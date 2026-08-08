@@ -25,8 +25,20 @@ $border-radius-pill: 50rem;
 @import 'bootstrap-icons/font/bootstrap-icons.css';
 
 // Additional Utility Classes
+:root {
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(0, 0, 0, 0.08);
+}
+
 :root, [data-bs-theme="light"] body {
     background-color: #ebf0ff !important;
+}
+
+.header {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid var(--glass-border) !important;
 }
 
 body {
@@ -346,10 +358,12 @@ $transition-speed: 0.3s;
 [data-bs-theme="dark"] {
     --bs-body-bg: #0F0F1A;
     --bs-body-color: #e2e8f0;
+    --glass-bg: rgba(30, 41, 59, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
 
     .header {
-        background-color: #141425 !important;
-        border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+        background: var(--glass-bg) !important;
+        border-bottom: 1px solid var(--glass-border) !important;
     }
 
     .footer {

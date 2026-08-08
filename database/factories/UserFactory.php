@@ -28,8 +28,13 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => static::$password ??= Hash::make('password123'),
             'remember_token' => Str::random(10),
+            'phone' => fake()->phoneNumber(),
+            'position' => fake()->randomElement(['Sales Specialist', 'CRM Manager', 'Account Executive', 'Support Agent', 'Marketing Lead', 'Data Analyst', 'Product Designer']),
+            'department' => fake()->randomElement(['Sales', 'Marketing', 'Customer Support', 'Product', 'Engineering', 'Operations']),
+            'status' => fake()->randomElement(['active', 'active', 'active', 'inactive']),
+            'joined_date' => fake()->dateTimeBetween('-2 years', 'now')->format('Y-m-d'),
         ];
     }
 

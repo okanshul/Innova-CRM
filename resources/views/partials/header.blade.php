@@ -1,6 +1,6 @@
 <header
-    class="header bg-body border-bottom py-2 px-3 px-xl-4 d-flex align-items-center justify-content-between sticky-top z-3"
-    style="min-height: 64px;">
+    class="header border-bottom py-2 px-3 px-xl-4 d-flex align-items-center justify-content-between sticky-top z-3"
+    style="min-height: 64px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);">
     <div class="d-flex align-items-center gap-2">
         <button class="btn btn-link link-body-emphasis p-0 fs-4 text-decoration-none shadow-none" id="sidebarToggle">
             <i class="fa-solid fa-bars fs-6"></i>
@@ -9,7 +9,7 @@
             style="width: 400px;">
             <i class="fa-solid fa-magnifying-glass text-secondary mx-2"></i>
             <input type="text" class="form-control border-0 bg-transparent shadow-none p-0 flex-grow-1"
-                style="font-size: 0.875rem;" placeholder="Search contacts, deals, tasks...">
+                style="font-size: 0.875rem; border: none !important; background: transparent !important; box-shadow: none !important; padding: 0 !important; outline: none !important;" placeholder="Search contacts, deals, tasks...">
             <span
                 class="badge text-secondary rounded-2 bg-transparent px-1 py-1 d-flex align-items-center justify-content-center"
                 style="font-size: 0.6rem; min-width:24px;">⌘ <span class="ps-1"
@@ -56,15 +56,15 @@
                 id="dropdownUserHeader" data-bs-toggle="dropdown" aria-expanded="false"
                 style="outline: none; box-shadow: none;">
                 <div class="position-relative me-2">
-                    <img src="https://i.pravatar.cc/150?img=33" alt="John Doe" width="36" height="36"
+                    <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : 'https://ui-avatars.com/api/?name='.urlencode(auth()->user()->name).'&background=6366F1&color=fff' }}" alt="{{ auth()->user()->name }}" width="36" height="36"
                         class="rounded-circle object-fit-cover shadow-sm">
                     <span class="position-absolute bottom-0 end-0 p-1 bg-success border border-white rounded-circle"
                         style="width:9px; height:9px;"></span>
                 </div>
                 <div class="d-none d-md-flex align-items-center gap-2 text-start me-1">
                     <div class="d-flex flex-column lh-1">
-                        <strong class="fs-6 fw-bold">John Doe</strong>
-                        <span class="text-secondary" style="font-size: 0.7rem;">Admin</span>
+                        <strong class="fs-6 fw-bold">{{ auth()->user()->name }}</strong>
+                        <span class="text-secondary text-capitalize" style="font-size: 0.7rem;">{{ auth()->user()->getRoleNames()->first() ?? 'Staff' }}</span>
                     </div>
                 </div>
                 <i class="fa-solid fa-chevron-down ms-1 fs-xs text-secondary opacity-75"></i>
@@ -72,12 +72,12 @@
             <div class="dropdown-menu dropdown-menu-end shadow-lg rounded-4 border-0 p-2 mt-2"
                 aria-labelledby="dropdownUserHeader" style="min-width: 230px;">
                 <div class="d-flex align-items-center gap-3 p-2 mb-2 bg-body-tertiary rounded-3">
-                    <img src="https://i.pravatar.cc/150?img=33" alt="John Doe" width="38" height="38"
+                    <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : 'https://ui-avatars.com/api/?name='.urlencode(auth()->user()->name).'&background=6366F1&color=fff' }}" alt="{{ auth()->user()->name }}" width="38" height="38"
                         class="rounded-circle object-fit-cover">
                     <div class="d-flex flex-column lh-sm text-truncate">
-                        <strong class="fw-bold text-body-emphasis" style="font-size: 0.85rem;">John Doe</strong>
-                        <span class="text-secondary text-truncate" style="font-size: 0.725rem;">john.doe@innova.com</span>
-                        <span class="badge bg-primary-subtle text-primary mt-1 align-self-start" style="font-size: 0.6rem;">Administrator</span>
+                        <strong class="fw-bold text-body-emphasis" style="font-size: 0.85rem;">{{ auth()->user()->name }}</strong>
+                        <span class="text-secondary text-truncate" style="font-size: 0.725rem;">{{ auth()->user()->email }}</span>
+                        <span class="badge bg-primary-subtle text-primary mt-1 align-self-start text-capitalize" style="font-size: 0.6rem;">{{ auth()->user()->getRoleNames()->first() ?? 'Staff' }}</span>
                     </div>
                 </div>
                 <div class="dropdown-divider my-1 opacity-25"></div>
@@ -94,10 +94,15 @@
                     <span class="fw-medium">Security</span>
                 </a>
                 <div class="dropdown-divider my-1 opacity-25"></div>
-                <a class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2 text-danger" href="#">
-                    <i class="fa-solid fa-right-from-bracket" style="width: 18px;"></i>
-                    <span class="fw-medium">Sign out</span>
-                </a>
+                
+                <!-- Logout Form -->
+                <form method="POST" action="{{ route('logout') }}" class="m-0">
+                    @csrf
+                    <button type="submit" class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2 text-danger w-100 text-start bg-transparent border-0">
+                        <i class="fa-solid fa-right-from-bracket" style="width: 18px;"></i>
+                        <span class="fw-medium">Sign out</span>
+                    </button>
+                </form>
             </div>
         </div>
     </div>
