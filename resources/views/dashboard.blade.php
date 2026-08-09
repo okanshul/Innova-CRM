@@ -40,8 +40,8 @@
 
         <main class="flex-grow-1 p-3 pb-3">
 
-            <!-- Stats Row -->
-            <div class="row g-3 mb-3">
+            <!-- Stats Row (2x2 Grid on Mobile) -->
+            <div class="row g-2 g-sm-3 mb-3">
                 @foreach ($stats as $stat)
                     @include('partials.stat-card', ['stat' => $stat])
                 @endforeach
@@ -50,7 +50,7 @@
             <!-- Pipeline section -->
             <div class="card rounded-4 shadow-sm border-0 mb-3">
                 <div class="card-body p-3">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
                         <h5 class="fw-bold mb-0">Sales Pipeline</h5>
                         <div class="d-flex gap-2 align-items-center">
                             <button
@@ -113,7 +113,7 @@
                     <div class="card h-100 rounded-4 shadow-sm border-0">
                         <div class="card-body p-3 d-flex flex-column justify-content-between">
                             <h6 class="fw-bold mb-3 fs-sm">Leads by Source</h6>
-                            <div class="d-flex align-items-center gap-3 my-auto">
+                            <div class="d-flex flex-column flex-sm-row align-items-center gap-3 my-auto">
                                 <div class="position-relative d-flex align-items-center justify-content-center flex-shrink-0" style="width: 160px; height: 160px;">
                                     <canvas id="leadsChart"></canvas>
                                     <!-- Center Text overlay for donut -->
@@ -123,8 +123,8 @@
                                     </div>
                                 </div>
                                 <!-- Custom Side Legend -->
-                                <div class="d-flex flex-column gap-2 ps-1">
-                                    <div class="d-flex align-items-center gap-3" style="font-size: 0.725rem;">
+                                <div class="d-flex flex-column gap-2 ps-sm-1 w-100">
+                                    <div class="d-flex align-items-center justify-content-between justify-content-sm-start gap-3" style="font-size: 0.725rem;">
                                         <div class="d-flex align-items-center gap-2" style="min-width: 105px;">
                                             <span class="d-inline-block rounded-circle bg-primary" style="width:7px;height:7px;"></span>
                                             <span class="text-body-emphasis fw-medium">Website</span>
@@ -134,7 +134,7 @@
                                             <span class="text-secondary">(435)</span>
                                         </div>
                                     </div>
-                                    <div class="d-flex align-items-center gap-3" style="font-size: 0.725rem;">
+                                    <div class="d-flex align-items-center justify-content-between justify-content-sm-start gap-3" style="font-size: 0.725rem;">
                                         <div class="d-flex align-items-center gap-2" style="min-width: 105px;">
                                             <span class="d-inline-block rounded-circle bg-primary opacity-75" style="width:7px;height:7px; background-color: #3b82f6 !important"></span>
                                             <span class="text-body-emphasis fw-medium">Referral</span>
@@ -144,7 +144,7 @@
                                             <span class="text-secondary">(311)</span>
                                         </div>
                                     </div>
-                                    <div class="d-flex align-items-center gap-3" style="font-size: 0.725rem;">
+                                    <div class="d-flex align-items-center justify-content-between justify-content-sm-start gap-3" style="font-size: 0.725rem;">
                                         <div class="d-flex align-items-center gap-2" style="min-width: 105px;">
                                             <span class="d-inline-block rounded-circle bg-info" style="width:7px;height:7px;"></span>
                                             <span class="text-body-emphasis fw-medium">Social Media</span>
@@ -154,7 +154,7 @@
                                             <span class="text-secondary">(248)</span>
                                         </div>
                                     </div>
-                                    <div class="d-flex align-items-center gap-3" style="font-size: 0.725rem;">
+                                    <div class="d-flex align-items-center justify-content-between justify-content-sm-start gap-3" style="font-size: 0.725rem;">
                                         <div class="d-flex align-items-center gap-2" style="min-width: 105px;">
                                             <span class="d-inline-block rounded-circle bg-warning" style="width:7px;height:7px;"></span>
                                             <span class="text-body-emphasis fw-medium">Email Campaign</span>
@@ -164,7 +164,7 @@
                                             <span class="text-secondary">(124)</span>
                                         </div>
                                     </div>
-                                    <div class="d-flex align-items-center gap-3" style="font-size: 0.725rem;">
+                                    <div class="d-flex align-items-center justify-content-between justify-content-sm-start gap-3" style="font-size: 0.725rem;">
                                         <div class="d-flex align-items-center gap-2" style="min-width: 105px;">
                                             <span class="d-inline-block rounded-circle bg-secondary" style="width:7px;height:7px;"></span>
                                             <span class="text-body-emphasis fw-medium">Other</span>
@@ -186,7 +186,7 @@
                         <div class="card-body p-3 pb-0 d-flex flex-column">
                             <div class="d-flex align-items-center justify-content-between mb-2">
                                 <h6 class="fw-bold mb-0 fs-sm">Recent Activity</h6>
-                                <button class="btn btn-sm btn-light border text-body-secondary rounded-3 py-1 px-2.5 shadow-none" style="font-size: 0.75rem;">View All</button>
+                                <button class="btn btn-sm btn-link text-primary text-decoration-none rounded-3 py-1 px-1 shadow-none fw-semibold" style="font-size: 0.75rem;">View All</button>
                             </div>
                             <div class="list-group list-group-flush border-0 flex-grow-1">
                                 @foreach ($activities as $activity)
@@ -205,22 +205,20 @@
                         <div class="card-body p-0 d-flex flex-column">
                             <div class="d-flex align-items-center justify-content-between px-3 pt-3 pb-2">
                                 <h6 class="fw-bold mb-0">Recent Contacts</h6>
-                                <button class="btn btn-sm btn-light border text-primary rounded-3 py-1 px-3 shadow-none fw-semibold" style="font-size: 0.75rem;">View All Contacts</button>
+                                <button class="btn btn-sm btn-link text-primary text-decoration-none rounded-3 py-1 px-1 shadow-none fw-semibold" style="font-size: 0.75rem;">View All Contacts</button>
                             </div>
 
                             <div class="table-responsive flex-grow-1 rounded-3">
-                                <table class="table table-hover align-middle mb-0">
+                                <table class="table table-hover align-middle mb-0" style="min-width: 600px;">
                                     <thead class="table-light">
                                         <tr>
                                             <th class="border-0 px-3 py-2" style="font-size: 0.75rem;">Name</th>
                                             <th class="border-0 py-2" style="font-size: 0.75rem;">Company</th>
                                             <th class="border-0 py-2" style="font-size: 0.75rem;">Status</th>
                                             <th class="border-0 py-2" style="font-size: 0.75rem;">Last Contact</th>
-                                            <th class="border-0 py-2 text-end" style="font-size: 0.75rem;">Deal Value
-                                            </th>
+                                            <th class="border-0 py-2 text-end" style="font-size: 0.75rem;">Deal Value</th>
                                             <th class="border-0 py-2" style="font-size: 0.75rem;">Owner</th>
-                                            <th class="border-0 py-2 text-end px-3" style="font-size: 0.75rem;">
-                                                Actions</th>
+                                            <th class="border-0 py-2 text-end px-3" style="font-size: 0.75rem;">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody class="border-top-0">
@@ -271,6 +269,9 @@
         </main>
         @include('partials.footer')
     </div>
+
+    @include('partials.mobile-nav')
+
 
 </body>
 

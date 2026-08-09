@@ -1,9 +1,9 @@
 <aside id="sidebar" class="offcanvas-lg offcanvas-start d-flex flex-column p-3">
     <div class="d-flex align-items-center justify-content-between mb-4 px-2 pt-1">
-        <a href="{{ route('dashboard') }}" class="d-flex align-items-center text-white text-decoration-none sidebar-brand">
+        <a href="{{ route('dashboard') }}" class="d-flex align-items-center text-white text-decoration-none sidebar-brand gap-2">
             <div class="bg-primary text-white p-2 rounded-3 d-flex align-items-center justify-content-center logo-icon shadow-sm"
-                style="width: 38px; height: 38px; min-width: 38px; background: linear-gradient(135deg, #6366f1, #4f46e5) !important;">
-                <i class="fa-solid fa-cube fs-5"></i>
+                style="width: 38px; height: 38px; min-width: 38px; background: linear-gradient(135deg, #6366f1, #a855f7) !important;">
+                <i class="fa-solid fa-layer-group fs-5"></i>
             </div>
             <span class="fs-4 fw-bold sidebar-text ms-2.5" style="letter-spacing: -0.02em;">InnovaCRM</span>
         </a>
@@ -83,7 +83,7 @@
 
     <!-- Upgrade Card -->
     <div class="mt-auto sidebar-footer pt-3">
-        <div class="card border-0 rounded-4 mb-3 p-3 text-white" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08) !important;">
+        <div class="card border-0 rounded-4 mb-3 p-3 text-white upgrade-card" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08) !important;">
             <div class="card-body p-0 text-start">
                 <div class="d-flex align-items-center gap-2 mb-1">
                     <i class="fa-solid fa-wand-magic-sparkles text-primary fs-5"></i>
@@ -98,7 +98,7 @@
 
         <!-- User Profile -->
         <div class="dropdown">
-            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle px-2 py-1.5 rounded-3 hover-bg sidebar-user"
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none px-2 py-1.5 rounded-3 hover-bg sidebar-user"
                 id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                 <div class="position-relative d-flex justify-content-center align-items-center">
                     <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : 'https://ui-avatars.com/api/?name='.urlencode(auth()->user()->name).'&background=6366F1&color=fff' }}" alt="{{ auth()->user()->name }}"

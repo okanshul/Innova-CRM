@@ -219,6 +219,18 @@ $transition-speed: 0.3s;
         }
     }
 
+.sidebar-user::after,
+.sidebar-user.dropdown-toggle::after {
+    display: none !important;
+    content: none !important;
+}
+
+html.sidebar-collapsed .upgrade-card,
+body.sidebar-collapsed .upgrade-card,
+#sidebar.sidebar-collapsed .upgrade-card {
+    display: none !important;
+}
+
     html.sidebar-collapsed #main-content,
     body.sidebar-collapsed #main-content,
     #main-content.content-expanded {
@@ -563,3 +575,73 @@ $transition-speed: 0.3s;
         }
     }
 }
+
+/* Mobile Bottom Fixed Navigation (< 768px) */
+.mobile-bottom-nav {
+    height: 60px;
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid var(--bs-border-color-translucent) !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 0.25rem;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+
+    [data-bs-theme="dark"] & {
+        background: rgba(15, 23, 42, 0.95) !important;
+    }
+}
+
+.mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    text-decoration: none;
+    font-size: 0.65rem;
+    font-weight: 500;
+    padding: 0.35rem 0.5rem;
+    border-radius: 10px;
+    transition: all 0.15s ease;
+    flex: 1;
+    text-align: center;
+
+    [data-bs-theme="dark"] & {
+        color: #94a3b8;
+    }
+
+    i {
+        font-size: 1.15rem;
+        margin-bottom: 2px;
+        transition: transform 0.15s ease;
+    }
+
+    &:hover, &.active {
+        color: #6366f1 !important;
+        font-weight: 600;
+
+        i {
+            transform: translateY(-1px);
+        }
+    }
+}
+
+@media (max-width: 767.98px) {
+    main {
+        padding-bottom: 75px !important;
+    }
+
+    .pipeline-board {
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 0.5rem;
+
+        .pipeline-col {
+            min-width: 250px !important;
+            scroll-snap-align: start;
+        }
+    }
+}
