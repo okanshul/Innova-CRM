@@ -57,21 +57,16 @@ $transition-speed: 0.3s;
     --bs-offcanvas-border-color: rgba(255, 255, 255, 0.1);
     width: $sidebar-width;
     height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1040;
     background-color: #0b0f19 !important; // Dark navy/black
     color: #fff !important;
     border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
-    transition: width $transition-speed ease, padding $transition-speed ease;
+    transition: transform $transition-speed ease-in-out, width $transition-speed ease, padding $transition-speed ease;
     overflow-x: hidden;
     overflow-y: auto;
 }
 
 // Adjust main content margin based on sidebar
 #main-content {
-    margin-left: $sidebar-width;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -129,6 +124,15 @@ $transition-speed: 0.3s;
 @media (max-width: 991.98px) {
     #sidebar {
         width: $sidebar-width !important;
+        max-width: 85vw !important;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        z-index: 1055 !important;
+    }
+
+    .offcanvas-backdrop {
+        z-index: 1050 !important;
     }
 
     #main-content {
@@ -138,6 +142,16 @@ $transition-speed: 0.3s;
 
 // Desktop Collapsed State (>= 992px)
 @media (min-width: 992px) {
+    #sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1030;
+    }
+
+    #main-content {
+        margin-left: $sidebar-width;
+    }
 
     html.sidebar-collapsed #sidebar,
     body.sidebar-collapsed #sidebar,

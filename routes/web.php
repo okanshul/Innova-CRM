@@ -12,5 +12,5 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->midd
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('staff', StaffController::class);
+    Route::resource('staff', StaffController::class)->only(['index', 'create', 'show', 'edit']);
 });

@@ -143,7 +143,7 @@
                             </a>
                         </div>
 
-                        <form id="staffCreateForm" action="{{ route('staff.store') }}" method="POST">
+                        <form id="staffCreateForm" action="{{ route('api.staff.store') }}" method="POST">
                             @csrf
 
                             <!-- Nav Tabs -->

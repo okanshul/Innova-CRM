@@ -148,7 +148,7 @@
                             </div>
                         </div>
 
-                        <form id="staffEditForm" action="{{ route('staff.update', $staff->id) }}" method="POST">
+                        <form id="staffEditForm" action="{{ route('api.staff.update', $staff->id) }}" method="POST">
                             @csrf
                             @method('PUT')
 

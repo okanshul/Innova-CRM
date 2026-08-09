@@ -915,7 +915,7 @@ const renderPermissionsModalBody = (groupedPermissions, directPermissions, roleP
                     });
                 } finally {
                     btnBulkDelete.disabled = false;
-                    btnBulkDelete.innerHTML = `<i class="fa-regular fa-trash-can"></i> Delete Selected (<span id="selectedCount">0</span>)`;
+                    btnBulkDelete.innerHTML = `<i class="fa-regular fa-trash-can pe-1"></i> Delete Selected (<span id="selectedCount">0</span>)`;
                 }
             } else {
                 if (!confirm(`Are you sure you want to delete ${count} selected staff member(s)?`)) return;

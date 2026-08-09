@@ -67,6 +67,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Auto-close offcanvas on mobile link clicks
+    if (sidebar) {
+        sidebar.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 992) {
+                    const bsOffcanvas = bootstrap.Offcanvas.getInstance(sidebar);
+                    if (bsOffcanvas) {
+                        bsOffcanvas.hide();
+                    }
+                }
+            });
+        });
+    }
+
     window.addEventListener('resize', () => {
         const isCollapsed = document.body.classList.contains('sidebar-collapsed');
         updateTooltipsState(isCollapsed);

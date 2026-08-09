@@ -83,7 +83,8 @@ class StaffController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Staff created successfully.',
-            'data' => $user
+            'data' => $user,
+            'redirect' => route('staff.index')
         ], 201);
     }
 
@@ -138,7 +139,8 @@ class StaffController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Staff updated successfully.',
-            'data' => $user
+            'data' => $user,
+            'redirect' => route('staff.index')
         ]);
     }
 
