@@ -98,8 +98,8 @@
 
         <!-- User Profile -->
         <div class="dropdown">
-            <a href="#" class="d-flex align-items-center text-white text-decoration-none px-2 py-1.5 rounded-3 hover-bg sidebar-user"
-                id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+            <a href="javascript:void(0)" class="dropdown-toggle d-flex align-items-center text-white text-decoration-none px-2 py-1.5 rounded-3 hover-bg sidebar-user"
+                id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false" role="button">
                 <div class="position-relative d-flex justify-content-center align-items-center">
                     <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : 'https://ui-avatars.com/api/?name='.urlencode(auth()->user()->name).'&background=6366F1&color=fff' }}" alt="{{ auth()->user()->name }}"
                         width="36" height="36" class="rounded-circle avatar object-fit-cover">

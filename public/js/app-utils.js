@@ -381,3 +381,135 @@ function bindDeleteAction(options = {}) {
         }
     });
 }
+
+/**
+ * 6. initCustomSelects(targetSelector)
+ * Converts standard select elements into modern custom themed dropdowns
+ * with instant two-way event synchronization.
+ */
+function initCustomSelects(targetSelector = '.custom-filter-select') {
+    const selects = document.querySelectorAll(targetSelector);
+    selects.forEach(select => {
+        if (select.dataset.customSelectInit === 'true' || select.closest('.custom-select-wrapper')) return;
+        select.dataset.customSelectInit = 'true';
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'custom-select-wrapper';
+
+        // Transfer width/flex classes from select to wrapper
+        if (select.className) {
+            const classList = select.className.split(' ').filter(c => c.startsWith('col-') || c.startsWith('w-') || c.startsWith('flex-'));
+            if (classList.length > 0) wrapper.classList.add(...classList);
+        }
+
+        select.parentNode.insertBefore(wrapper, select);
+        wrapper.appendChild(select);
+        select.classList.add('custom-select-hidden');
+
+        const trigger = document.createElement('div');
+        trigger.className = 'custom-select-trigger';
+        trigger.tabIndex = 0;
+
+        const labelSpan = document.createElement('span');
+        labelSpan.className = 'custom-select-label text-truncate';
+
+        const arrowIcon = document.createElement('i');
+        arrowIcon.className = 'fa-solid fa-chevron-down custom-select-arrow ms-2';
+
+        trigger.appendChild(labelSpan);
+        trigger.appendChild(arrowIcon);
+        wrapper.appendChild(trigger);
+
+        const menu = document.createElement('div');
+        menu.className = 'custom-select-menu';
+        wrapper.appendChild(menu);
+
+        const renderMenuOptions = () => {
+            menu.innerHTML = '';
+            const selectedOption = select.options[select.selectedIndex] || select.options[0];
+            labelSpan.textContent = selectedOption ? selectedOption.text : 'Select...';
+
+            Array.from(select.options).forEach((opt, idx) => {
+                const optItem = document.createElement('div');
+                optItem.className = `custom-select-option ${opt.selected ? 'selected' : ''} ${opt.disabled ? 'disabled' : ''}`;
+                optItem.dataset.value = opt.value;
+
+                const textSpan = document.createElement('span');
+                textSpan.textContent = opt.text;
+                optItem.appendChild(textSpan);
+
+                optItem.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (opt.disabled) return;
+
+                    select.selectedIndex = idx;
+                    select.dispatchEvent(new Event('change', { bubbles: true }));
+                    closeMenu();
+                });
+
+                menu.appendChild(optItem);
+            });
+        };
+
+        const openMenu = () => {
+            document.querySelectorAll('.custom-select-menu.show').forEach(m => {
+                if (m !== menu) {
+                    m.classList.remove('show');
+                    m.previousElementSibling?.classList.remove('active');
+                }
+            });
+            renderMenuOptions();
+            menu.classList.add('show');
+            trigger.classList.add('active');
+        };
+
+        const closeMenu = () => {
+            menu.classList.remove('show');
+            trigger.classList.remove('active');
+        };
+
+        trigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (menu.classList.contains('show')) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        });
+
+        trigger.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                if (menu.classList.contains('show')) closeMenu(); else openMenu();
+            } else if (e.key === 'Escape') {
+                closeMenu();
+            }
+        });
+
+        select.addEventListener('change', () => {
+            const selectedOption = select.options[select.selectedIndex];
+            if (selectedOption) {
+                labelSpan.textContent = selectedOption.text;
+            }
+            renderMenuOptions();
+        });
+
+        renderMenuOptions();
+    });
+}
+
+// Global click outside to dismiss open custom select menus
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.custom-select-wrapper')) {
+        document.querySelectorAll('.custom-select-menu.show').forEach(m => {
+            m.classList.remove('show');
+            m.previousElementSibling?.classList.remove('active');
+        });
+    }
+});
+
+// Auto-initialize custom selects on page load
+document.addEventListener('DOMContentLoaded', () => {
+    initCustomSelects();
+});
+

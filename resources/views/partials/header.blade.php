@@ -1,6 +1,6 @@
 <header
-    class="header border-bottom py-2 px-3 px-xl-4 d-flex align-items-center justify-content-between sticky-top z-3"
-    style="min-height: 64px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);">
+    class="header border-bottom py-2 px-3 px-xl-4 d-flex align-items-center justify-content-between sticky-top"
+    style="min-height: 64px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 1030;">
     <div class="d-flex align-items-center gap-2">
         <button class="btn btn-link link-body-emphasis p-0 fs-4 text-decoration-none shadow-none me-1" id="sidebarToggle">
             <i class="fa-solid fa-bars fs-5"></i>
@@ -61,9 +61,9 @@
 
         <!-- User Dropdown Profile -->
         <div class="dropdown ms-1">
-            <a href="#"
-                class="d-flex align-items-center text-body-emphasis text-decoration-none shadow-none p-0 rounded"
-                id="dropdownUserHeader" data-bs-toggle="dropdown" aria-expanded="false"
+            <a href="javascript:void(0)"
+                class="dropdown-toggle d-flex align-items-center text-body-emphasis text-decoration-none shadow-none p-0 rounded"
+                id="dropdownUserHeader" data-bs-toggle="dropdown" aria-expanded="false" role="button"
                 style="outline: none; box-shadow: none;">
                 <div class="position-relative">
                     <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : 'https://ui-avatars.com/api/?name='.urlencode(auth()->user()->name).'&background=6366F1&color=fff' }}" alt="{{ auth()->user()->name }}" width="36" height="36"
