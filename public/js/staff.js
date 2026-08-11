@@ -1,14 +1,19 @@
-document.addEventListener('DOMContentLoaded', function() {
+/**
+ * InnovaCRM Staff Management JavaScript
+ * Refactored to leverage app-utils.js (loadDataTable, bindFormSubmit, bindDeleteAction, SweetAlert2)
+ */
+
+document.addEventListener('DOMContentLoaded', function () {
     const tableBody = document.getElementById('staffTableBody');
     const selectAllCheckbox = document.getElementById('selectAll');
+    const btnBulkDelete = document.getElementById('btnBulkDelete');
+    const selectedCountSpan = document.getElementById('selectedCount');
 
     // Filter controls
     const filterDepartment = document.getElementById('filterDepartment');
     const filterStatus = document.getElementById('filterStatus');
     const perPageSelect = document.getElementById('perPage');
     const searchInput = document.getElementById('searchInput');
-    const paginationSummary = document.getElementById('paginationSummary');
-    const paginationControls = document.getElementById('paginationControls');
 
     // State
     let currentPage = 1;
@@ -16,11 +21,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentSearch = '';
     let currentDepartment = '';
     let currentStatus = '';
-
-    const getHeaders = () => ({
-        'Accept': 'application/json',
-        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-    });
 
     // Helper: Department Icon
     const getDeptIcon = (dept) => {
@@ -53,81 +53,45 @@ document.addEventListener('DOMContentLoaded', function() {
         return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     };
 
-    // Load Staff Data
-    const loadStaff = async (page = 1) => {
-        currentPage = page;
-        try {
-            const params = new URLSearchParams({
-                page: currentPage,
-                per_page: perPage,
-                search: currentSearch,
-                department: currentDepartment,
-                status: currentStatus
-            });
+    // Table Row HTML Renderer
+    const renderStaffRow = (staff) => {
+        const avatarSrc = staff.avatar
+            ? `/storage/${staff.avatar}`
+            : `https://ui-avatars.com/api/?name=${encodeURIComponent(staff.name)}&background=6366F1&color=fff`;
 
-            const response = await fetch(`/api/staff?${params.toString()}`, { headers: getHeaders() });
-            const data = await response.json();
+        const positionDisplay = staff.position || (staff.role_name ? staff.role_name.charAt(0).toUpperCase() + staff.role_name.slice(1) : 'Staff');
+        const badgeClass = getRoleBadgeClass(staff.position, staff.role_name);
 
-            if (data.success) {
-                renderTable(data.data.data);
-                renderPagination(data.data);
-            }
-        } catch (error) {
-            console.error('Error loading staff:', error);
-        }
-    };
+        const statusBadge = staff.status === 'active'
+            ? `<span class="status-badge status-badge-active">Active</span>`
+            : `<span class="status-badge status-badge-inactive">Inactive</span>`;
 
-    // Render Table Rows
-    const renderTable = (staffList) => {
-        if (!tableBody) return;
-        tableBody.innerHTML = '';
-        if (selectAllCheckbox) selectAllCheckbox.checked = false;
-
-        if (!staffList || staffList.length === 0) {
-            tableBody.innerHTML = `<tr><td colspan="9" class="text-center py-5 text-secondary">No staff members found matching your criteria.</td></tr>`;
-            return;
-        }
-
-        staffList.forEach(staff => {
-            const tr = document.createElement('tr');
-            tr.className = 'border-bottom hover-bg-light transition-colors';
-
-            const avatarSrc = staff.avatar
-                ? `/storage/${staff.avatar}`
-                : `https://ui-avatars.com/api/?name=${encodeURIComponent(staff.name)}&background=6366F1&color=fff`;
-
-            const positionDisplay = staff.position || (staff.role_name ? staff.role_name.charAt(0).toUpperCase() + staff.role_name.slice(1) : 'Staff');
-            const badgeClass = getRoleBadgeClass(staff.position, staff.role_name);
-
-            const statusBadge = staff.status === 'active'
-                ? `<span class="status-badge status-badge-active">Active</span>`
-                : `<span class="status-badge status-badge-inactive">Inactive</span>`;
-
-            let actionButtons = `
-                <a href="/staff/${staff.id}" class="action-btn action-btn-view me-1" title="View Details">
-                    <i class="fa-regular fa-eye"></i>
+        let actionButtons = `
+            <a href="/staff/${staff.id}" class="action-btn action-btn-view me-1" title="View Details">
+                <i class="fa-regular fa-eye"></i>
+            </a>
+        `;
+        if (window.userPermissions && window.userPermissions.canEdit) {
+            actionButtons += `
+                <button class="action-btn action-btn-perm manage-permissions me-1" data-id="${staff.id}" data-name="${staff.name}" data-role="${staff.role_name || 'staff'}" title="Manage Permissions">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </button>
+                <a href="/staff/${staff.id}/edit" class="action-btn action-btn-edit me-1" title="Edit Member">
+                    <i class="fa-regular fa-pen-to-square"></i>
                 </a>
             `;
-            if (window.userPermissions && window.userPermissions.canEdit) {
-                actionButtons += `
-                    <button class="action-btn action-btn-perm manage-permissions me-1" data-id="${staff.id}" data-name="${staff.name}" data-role="${staff.role_name || 'staff'}" title="Manage Permissions">
-                        <i class="fa-solid fa-shield-halved"></i>
-                    </button>
-                    <a href="/staff/${staff.id}/edit" class="action-btn action-btn-edit me-1" title="Edit Member">
-                        <i class="fa-regular fa-pen-to-square"></i>
-                    </a>
-                `;
-            }
-            if (window.userPermissions && window.userPermissions.canDelete) {
-                actionButtons += `
-                    <button class="action-btn action-btn-delete delete-staff" data-id="${staff.id}" title="Delete Member">
-                        <i class="fa-regular fa-trash-can"></i>
-                    </button>
-                `;
-            }
+        }
+        if (window.userPermissions && window.userPermissions.canDelete) {
+            actionButtons += `
+                <button class="action-btn action-btn-delete delete-staff" data-id="${staff.id}" data-name="${staff.name}" title="Delete Member">
+                    <i class="fa-regular fa-trash-can"></i>
+                </button>
+            `;
+        }
 
-            tr.innerHTML = `
-                <td class="ps-4 py-3">
+        return `
+            <tr class="border-bottom hover-bg-light transition-colors">
+                <td class="ps-3 py-3">
                     <input type="checkbox" class="form-check-input custom-checkbox staff-checkbox" value="${staff.id}">
                 </td>
                 <td class="py-3">
@@ -157,85 +121,232 @@ document.addEventListener('DOMContentLoaded', function() {
                 <td class="py-3 text-secondary" style="font-size: 0.85rem;">
                     ${formatDate(staff.joined_date || staff.created_at)}
                 </td>
-                <td class="pe-4 py-3 text-end">
+                <td class="pe-3 py-3 text-end">
                     <div class="d-inline-flex align-items-center">
                         ${actionButtons}
                     </div>
                 </td>
+            </tr>
+        `;
+    };
+
+    // Helpers for Mobile Card Design
+    const getAvatarBg = (name) => {
+        const colors = ['#6366F1', '#5B5FC7', '#4F46E5', '#6366F1', '#5B5FC7'];
+        if (!name) return colors[0];
+        let hash = 0;
+        for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+        return colors[Math.abs(hash) % colors.length];
+    };
+
+    const getInitials = (name) => {
+        if (!name) return 'ST';
+        const parts = name.trim().split(' ');
+        if (parts.length >= 2) {
+            return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+        }
+        return name.substring(0, 2).toUpperCase();
+    };
+
+    // Mobile Staff Card HTML Renderer
+    const renderStaffMobileCard = (staff) => {
+        const initials = getInitials(staff.name);
+        const avatarBg = getAvatarBg(staff.name);
+
+        const avatarHtml = staff.avatar
+            ? `<img src="/storage/${staff.avatar}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0" width="42" height="42" alt="${staff.name}">`
+            : `<div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 fw-bold text-white shadow-sm" style="width: 42px; height: 42px; background-color: ${avatarBg}; font-size: 0.9rem; letter-spacing: 0.5px;">${initials}</div>`;
+
+        const statusBadge = staff.status === 'active'
+            ? `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #dcfce7; color: #16a34a; font-size: 0.75rem;">Active</span>`
+            : `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #fee2e2; color: #dc2626; font-size: 0.75rem;">Inactive</span>`;
+
+        const positionDisplay = staff.position || (staff.role_name ? staff.role_name.charAt(0).toUpperCase() + staff.role_name.slice(1) : 'Staff');
+        const badgeClass = getRoleBadgeClass(staff.position, staff.role_name);
+        const collapseId = `staffCollapse_${staff.id}`;
+
+        let actionButtonsHtml = `
+            <a href="/staff/${staff.id}" class="action-btn action-btn-view me-1" title="View Details">
+                <i class="fa-regular fa-eye"></i>
+            </a>
+        `;
+        if (window.userPermissions && window.userPermissions.canEdit) {
+            actionButtonsHtml += `
+                <button class="action-btn action-btn-perm manage-permissions me-1" data-id="${staff.id}" data-name="${staff.name}" data-role="${staff.role_name || 'staff'}" title="Manage Permissions">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </button>
+                <a href="/staff/${staff.id}/edit" class="action-btn action-btn-edit me-1" title="Edit Member">
+                    <i class="fa-regular fa-pen-to-square"></i>
+                </a>
             `;
+        }
+        if (window.userPermissions && window.userPermissions.canDelete) {
+            actionButtonsHtml += `
+                <button class="action-btn action-btn-delete delete-staff" data-id="${staff.id}" data-name="${staff.name}" title="Delete Member">
+                    <i class="fa-regular fa-trash-can"></i>
+                </button>
+            `;
+        }
 
-            tableBody.appendChild(tr);
-        });
+        return `
+            <div class="border-bottom staff-mobile-item bg-body" style="min-width: 0;">
+                <div class="d-flex align-items-center justify-content-between p-3 staff-mobile-header" 
+                     data-bs-target="#${collapseId}" 
+                     aria-expanded="false" 
+                     aria-controls="${collapseId}"
+                     style="cursor: pointer; min-width: 0;">
+                    
+                    <div class="d-flex align-items-center gap-3 min-w-0 flex-grow-1 me-2" style="min-width: 0;">
+                        ${avatarHtml}
+                        <div class="min-w-0 flex-grow-1" style="min-width: 0;">
+                            <div class="fw-bold text-body-emphasis text-truncate" style="font-size: 0.95rem;">
+                                ${staff.name}
+                            </div>
+                            <div class="text-secondary text-truncate" style="font-size: 0.825rem;">
+                                ${staff.email}
+                            </div>
+                        </div>
+                    </div>
 
-        attachEventListeners();
+                    <div class="d-flex align-items-center gap-2 flex-shrink-0 ms-auto">
+                        ${statusBadge}
+                        <button class="btn text-secondary p-0 border-0 shadow-none text-decoration-none lh-1 staff-action-toggle ms-1" 
+                                type="button" 
+                                aria-label="Toggle Staff Details">
+                            <i class="fa-solid fa-chevron-right chevron-icon" style="color: #6366f1; font-size: 0.85rem;"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="collapse" id="${collapseId}">
+                    <div class="p-3 bg-body border-top" style="font-size: 0.825rem;">
+                        <!-- Department Row -->
+                        <div class="d-flex align-items-center justify-content-between py-1">
+                            <div class="fw-semibold text-body-emphasis d-flex align-items-center me-2" style="font-size: 0.8rem;">
+                                <i class="fa-solid fa-briefcase me-1" style="color: #6366f1; width: 16px;"></i> Department :
+                            </div>
+                            <div class="fw-medium text-body-secondary text-end">
+                                ${staff.department || '-'}
+                            </div>
+                        </div>
+
+                        <!-- Role Row -->
+                        <div class="d-flex align-items-center justify-content-between py-1">
+                            <div class="fw-semibold text-body-emphasis d-flex align-items-center me-2" style="font-size: 0.8rem;">
+                                <i class="fa-solid fa-user me-1" style="color: #6366f1; width: 16px;"></i> Role :
+                            </div>
+                            <div class="text-end">
+                                <span class="role-badge ${badgeClass}">${positionDisplay}</span>
+                            </div>
+                        </div>
+
+                        <!-- Phone Row -->
+                        <div class="d-flex align-items-center justify-content-between py-1">
+                            <div class="fw-semibold text-body-emphasis d-flex align-items-center me-2" style="font-size: 0.8rem;">
+                                <i class="fa-solid fa-phone me-1" style="color: #6366f1; width: 16px;"></i> Phone No. :
+                            </div>
+                            <div class="fw-medium text-end" style="color: #0284c7;">
+                                ${staff.phone || '+1 (555) 000-0000'}
+                            </div>
+                        </div>
+
+                        <!-- Joined Row -->
+                        <div class="d-flex align-items-center justify-content-between py-1">
+                            <div class="fw-semibold text-body-emphasis d-flex align-items-center me-2" style="font-size: 0.8rem;">
+                                <i class="fa-solid fa-calendar-days me-1" style="color: #6366f1; width: 16px;"></i> Joined On :
+                            </div>
+                            <div class="fw-medium text-body-secondary text-end">
+                                ${formatDate(staff.joined_date || staff.created_at)}
+                            </div>
+                        </div>
+
+                        <!-- Actions Row -->
+                        <div class="d-flex align-items-center justify-content-between py-1">
+                            <div class="fw-semibold text-body-emphasis d-flex align-items-center me-2" style="font-size: 0.8rem;">
+                                <i class="fa-solid fa-gear me-1" style="color: #6366f1; width: 16px;"></i> Actions :
+                            </div>
+                            <div class="d-inline-flex align-items-center ms-auto">
+                                ${actionButtonsHtml}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
     };
 
-    // Render Pagination Controls
-    const renderPagination = (paginationData) => {
-        if (!paginationSummary || !paginationControls) return;
+    // Load Staff Table Data via loadDataTable Helper
+    const fetchStaffTable = (page = currentPage) => {
+        currentPage = page;
+        if (!tableBody) return;
 
-        const { from, to, total, current_page, last_page } = paginationData;
+        loadDataTable({
+            url: '/api/staff',
+            tableBodyId: 'staffTableBody',
+            summaryId: 'paginationSummary',
+            controlsId: 'paginationControls',
+            page: currentPage,
+            perPage: perPage,
+            params: {
+                search: currentSearch,
+                department: currentDepartment,
+                status: currentStatus
+            },
+            emptyMessage: 'No staff members found matching your criteria.',
+            rowRenderer: renderStaffRow,
+            onRendered: (items) => {
+                if (selectAllCheckbox) selectAllCheckbox.checked = false;
 
-        if (total === 0) {
-            paginationSummary.textContent = 'Showing 0 entries';
-            paginationControls.innerHTML = '';
-            return;
-        }
+                // Render Mobile Staff Cards
+                const mobileCardList = document.getElementById('staffMobileCardList');
+                const mobileSummary = document.getElementById('mobilePaginationSummary');
+                const mobileControls = document.getElementById('mobilePaginationControls');
+                const desktopSummary = document.getElementById('paginationSummary');
+                const desktopControls = document.getElementById('paginationControls');
 
-        paginationSummary.textContent = `Showing ${from || 0} to ${to || 0} of ${total} entries`;
-
-        let html = '';
-
-        // Previous button
-        html += `
-            <button class="page-btn" ${current_page === 1 ? 'disabled' : ''} data-page="${current_page - 1}">
-                <i class="fa-solid fa-chevron-left fs-xs"></i>
-            </button>
-        `;
-
-        // Page Numbers
-        for (let page = 1; page <= last_page; page++) {
-            if (page === 1 || page === last_page || (page >= current_page - 1 && page <= current_page + 1)) {
-                html += `
-                    <button class="page-btn ${page === current_page ? 'active' : ''}" data-page="${page}">${page}</button>
-                `;
-            } else if (page === current_page - 2 || page === current_page + 2) {
-                html += `<span class="px-1 text-secondary">...</span>`;
-            }
-        }
-
-        // Next button
-        html += `
-            <button class="page-btn" ${current_page === last_page ? 'disabled' : ''} data-page="${current_page + 1}">
-                <i class="fa-solid fa-chevron-right fs-xs"></i>
-            </button>
-        `;
-
-        paginationControls.innerHTML = html;
-
-        paginationControls.querySelectorAll('.page-btn:not(:disabled)').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const targetPage = parseInt(e.currentTarget.dataset.page);
-                if (targetPage && targetPage !== currentPage) {
-                    loadStaff(targetPage);
+                if (mobileCardList) {
+                    mobileCardList.innerHTML = '';
+                    if (!items || items.length === 0) {
+                        mobileCardList.innerHTML = `
+                            <div class="text-center py-4 text-secondary small">
+                                No staff members found matching your criteria.
+                            </div>
+                        `;
+                    } else {
+                        items.forEach(staff => {
+                            mobileCardList.insertAdjacentHTML('beforeend', renderStaffMobileCard(staff));
+                        });
+                    }
                 }
-            });
+
+                if (mobileSummary && desktopSummary) {
+                    mobileSummary.textContent = desktopSummary.textContent;
+                }
+                if (mobileControls && desktopControls) {
+                    mobileControls.innerHTML = desktopControls.innerHTML;
+                    if (!mobileControls.dataset.bound) {
+                        mobileControls.dataset.bound = 'true';
+                        mobileControls.addEventListener('click', (e) => {
+                            const btn = e.target.closest('.page-btn');
+                            if (btn && !btn.disabled && btn.dataset.page) {
+                                fetchStaffTable(parseInt(btn.dataset.page));
+                            }
+                        });
+                    }
+                }
+
+                attachEventListeners();
+            }
         });
     };
 
-    // Bulk Delete Elements
-    const btnBulkDelete = document.getElementById('btnBulkDelete');
-    const selectedCountSpan = document.getElementById('selectedCount');
-
-    // Helper: Update Bulk Delete Button State
+    // Update Bulk Delete Button State
     const updateBulkDeleteState = () => {
         const checkedBoxes = document.querySelectorAll('.staff-checkbox:checked');
         const count = checkedBoxes.length;
         const totalBoxes = document.querySelectorAll('.staff-checkbox').length;
 
-        if (selectedCountSpan) {
-            selectedCountSpan.textContent = count;
-        }
+        if (selectedCountSpan) selectedCountSpan.textContent = count;
 
         if (btnBulkDelete) {
             if (count > 0) {
@@ -253,355 +364,408 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-/* ==========================================================================
-   VANILLA JAVASCRIPT PERMISSIONS MATRIX LOGIC
-   Handles row "All" checkboxes, global "Select All / Clear All" buttons,
-   indeterminate visual states, getter/setter helpers, and event delegation.
-   ========================================================================== */
-const PermissionsMatrix = (() => {
-    const getModule = (el) => {
-        return el.dataset.module || el.dataset.group || el.getAttribute('data-module') || el.getAttribute('data-group');
-    };
-
-    const getPermissionKey = (cb) => {
-        return cb.dataset.permission || cb.value;
-    };
-
-    /**
-     * 1. updateRowAllState(module, container)
-     * Re-evaluates that row's "All" checkbox (checked / unchecked / indeterminate).
-     */
-    const updateRowAllState = (module, container = document) => {
-        if (!module) return;
-        const root = (container instanceof Element) ? container : document;
-        const row = root.querySelector(`.perm-module-row[data-module="${module}"], .perm-module-row[data-group="${module}"]`);
-        if (!row) return;
-
-        const rowAllCheckbox = row.querySelector('.perm-row-all, .perm-row-select-all');
-        if (!rowAllCheckbox) return;
-
-        const rowCheckboxes = Array.from(row.querySelectorAll('.perm-checkbox'));
-        if (rowCheckboxes.length === 0) {
-            rowAllCheckbox.checked = false;
-            rowAllCheckbox.indeterminate = false;
-            return;
-        }
-
-        const checkedCount = rowCheckboxes.filter(cb => cb.checked).length;
-        const totalCount = rowCheckboxes.length;
-
-        if (checkedCount === totalCount) {
-            rowAllCheckbox.checked = true;
-            rowAllCheckbox.indeterminate = false;
-        } else if (checkedCount === 0) {
-            rowAllCheckbox.checked = false;
-            rowAllCheckbox.indeterminate = false;
-        } else {
-            rowAllCheckbox.checked = false;
-            rowAllCheckbox.indeterminate = true;
-        }
-    };
-
-    /**
-     * Update all module rows' "All" states in a container.
-     */
-    const updateAllRowStates = (container = document) => {
-        const root = (container instanceof Element) ? container : document;
-        const rows = root.querySelectorAll('.perm-module-row');
-        rows.forEach(row => {
-            const module = getModule(row);
-            if (module) updateRowAllState(module, root);
-        });
-    };
-
-    /**
-     * 2. handleRowAllChange(rowAllCheckbox)
-     */
-    const handleRowAllChange = (rowAllCheckbox) => {
-        const module = getModule(rowAllCheckbox);
-        const row = rowAllCheckbox.closest('.perm-module-row') || document;
-        const isChecked = rowAllCheckbox.checked;
-
-        rowAllCheckbox.indeterminate = false;
-
-        row.querySelectorAll(`.perm-checkbox[data-module="${module}"]:not(:disabled), .perm-checkbox[data-group="${module}"]:not(:disabled)`).forEach(cb => {
-            cb.checked = isChecked;
-        });
-
-        const container = rowAllCheckbox.closest('.perm-matrix-card') || rowAllCheckbox.closest('form') || document;
-        updateRowAllState(module, container);
-    };
-
-    /**
-     * 3. handleActionCheckboxChange(checkbox)
-     * If 'view' is unchecked -> uncheck all other permissions in that module row.
-     * If 'create', 'edit', or 'delete' is checked -> automatically check 'view'.
-     */
-    const handleActionCheckboxChange = (checkbox) => {
-        const module = getModule(checkbox);
-        const action = checkbox.dataset.action || (checkbox.dataset.permission ? checkbox.dataset.permission.split('.')[1] : '');
-        const row = checkbox.closest('.perm-module-row') || document;
-        const container = checkbox.closest('.perm-matrix-card') || checkbox.closest('form') || document;
-
-        if (action === 'view' && !checkbox.checked) {
-            row.querySelectorAll(`.perm-checkbox[data-module="${module}"]:not(:disabled), .perm-checkbox[data-group="${module}"]:not(:disabled)`).forEach(cb => {
-                cb.checked = false;
+    // Attach Dynamic Row Listeners
+    const attachEventListeners = () => {
+        document.querySelectorAll('.manage-permissions').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = e.currentTarget.dataset.id;
+                const name = e.currentTarget.dataset.name;
+                const role = e.currentTarget.dataset.role;
+                openPermissionsModal(id, name, role);
             });
-        } else if ((action === 'create' || action === 'edit' || action === 'delete') && checkbox.checked) {
-            const viewCheckbox = row.querySelector(`.perm-checkbox[data-action="view"]`);
-            if (viewCheckbox && !viewCheckbox.disabled) {
-                viewCheckbox.checked = true;
+        });
+
+        document.querySelectorAll('.staff-checkbox').forEach(cb => {
+            cb.addEventListener('change', () => {
+                updateBulkDeleteState();
+            });
+        });
+
+        updateBulkDeleteState();
+    };
+
+    // Explicit click handler for staff mobile card header collapse toggle
+    document.addEventListener('click', function (e) {
+        const header = e.target.closest('.staff-mobile-header');
+        if (!header) return;
+
+        const targetId = header.getAttribute('data-bs-target');
+        if (targetId) {
+            const collapseEl = document.querySelector(targetId);
+            if (collapseEl && typeof bootstrap !== 'undefined') {
+                const bsCollapse = bootstrap.Collapse.getOrCreateInstance(collapseEl);
+                bsCollapse.toggle();
             }
         }
+    });
 
-        updateRowAllState(module, container);
-    };
+    // Bootstrap Collapse events to sync chevron icon toggle state
+    document.addEventListener('show.bs.collapse', function (e) {
+        const item = e.target.closest('.staff-mobile-item');
+        if (item) {
+            const header = item.querySelector('.staff-mobile-header');
+            const toggle = item.querySelector('.staff-action-toggle');
+            if (header) header.setAttribute('aria-expanded', 'true');
+            if (toggle) toggle.setAttribute('aria-expanded', 'true');
+        }
+    });
 
-    /**
-     * 4. selectAllPermissions(container)
-     */
-    const selectAllPermissions = (container = document) => {
-        const root = (container instanceof Element) ? container : document;
-        root.querySelectorAll('.perm-checkbox:not(:disabled)').forEach(cb => {
-            cb.checked = true;
-        });
-        root.querySelectorAll('.perm-row-all, .perm-row-select-all').forEach(cb => {
-            cb.checked = true;
-            cb.indeterminate = false;
-        });
-        updateAllRowStates(root);
-    };
+    document.addEventListener('hide.bs.collapse', function (e) {
+        const item = e.target.closest('.staff-mobile-item');
+        if (item) {
+            const header = item.querySelector('.staff-mobile-header');
+            const toggle = item.querySelector('.staff-action-toggle');
+            if (header) header.setAttribute('aria-expanded', 'false');
+            if (toggle) toggle.setAttribute('aria-expanded', 'false');
+        }
+    });
 
-    /**
-     * 5. clearAllPermissions(container)
-     */
-    const clearAllPermissions = (container = document) => {
-        const root = (container instanceof Element) ? container : document;
-        root.querySelectorAll('.perm-checkbox:not(:disabled)').forEach(cb => {
-            cb.checked = false;
-        });
-        root.querySelectorAll('.perm-row-all, .perm-row-select-all').forEach(cb => {
-            cb.checked = false;
-            cb.indeterminate = false;
-        });
-        updateAllRowStates(root);
-    };
+    // Single Staff Delete via bindDeleteAction
+    bindDeleteAction({
+        selector: '.delete-staff',
+        url: (id) => `/api/staff/${id}`,
+        tableReloadFn: () => fetchStaffTable(currentPage),
+        itemNameAttr: 'data-name'
+    });
 
-    /**
-     * 6. getCheckedPermissions(container)
-     */
-    const getCheckedPermissions = (container = document) => {
-        const root = (container instanceof Element) ? container : document;
-        const checkedBoxes = Array.from(root.querySelectorAll('.perm-checkbox:checked:not(:disabled)'));
-        return checkedBoxes.map(cb => getPermissionKey(cb));
-    };
+    // Bind Staff Create Form via AJAX
+    bindFormSubmit({
+        formId: 'staffCreateForm',
+        showToast: true,
+        onSuccess: (data) => {
+            if (data.redirect) {
+                setTimeout(() => {
+                    window.location.href = data.redirect;
+                }, 800);
+            }
+        }
+    });
 
-    /**
-     * 7. setCheckedPermissions(permissionsArray, container)
-     */
-    const setCheckedPermissions = (permissionsArray = [], container = document) => {
-        const root = (container instanceof Element) ? container : document;
-        const permSet = new Set(permissionsArray || []);
+    // Bind Staff Edit Form via AJAX
+    bindFormSubmit({
+        formId: 'staffEditForm',
+        showToast: true,
+        onSuccess: (data) => {
+            if (data.redirect) {
+                setTimeout(() => {
+                    window.location.href = data.redirect;
+                }, 800);
+            }
+        }
+    });
 
-        root.querySelectorAll('.perm-checkbox:not(:disabled)').forEach(cb => {
-            const key = getPermissionKey(cb);
-            cb.checked = permSet.has(key);
-        });
+    // Bulk Delete Action with SweetAlert2 & apiRequest
+    if (btnBulkDelete) {
+        btnBulkDelete.addEventListener('click', async () => {
+            const checkedBoxes = document.querySelectorAll('.staff-checkbox:checked');
+            const selectedIds = Array.from(checkedBoxes).map(cb => cb.value);
+            const count = selectedIds.length;
 
-        updateAllRowStates(root);
-    };
+            if (count === 0) return;
 
-    /**
-     * 8. Event Delegation Initialization
-     */
-    const init = () => {
-        document.addEventListener('change', (e) => {
-            if (e.target.classList.contains('perm-checkbox')) {
-                handleActionCheckboxChange(e.target);
-            } else if (e.target.classList.contains('perm-row-all') || e.target.classList.contains('perm-row-select-all')) {
-                handleRowAllChange(e.target);
+            const confirmed = await confirmDelete(`${count} selected staff member${count > 1 ? 's' : ''}`);
+            if (!confirmed) return;
+
+            try {
+                btnBulkDelete.disabled = true;
+                btnBulkDelete.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1.5"></i> Deleting...';
+
+                const deletePromises = selectedIds.map(id => apiRequest(`/api/staff/${id}`, { method: 'DELETE' }));
+                await Promise.all(deletePromises);
+
+                showSuccessToast(`${count} staff member${count > 1 ? 's' : ''} deleted successfully`);
+                if (selectAllCheckbox) selectAllCheckbox.checked = false;
+                fetchStaffTable(currentPage);
+            } catch (error) {
+                console.error('Error in bulk delete:', error);
+                showErrorToast(error.message || 'An error occurred while performing bulk delete.');
+            } finally {
+                btnBulkDelete.disabled = false;
+                btnBulkDelete.innerHTML = `<i class="fa-regular fa-trash-can pe-1"></i> Delete Selected (<span id="selectedCount">0</span>)`;
             }
         });
-
-        document.addEventListener('click', (e) => {
-            const selectAllBtn = e.target.closest('#selectAllPermissions, .perm-global-select-all');
-            if (selectAllBtn) {
-                e.preventDefault();
-                const container = selectAllBtn.closest('.perm-matrix-card') || selectAllBtn.closest('form') || document;
-                selectAllPermissions(container);
-                return;
-            }
-
-            const clearAllBtn = e.target.closest('#clearAllPermissions, .perm-global-clear-all');
-            if (clearAllBtn) {
-                e.preventDefault();
-                const container = clearAllBtn.closest('.perm-matrix-card') || clearAllBtn.closest('form') || document;
-                clearAllPermissions(container);
-                return;
-            }
-        });
-
-        updateAllRowStates();
-    };
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
     }
 
-    return {
-        updateRowAllState,
-        handleRowAllChange,
-        handleActionCheckboxChange,
-        selectAllPermissions,
-        clearAllPermissions,
-        getCheckedPermissions,
-        setCheckedPermissions,
-        updateAllRowStates
-    };
-})();
-
-// Attach to window object for external availability
-window.PermissionsMatrix = PermissionsMatrix;
-
-// Manage Permissions Matrix Rendering
-const groupMeta = {
-    'staff': { title: 'Staff Management', icon: 'fa-user-group' },
-    'contacts': { title: 'Contacts', icon: 'fa-address-book' },
-    'deals': { title: 'Deals', icon: 'fa-handshake' },
-    'pipeline': { title: 'Pipeline', icon: 'fa-diagram-project' },
-    'reports': { title: 'Reports', icon: 'fa-chart-pie' },
-    'tasks': { title: 'Tasks', icon: 'fa-list-check' },
-    'settings': { title: 'Settings', icon: 'fa-gear' }
-};
-
-const renderPermissionsModalBody = (groupedPermissions, directPermissions, rolePermissions) => {
-    const directSet = new Set(directPermissions || []);
-    const roleSet = new Set(rolePermissions || []);
-    const actions = ['view', 'create', 'edit', 'delete'];
-
-    let html = `
-        <style>
-            .perm-matrix-card .form-check-input {
-                width: 1rem !important;
-                height: 1rem !important;
-                cursor: pointer;
-                margin-top: 0 !important;
-            }
-            .perm-matrix-card .table td {
-                padding-top: 0.5rem !important;
-                padding-bottom: 0.5rem !important;
-            }
-        </style>
-        <div class="card border rounded-3 shadow-none overflow-hidden perm-matrix-card" id="modalPermissionsMatrixContainer">
-            <div class="card-header bg-body-tertiary d-flex align-items-center justify-content-between py-2.5 px-3 border-bottom">
-                <div class="d-flex align-items-center gap-2 fw-semibold text-body-emphasis small">
-                    <i class="fa-solid fa-shield-halved" style="color: #6366F1;"></i>
-                    <span>Module Permissions Matrix</span>
-                </div>
-                <div class="d-flex align-items-center gap-2">
-                    <button type="button" id="modalSelectAllPermissions" class="btn btn-sm btn-purple-light fw-semibold border-0 perm-global-select-all" style="font-size: 0.775rem; color: #6366F1; background-color: #f3e8ff;">
-                        <i class="fa-solid fa-check-double me-1"></i> Select All Permissions
-                    </button>
-                    <button type="button" id="modalClearAllPermissions" class="btn btn-sm btn-light border text-secondary fw-semibold perm-global-clear-all" style="font-size: 0.775rem;">
-                        <i class="fa-solid fa-xmark me-1"></i> Clear All
-                    </button>
-                </div>
-            </div>
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0" id="modalPermissionsMatrix" style="font-size: 0.85rem;">
-                    <thead class="bg-body-tertiary border-bottom text-secondary">
-                        <tr class="fw-semibold" style="font-size: 0.75rem; letter-spacing: 0.03em;">
-                            <th class="ps-3 py-2 text-uppercase">Module</th>
-                            <th class="text-center py-2 text-uppercase" style="width: 15%;">View</th>
-                            <th class="text-center py-2 text-uppercase" style="width: 15%;">Create</th>
-                            <th class="text-center py-2 text-uppercase" style="width: 15%;">Edit</th>
-                            <th class="text-center py-2 text-uppercase" style="width: 15%;">Delete</th>
-                            <th class="pe-3 text-center py-2 text-uppercase" style="width: 15%;">All</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-    `;
-
-    for (const [group, perms] of Object.entries(groupedPermissions)) {
-        const meta = groupMeta[group] || { title: group.charAt(0).toUpperCase() + group.slice(1), icon: 'fa-folder' };
-        const groupPermMap = {};
-        perms.forEach(p => {
-            const parts = p.split('.');
-            const act = parts[1] || '';
-            groupPermMap[act] = p;
+    // Filter Handlers
+    if (filterDepartment) {
+        filterDepartment.addEventListener('change', (e) => {
+            currentDepartment = e.target.value;
+            fetchStaffTable(1);
         });
+    }
 
-        let allRowChecked = true;
+    if (filterStatus) {
+        filterStatus.addEventListener('change', (e) => {
+            currentStatus = e.target.value;
+            fetchStaffTable(1);
+        });
+    }
 
-        let rowCells = '';
-        actions.forEach(action => {
-            if (groupPermMap[action]) {
-                const perm = groupPermMap[action];
-                const isRole = roleSet.has(perm);
-                const isDirect = directSet.has(perm);
-                const isChecked = isRole || isDirect;
-                const inputId = `modal_perm_${perm.replace('.', '_')}`;
+    if (perPageSelect) {
+        perPageSelect.addEventListener('change', (e) => {
+            perPage = parseInt(e.target.value);
+            fetchStaffTable(1);
+        });
+    }
 
-                if (!isChecked) allRowChecked = false;
+    let searchTimeout;
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                currentSearch = e.target.value.trim();
+                fetchStaffTable(1);
+            }, 300);
+        });
+    }
 
-                rowCells += `
-                    <td class="text-center py-2">
-                        <div class="d-flex flex-column align-items-center justify-content-center">
-                            <input class="form-check-input custom-checkbox perm-checkbox"
-                                   type="checkbox"
-                                   name="permissions[]"
-                                   value="${perm}"
-                                   id="${inputId}"
-                                   data-module="${group}"
-                                   data-group="${group}"
-                                   data-action="${action}"
-                                   data-permission="${perm}"
-                                   ${isChecked ? 'checked' : ''}>
-                        </div>
-                    </td>
-                `;
+    if (selectAllCheckbox) {
+        selectAllCheckbox.addEventListener('change', (e) => {
+            document.querySelectorAll('.staff-checkbox').forEach(cb => {
+                cb.checked = e.target.checked;
+            });
+            updateBulkDeleteState();
+        });
+    }
+
+    const btnFilterTrigger = document.getElementById('btnFilterTrigger');
+    if (btnFilterTrigger) {
+        btnFilterTrigger.addEventListener('click', () => {
+            if (filterDepartment) filterDepartment.value = '';
+            if (filterStatus) filterStatus.value = '';
+            if (searchInput) searchInput.value = '';
+            currentDepartment = '';
+            currentStatus = '';
+            currentSearch = '';
+            fetchStaffTable(1);
+        });
+    }
+
+    const btnExport = document.getElementById('btnExport');
+    if (btnExport) {
+        btnExport.addEventListener('click', async () => {
+            try {
+                btnExport.disabled = true;
+                btnExport.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>Exporting...</span>`;
+                const params = new URLSearchParams({
+                    search: currentSearch,
+                    department: currentDepartment,
+                    status: currentStatus,
+                    per_page: 1000
+                });
+                const response = await fetch(`/api/staff?${params.toString()}`);
+                const resData = await response.json();
+                const items = resData.data || resData;
+
+                if (!Array.isArray(items) || items.length === 0) {
+                    if (typeof showErrorToast === 'function') showErrorToast('No staff data available to export.');
+                    return;
+                }
+
+                const headers = ['ID', 'Name', 'Email', 'Phone', 'Department', 'Role/Position', 'Status', 'Joined Date'];
+                const csvRows = [headers.join(',')];
+
+                items.forEach(staff => {
+                    const row = [
+                        staff.id,
+                        `"${(staff.name || '').replace(/"/g, '""')}"`,
+                        `"${(staff.email || '').replace(/"/g, '""')}"`,
+                        `"${(staff.phone || '').replace(/"/g, '""')}"`,
+                        `"${(staff.department || '').replace(/"/g, '""')}"`,
+                        `"${(staff.position || staff.role_name || '').replace(/"/g, '""')}"`,
+                        staff.status || '',
+                        `"${staff.joined_date || staff.created_at || ''}"`
+                    ];
+                    csvRows.push(row.join(','));
+                });
+
+                const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `staff_export_${new Date().toISOString().slice(0, 10)}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } catch (err) {
+                console.error('Export failed:', err);
+            } finally {
+                btnExport.disabled = false;
+                btnExport.innerHTML = `<i class="fa-solid fa-download"></i> <span>Export</span>`;
+            }
+        });
+    }
+
+    /* ==========================================================================
+       PERMISSIONS MATRIX & MODAL LOGIC
+       ========================================================================== */
+    const PermissionsMatrix = (() => {
+        const getModule = (el) => el.dataset.module || el.dataset.group || el.getAttribute('data-module') || el.getAttribute('data-group');
+        const getPermissionKey = (cb) => cb.dataset.permission || cb.value;
+
+        const updateRowAllState = (module, container = document) => {
+            if (!module) return;
+            const root = (container instanceof Element) ? container : document;
+            const row = root.querySelector(`.perm-module-row[data-module="${module}"], .perm-module-row[data-group="${module}"]`);
+            if (!row) return;
+
+            const rowAllCheckbox = row.querySelector('.perm-row-all, .perm-row-select-all');
+            if (!rowAllCheckbox) return;
+
+            const rowCheckboxes = Array.from(row.querySelectorAll('.perm-checkbox'));
+            if (rowCheckboxes.length === 0) {
+                rowAllCheckbox.checked = false;
+                rowAllCheckbox.indeterminate = false;
+                return;
+            }
+
+            const checkedCount = rowCheckboxes.filter(cb => cb.checked).length;
+            const totalCount = rowCheckboxes.length;
+
+            if (checkedCount === totalCount) {
+                rowAllCheckbox.checked = true;
+                rowAllCheckbox.indeterminate = false;
+            } else if (checkedCount === 0) {
+                rowAllCheckbox.checked = false;
+                rowAllCheckbox.indeterminate = false;
             } else {
-                rowCells += `<td class="text-center py-2"><span class="text-body-tertiary fw-light">—</span></td>`;
+                rowAllCheckbox.checked = false;
+                rowAllCheckbox.indeterminate = true;
             }
-        });
+        };
 
-        const isRowAllChecked = allRowChecked;
+        const updateAllRowStates = (container = document) => {
+            const root = (container instanceof Element) ? container : document;
+            const rows = root.querySelectorAll('.perm-module-row');
+            rows.forEach(row => {
+                const module = getModule(row);
+                if (module) updateRowAllState(module, root);
+            });
+        };
 
-        html += `
-            <tr class="perm-module-row" data-module="${group}" data-group="${group}">
-                <td class="ps-3 py-2 fw-semibold text-body-emphasis">
-                    <div class="d-flex align-items-center gap-2">
-                        <i class="fa-solid ${meta.icon}" style="color: #6366F1; width: 16px;"></i>
-                        <span>${meta.title}</span>
-                    </div>
-                </td>
-                ${rowCells}
-                <td class="pe-3 text-center py-2">
-                    <div class="form-check d-inline-block m-0">
-                        <input class="form-check-input custom-checkbox perm-row-all perm-row-select-all"
-                               type="checkbox"
-                               id="modal_row_all_${group}"
-                               data-module="${group}"
-                               data-group="${group}"
-                               ${isRowAllChecked ? 'checked' : ''}
-                               title="Select all permissions for ${meta.title}">
-                    </div>
-                </td>
-            </tr>
-        `;
-    }
+        const handleRowAllChange = (rowAllCheckbox) => {
+            const module = getModule(rowAllCheckbox);
+            const row = rowAllCheckbox.closest('.perm-module-row') || document;
+            const isChecked = rowAllCheckbox.checked;
 
-    html += `
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    `;
-    return html;
-};
+            rowAllCheckbox.indeterminate = false;
+            row.querySelectorAll(`.perm-checkbox[data-module="${module}"]:not(:disabled), .perm-checkbox[data-group="${module}"]:not(:disabled)`).forEach(cb => {
+                cb.checked = isChecked;
+            });
 
+            const container = rowAllCheckbox.closest('.perm-matrix-card') || rowAllCheckbox.closest('form') || document;
+            updateRowAllState(module, container);
+        };
+
+        const handleActionCheckboxChange = (checkbox) => {
+            const module = getModule(checkbox);
+            const action = checkbox.dataset.action || (checkbox.dataset.permission ? checkbox.dataset.permission.split('.')[1] : '');
+            const row = checkbox.closest('.perm-module-row') || document;
+            const container = checkbox.closest('.perm-matrix-card') || checkbox.closest('form') || document;
+
+            if (action === 'view' && !checkbox.checked) {
+                row.querySelectorAll(`.perm-checkbox[data-module="${module}"]:not(:disabled), .perm-checkbox[data-group="${module}"]:not(:disabled)`).forEach(cb => {
+                    cb.checked = false;
+                });
+            } else if ((action === 'create' || action === 'edit' || action === 'delete') && checkbox.checked) {
+                const viewCheckbox = row.querySelector(`.perm-checkbox[data-action="view"]`);
+                if (viewCheckbox && !viewCheckbox.disabled) {
+                    viewCheckbox.checked = true;
+                }
+            }
+
+            updateRowAllState(module, container);
+        };
+
+        const selectAllPermissions = (container = document) => {
+            const root = (container instanceof Element) ? container : document;
+            root.querySelectorAll('.perm-checkbox:not(:disabled)').forEach(cb => cb.checked = true);
+            root.querySelectorAll('.perm-row-all, .perm-row-select-all').forEach(cb => {
+                cb.checked = true;
+                cb.indeterminate = false;
+            });
+            updateAllRowStates(root);
+        };
+
+        const clearAllPermissions = (container = document) => {
+            const root = (container instanceof Element) ? container : document;
+            root.querySelectorAll('.perm-checkbox:not(:disabled)').forEach(cb => cb.checked = false);
+            root.querySelectorAll('.perm-row-all, .perm-row-select-all').forEach(cb => {
+                cb.checked = false;
+                cb.indeterminate = false;
+            });
+            updateAllRowStates(root);
+        };
+
+        const getCheckedPermissions = (container = document) => {
+            const root = (container instanceof Element) ? container : document;
+            const checkedBoxes = Array.from(root.querySelectorAll('.perm-checkbox:checked:not(:disabled)'));
+            const keys = checkedBoxes.map(cb => getPermissionKey(cb));
+            return Array.from(new Set(keys));
+        };
+
+        const setCheckedPermissions = (permissionsArray = [], container = document) => {
+            const root = (container instanceof Element) ? container : document;
+            const permSet = new Set(permissionsArray || []);
+            root.querySelectorAll('.perm-checkbox:not(:disabled)').forEach(cb => {
+                const key = getPermissionKey(cb);
+                cb.checked = permSet.has(key);
+            });
+            updateAllRowStates(root);
+        };
+
+        const init = () => {
+            document.addEventListener('change', (e) => {
+                if (e.target.classList.contains('perm-checkbox')) {
+                    handleActionCheckboxChange(e.target);
+                } else if (e.target.classList.contains('perm-row-all') || e.target.classList.contains('perm-row-select-all')) {
+                    handleRowAllChange(e.target);
+                }
+            });
+
+            document.addEventListener('click', (e) => {
+                const selectAllBtn = e.target.closest('#selectAllPermissions, .perm-global-select-all');
+                if (selectAllBtn) {
+                    e.preventDefault();
+                    const container = selectAllBtn.closest('.perm-matrix-card') || selectAllBtn.closest('form') || document;
+                    selectAllPermissions(container);
+                    return;
+                }
+
+                const clearAllBtn = e.target.closest('#clearAllPermissions, .perm-global-clear-all');
+                if (clearAllBtn) {
+                    e.preventDefault();
+                    const container = clearAllBtn.closest('.perm-matrix-card') || clearAllBtn.closest('form') || document;
+                    clearAllPermissions(container);
+                    return;
+                }
+            });
+
+            updateAllRowStates();
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+
+        return {
+            updateRowAllState,
+            handleRowAllChange,
+            handleActionCheckboxChange,
+            selectAllPermissions,
+            clearAllPermissions,
+            getCheckedPermissions,
+            setCheckedPermissions,
+            updateAllRowStates
+        };
+    })();
+
+    window.PermissionsMatrix = PermissionsMatrix;
+
+    // Permissions Modal Elements & Logic
     const permissionsModalEl = document.getElementById('permissionsModal');
     const permissionsModalForm = document.getElementById('permissionsModalForm');
     const permissionsModalSpinner = document.getElementById('permissionsModalSpinner');
@@ -611,13 +775,190 @@ const renderPermissionsModalBody = (groupedPermissions, directPermissions, roleP
     let permissionsModalInstance = null;
 
     if (permissionsModalEl && typeof bootstrap !== 'undefined') {
-        permissionsModalInstance = new bootstrap.Modal(permissionsModalEl);
+        permissionsModalInstance = bootstrap.Modal.getOrCreateInstance(permissionsModalEl);
     }
+
+    const groupMeta = {
+        'staff': { title: 'Staff Management', icon: 'fa-user-group' },
+        'contacts': { title: 'Contacts', icon: 'fa-address-book' },
+        'deals': { title: 'Deals', icon: 'fa-handshake' },
+        'pipeline': { title: 'Pipeline', icon: 'fa-diagram-project' },
+        'reports': { title: 'Reports', icon: 'fa-chart-pie' },
+        'tasks': { title: 'Tasks', icon: 'fa-list-check' },
+        'settings': { title: 'Settings', icon: 'fa-gear' }
+    };
+
+    const renderPermissionsModalBody = (groupedPermissions, directPermissions, rolePermissions) => {
+        const directSet = new Set(directPermissions || []);
+        const roleSet = new Set(rolePermissions || []);
+        const actions = ['view', 'create', 'edit', 'delete'];
+
+        let tableRowsHtml = '';
+        let accordionItemsHtml = '';
+
+        for (const [group, perms] of Object.entries(groupedPermissions)) {
+            const meta = groupMeta[group] || { title: group.charAt(0).toUpperCase() + group.slice(1), icon: 'fa-folder' };
+            const groupPermMap = {};
+            perms.forEach(p => {
+                const parts = p.split('.');
+                groupPermMap[parts[1] || ''] = p;
+            });
+
+            let allRowChecked = true;
+            let rowCells = '';
+            let accordionRows = '';
+
+            actions.forEach(action => {
+                if (groupPermMap[action]) {
+                    const perm = groupPermMap[action];
+                    const isChecked = roleSet.has(perm) || directSet.has(perm);
+                    const inputId = `modal_perm_${perm.replace('.', '_')}`;
+                    const mobInputId = `modal_perm_mob_${perm.replace('.', '_')}`;
+
+                    if (!isChecked) allRowChecked = false;
+
+                    rowCells += `
+                        <td class="text-center py-2">
+                            <div class="d-flex flex-column align-items-center justify-content-center">
+                                <input class="form-check-input custom-checkbox perm-checkbox"
+                                       type="checkbox"
+                                       name="permissions[]"
+                                       value="${perm}"
+                                       id="${inputId}"
+                                       data-module="${group}"
+                                       data-group="${group}"
+                                       data-action="${action}"
+                                       data-permission="${perm}"
+                                       ${isChecked ? 'checked' : ''}>
+                            </div>
+                        </td>
+                    `;
+
+                    accordionRows += `
+                        <div class="d-flex align-items-center justify-content-between py-2 border-bottom">
+                            <label class="form-check-label text-capitalize text-body-emphasis small fw-medium me-2" for="${mobInputId}">
+                                ${action} ${group}
+                            </label>
+                            <div class="form-check form-switch m-0">
+                                <input class="form-check-input perm-checkbox"
+                                       type="checkbox"
+                                       name="permissions[]"
+                                       value="${perm}"
+                                       id="${mobInputId}"
+                                       data-module="${group}"
+                                       data-group="${group}"
+                                       data-action="${action}"
+                                       data-permission="${perm}"
+                                       ${isChecked ? 'checked' : ''}>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    rowCells += `<td class="text-center py-2"><span class="text-body-tertiary fw-light">—</span></td>`;
+                }
+            });
+
+            tableRowsHtml += `
+                <tr class="perm-module-row" data-module="${group}" data-group="${group}">
+                    <td class="ps-3 py-2 fw-semibold text-body-emphasis">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fa-solid ${meta.icon}" style="color: #6366F1; width: 16px;"></i>
+                            <span>${meta.title}</span>
+                        </div>
+                    </td>
+                    ${rowCells}
+                    <td class="pe-3 text-center py-2">
+                        <div class="form-check d-inline-block m-0">
+                            <input class="form-check-input custom-checkbox perm-row-all perm-row-select-all"
+                                   type="checkbox"
+                                   id="modal_row_all_${group}"
+                                   data-module="${group}"
+                                   data-group="${group}"
+                                   ${allRowChecked ? 'checked' : ''}
+                                   title="Select all permissions for ${meta.title}">
+                        </div>
+                    </td>
+                </tr>
+            `;
+
+            accordionItemsHtml += `
+                <div class="accordion-item border rounded-3 overflow-hidden perm-module-row mb-2" data-module="${group}" data-group="${group}">
+                    <div class="accordion-header d-flex align-items-center justify-content-between bg-body-tertiary px-3 py-2">
+                        <button class="accordion-button collapsed p-0 bg-transparent shadow-none flex-grow-1 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_modal_${group}">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="fa-solid ${meta.icon}" style="color: #6366F1; width: 16px;"></i>
+                                <span class="fw-semibold text-body-emphasis small">${meta.title}</span>
+                            </div>
+                        </button>
+                        <div class="form-check m-0 ms-2 d-flex align-items-center gap-1.5" onclick="event.stopPropagation();">
+                            <input class="form-check-input custom-checkbox perm-row-all perm-row-select-all"
+                                   type="checkbox"
+                                   id="modal_mob_row_all_${group}"
+                                   data-module="${group}"
+                                   data-group="${group}"
+                                   ${allRowChecked ? 'checked' : ''}
+                                   title="Select all permissions for ${meta.title}">
+                            <label class="form-check-label small fw-medium text-secondary" for="modal_mob_row_all_${group}" style="font-size: 0.775rem;">All</label>
+                        </div>
+                    </div>
+                    <div id="collapse_modal_${group}" class="accordion-collapse collapse" data-bs-parent="#modal_accordion_parent">
+                        <div class="accordion-body p-3 bg-body border-top">
+                            ${accordionRows}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        let html = `
+            <div class="card border rounded-3 shadow-none overflow-hidden perm-matrix-card" id="modalPermissionsMatrixContainer">
+                <div class="card-header bg-body-tertiary d-flex flex-column flex-sm-row align-items-sm-center justify-content-between p-3 border-bottom gap-2">
+                    <div class="d-flex align-items-center gap-2 fw-semibold text-body-emphasis small">
+                        <i class="fa-solid fa-shield-halved" style="color: #6366F1;"></i>
+                        <span>Module Permissions Matrix</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="button" id="modalSelectAllPermissions" class="btn btn-sm btn-purple-light fw-semibold border-0 perm-global-select-all" style="font-size: 0.775rem; color: #6366F1; background-color: #f3e8ff;">
+                            <i class="fa-solid fa-check-double me-1"></i> Select All Permissions
+                        </button>
+                        <button type="button" id="modalClearAllPermissions" class="btn btn-sm btn-light border text-secondary fw-semibold perm-global-clear-all" style="font-size: 0.775rem;">
+                            <i class="fa-solid fa-xmark me-1"></i> Clear All
+                        </button>
+                    </div>
+                </div>
+                <!-- Desktop Table View -->
+                <div class="table-responsive d-none d-lg-block">
+                    <table class="table table-hover align-middle mb-0" id="modalPermissionsMatrix" style="font-size: 0.85rem;">
+                        <thead class="bg-body-tertiary border-bottom text-secondary">
+                            <tr class="fw-semibold" style="font-size: 0.75rem; letter-spacing: 0.03em;">
+                                <th class="ps-3 py-2 text-uppercase">Module</th>
+                                <th class="text-center py-2 text-uppercase" style="width: 15%;">View</th>
+                                <th class="text-center py-2 text-uppercase" style="width: 15%;">Create</th>
+                                <th class="text-center py-2 text-uppercase" style="width: 15%;">Edit</th>
+                                <th class="text-center py-2 text-uppercase" style="width: 15%;">Delete</th>
+                                <th class="pe-3 text-center py-2 text-uppercase" style="width: 15%;">All</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${tableRowsHtml}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Mobile Accordion View -->
+                <div class="d-lg-none p-3 bg-body" id="modal_mobile_accordion">
+                    <div class="accordion accordion-flush d-flex flex-column gap-2" id="modal_accordion_parent">
+                        ${accordionItemsHtml}
+                    </div>
+                </div>
+            </div>
+        `;
+        return html;
+    };
 
     const openPermissionsModal = async (staffId, staffName, staffRole) => {
         if (!permissionsModalEl) return;
         if (!permissionsModalInstance && typeof bootstrap !== 'undefined') {
-            permissionsModalInstance = new bootstrap.Modal(permissionsModalEl);
+            permissionsModalInstance = bootstrap.Modal.getOrCreateInstance(permissionsModalEl);
         }
 
         if (permStaffName) permStaffName.textContent = staffName || 'Staff Member';
@@ -635,8 +976,7 @@ const renderPermissionsModalBody = (groupedPermissions, directPermissions, roleP
         if (permissionsModalInstance) permissionsModalInstance.show();
 
         try {
-            const response = await fetch(`/api/staff/${staffId}/permissions`, { headers: getHeaders() });
-            const data = await response.json();
+            const data = await apiRequest(`/api/staff/${staffId}/permissions`);
 
             if (data.success) {
                 const { user, grouped_permissions, direct_permissions, role_permissions } = data.data;
@@ -684,48 +1024,18 @@ const renderPermissionsModalBody = (groupedPermissions, directPermissions, roleP
             }
 
             try {
-                // Collect checked and enabled (editable) direct permissions
                 const checkedPermissions = PermissionsMatrix.getCheckedPermissions(permissionsModalForm);
-
-                const response = await fetch(`/api/staff/${staffId}/permissions`, {
+                const data = await apiRequest(`/api/staff/${staffId}/permissions`, {
                     method: 'PUT',
-                    headers: {
-                        ...getHeaders(),
-                        'Content-Type': 'application/json'
-                    },
                     body: JSON.stringify({ permissions: checkedPermissions })
                 });
 
-                const data = await response.json();
+                if (permissionsModalInstance) permissionsModalInstance.hide();
+                showSuccessToast(data.message || 'Permissions updated successfully');
 
-                if (response.ok && data.success) {
-                    if (permissionsModalInstance) permissionsModalInstance.hide();
-                    showToast('success', data.message || 'Permissions updated successfully');
-                } else {
-                    const errorMsg = data.message || 'Failed to update permissions.';
-                    if (typeof Swal !== 'undefined') {
-                        Swal.fire({
-                            title: 'Error!',
-                            text: errorMsg,
-                            icon: 'error',
-                            confirmButtonColor: '#6366f1'
-                        });
-                    } else {
-                        alert(errorMsg);
-                    }
-                }
             } catch (err) {
                 console.error('Save permissions error:', err);
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'An error occurred while saving permissions.',
-                        icon: 'error',
-                        confirmButtonColor: '#6366f1'
-                    });
-                } else {
-                    alert('An error occurred while saving permissions.');
-                }
+                showErrorToast(err.message || 'An error occurred while saving permissions.');
             } finally {
                 if (submitBtn) {
                     submitBtn.disabled = false;
@@ -735,276 +1045,23 @@ const renderPermissionsModalBody = (groupedPermissions, directPermissions, roleP
         });
     }
 
-    // Delegated click & change handlers for Matrix & Select All / Clear All actions
-    document.addEventListener('click', (e) => {
-        const globalSelectBtn = e.target.closest('.perm-global-select-all');
-        if (globalSelectBtn) {
-            const card = globalSelectBtn.closest('.perm-matrix-card') || document;
-            card.querySelectorAll('.perm-checkbox:not(:disabled)').forEach(cb => cb.checked = true);
-            card.querySelectorAll('.perm-row-select-all').forEach(cb => cb.checked = true);
-            return;
-        }
-
-        const globalClearBtn = e.target.closest('.perm-global-clear-all');
-        if (globalClearBtn) {
-            const card = globalClearBtn.closest('.perm-matrix-card') || document;
-            card.querySelectorAll('.perm-checkbox:not(:disabled)').forEach(cb => cb.checked = false);
-            card.querySelectorAll('.perm-row-select-all').forEach(cb => cb.checked = false);
-            return;
-        }
+    // Password Eye Toggle Handler for Forms
+    document.querySelectorAll('.toggle-password-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const input = this.parentNode.querySelector('input');
+            if (!input) return;
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            const icon = this.querySelector('i');
+            if (icon) {
+                icon.classList.toggle('fa-eye', !isPassword);
+                icon.classList.toggle('fa-eye-slash', isPassword);
+            }
+        });
     });
 
-    document.addEventListener('change', (e) => {
-        if (e.target.classList.contains('perm-row-select-all')) {
-            const row = e.target.closest('.perm-module-row');
-            if (row) {
-                const isChecked = e.target.checked;
-                row.querySelectorAll('.perm-checkbox:not(:disabled)').forEach(cb => cb.checked = isChecked);
-            }
-            return;
-        }
-
-        if (e.target.classList.contains('perm-checkbox')) {
-            const row = e.target.closest('.perm-module-row');
-            if (row) {
-                const rowSelectAll = row.querySelector('.perm-row-select-all');
-                if (rowSelectAll) {
-                    const rowCheckboxes = Array.from(row.querySelectorAll('.perm-checkbox:not(:disabled)'));
-                    rowSelectAll.checked = rowCheckboxes.length > 0 && rowCheckboxes.every(cb => cb.checked);
-                }
-            }
-        }
-    });
-
-    // Event Listeners for Dynamic Table Rows
-    const attachEventListeners = () => {
-        document.querySelectorAll('.manage-permissions').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const id = e.currentTarget.dataset.id;
-                const name = e.currentTarget.dataset.name;
-                const role = e.currentTarget.dataset.role;
-                openPermissionsModal(id, name, role);
-            });
-        });
-
-        document.querySelectorAll('.delete-staff').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const id = e.currentTarget.dataset.id;
-                deleteStaff(id);
-            });
-        });
-
-        document.querySelectorAll('.staff-checkbox').forEach(cb => {
-            cb.addEventListener('change', () => {
-                updateBulkDeleteState();
-            });
-        });
-
-        updateBulkDeleteState();
-    };
-
-    // Filter Handlers
-    if (filterDepartment) {
-        filterDepartment.addEventListener('change', (e) => {
-            currentDepartment = e.target.value;
-            loadStaff(1);
-        });
-    }
-
-    if (filterStatus) {
-        filterStatus.addEventListener('change', (e) => {
-            currentStatus = e.target.value;
-            loadStaff(1);
-        });
-    }
-
-    if (perPageSelect) {
-        perPageSelect.addEventListener('change', (e) => {
-            perPage = parseInt(e.target.value);
-            loadStaff(1);
-        });
-    }
-
-    // Debounced Search Input
-    let searchTimeout;
-    if (searchInput) {
-        searchInput.addEventListener('input', (e) => {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => {
-                currentSearch = e.target.value.trim();
-                loadStaff(1);
-            }, 300);
-        });
-    }
-
-    // Select All Checkbox
-    if (selectAllCheckbox) {
-        selectAllCheckbox.addEventListener('change', (e) => {
-            document.querySelectorAll('.staff-checkbox').forEach(cb => {
-                cb.checked = e.target.checked;
-            });
-            updateBulkDeleteState();
-        });
-    }
-
-    // Toast Notification Helper
-    const showToast = (icon, title) => {
-        if (typeof Swal !== 'undefined') {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true
-            });
-            Toast.fire({ icon, title });
-        }
-    };
-
-    // Bulk Delete Action with SweetAlert2
-    if (btnBulkDelete) {
-        btnBulkDelete.addEventListener('click', async () => {
-            const checkedBoxes = document.querySelectorAll('.staff-checkbox:checked');
-            const selectedIds = Array.from(checkedBoxes).map(cb => cb.value);
-            const count = selectedIds.length;
-
-            if (count === 0) return;
-
-            if (typeof Swal !== 'undefined') {
-                const result = await Swal.fire({
-                    title: 'Are you sure?',
-                    text: `You are about to delete ${count} selected staff member${count > 1 ? 's' : ''}!`,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, delete them!',
-                    cancelButtonText: 'Cancel',
-                    reverseButtons: true,
-                    customClass: {
-                        popup: 'rounded-4 border-0 shadow',
-                        confirmButton: 'btn btn-danger rounded-3 px-3.5 py-2 fw-semibold ms-2',
-                        cancelButton: 'btn btn-light border rounded-3 px-3.5 py-2'
-                    },
-                    buttonsStyling: false
-                });
-
-                if (!result.isConfirmed) return;
-
-                try {
-                    btnBulkDelete.disabled = true;
-                    btnBulkDelete.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1.5"></i> Deleting...';
-
-                    const deletePromises = selectedIds.map(id =>
-                        fetch(`/api/staff/${id}`, {
-                            method: 'DELETE',
-                            headers: getHeaders()
-                        })
-                    );
-
-                    await Promise.all(deletePromises);
-
-                    showToast('success', `${count} staff member${count > 1 ? 's' : ''} deleted successfully`);
-                    if (selectAllCheckbox) selectAllCheckbox.checked = false;
-                    loadStaff(currentPage);
-                } catch (error) {
-                    console.error('Error in bulk delete:', error);
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'An error occurred while performing bulk delete.',
-                        icon: 'error',
-                        confirmButtonColor: '#6366f1'
-                    });
-                } finally {
-                    btnBulkDelete.disabled = false;
-                    btnBulkDelete.innerHTML = `<i class="fa-regular fa-trash-can pe-1"></i> Delete Selected (<span id="selectedCount">0</span>)`;
-                }
-            } else {
-                if (!confirm(`Are you sure you want to delete ${count} selected staff member(s)?`)) return;
-                try {
-                    const deletePromises = selectedIds.map(id =>
-                        fetch(`/api/staff/${id}`, {
-                            method: 'DELETE',
-                            headers: getHeaders()
-                        })
-                    );
-
-                    await Promise.all(deletePromises);
-                    if (selectAllCheckbox) selectAllCheckbox.checked = false;
-                    loadStaff(currentPage);
-                } catch (error) {
-                    console.error('Error in bulk delete:', error);
-                }
-            }
-        });
-    }
-
-    // Delete Single Staff with SweetAlert2
-    const deleteStaff = async (id) => {
-        if (typeof Swal !== 'undefined') {
-            const result = await Swal.fire({
-                title: 'Are you sure?',
-                text: 'You will not be able to recover this staff member record!',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, delete it!',
-                cancelButtonText: 'Cancel',
-                reverseButtons: true,
-                customClass: {
-                    popup: 'rounded-4 border-0 shadow',
-                    confirmButton: 'btn btn-danger rounded-3 px-3.5 py-2 fw-semibold ms-2',
-                    cancelButton: 'btn btn-light border rounded-3 px-3.5 py-2'
-                },
-                buttonsStyling: false
-            });
-
-            if (!result.isConfirmed) return;
-
-            try {
-                const response = await fetch(`/api/staff/${id}`, {
-                    method: 'DELETE',
-                    headers: getHeaders()
-                });
-
-                if (response.ok) {
-                    showToast('success', 'Staff member deleted successfully');
-                    loadStaff(currentPage);
-                } else {
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'An error occurred while deleting.',
-                        icon: 'error',
-                        confirmButtonColor: '#6366f1'
-                    });
-                }
-            } catch (error) {
-                console.error('Error deleting staff:', error);
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Network error occurred.',
-                    icon: 'error',
-                    confirmButtonColor: '#6366f1'
-                });
-            }
-        } else {
-            if (!confirm('Are you sure you want to delete this staff member?')) return;
-            try {
-                const response = await fetch(`/api/staff/${id}`, {
-                    method: 'DELETE',
-                    headers: getHeaders()
-                });
-
-                if (response.ok) {
-                    loadStaff(currentPage);
-                } else {
-                    alert('An error occurred while deleting.');
-                }
-            } catch (error) {
-                console.error('Error deleting staff:', error);
-            }
-        }
-    };
-
-    // Initial Load if on index page table
+    // Initial Load for Staff Table
     if (tableBody) {
-        loadStaff(1);
+        fetchStaffTable(1);
     }
 });

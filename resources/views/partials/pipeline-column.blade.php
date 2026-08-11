@@ -24,7 +24,7 @@
     <div class="d-flex flex-column gap-2 mb-2 flex-grow-1">
         @foreach ($column['deals'] as $deal)
             <div class="card rounded-3 border-0 shadow-sm">
-                <div class="card-body p-2">
+                <div class="card-body p-3">
                     <div class="d-flex justify-content-between align-items-center mb-1">
                         <h6 class="mb-0 fw-bold text-truncate pe-2" style="font-size: 0.8rem;">{{ $deal['company'] }}
                         </h6>
