@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         return `
             <tr class="border-bottom hover-bg-light transition-colors">
-                <td class="ps-4 py-3">
+                <td class="ps-3 py-3">
                     <input type="checkbox" class="form-check-input custom-checkbox staff-checkbox" value="${staff.id}">
                 </td>
                 <td class="py-3">
@@ -121,12 +121,157 @@ document.addEventListener('DOMContentLoaded', function () {
                 <td class="py-3 text-secondary" style="font-size: 0.85rem;">
                     ${formatDate(staff.joined_date || staff.created_at)}
                 </td>
-                <td class="pe-4 py-3 text-end">
+                <td class="pe-3 py-3 text-end">
                     <div class="d-inline-flex align-items-center">
                         ${actionButtons}
                     </div>
                 </td>
             </tr>
+        `;
+    };
+
+    // Helpers for Mobile Card Design
+    const getAvatarBg = (name) => {
+        const colors = ['#6366F1', '#5B5FC7', '#4F46E5', '#6366F1', '#5B5FC7'];
+        if (!name) return colors[0];
+        let hash = 0;
+        for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+        return colors[Math.abs(hash) % colors.length];
+    };
+
+    const getInitials = (name) => {
+        if (!name) return 'ST';
+        const parts = name.trim().split(' ');
+        if (parts.length >= 2) {
+            return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+        }
+        return name.substring(0, 2).toUpperCase();
+    };
+
+    // Mobile Staff Card HTML Renderer
+    const renderStaffMobileCard = (staff) => {
+        const initials = getInitials(staff.name);
+        const avatarBg = getAvatarBg(staff.name);
+
+        const avatarHtml = staff.avatar
+            ? `<img src="/storage/${staff.avatar}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0" width="42" height="42" alt="${staff.name}">`
+            : `<div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 fw-bold text-white shadow-sm" style="width: 42px; height: 42px; background-color: ${avatarBg}; font-size: 0.9rem; letter-spacing: 0.5px;">${initials}</div>`;
+
+        const statusBadge = staff.status === 'active'
+            ? `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #dcfce7; color: #16a34a; font-size: 0.75rem;">Active</span>`
+            : `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #fee2e2; color: #dc2626; font-size: 0.75rem;">Inactive</span>`;
+
+        const positionDisplay = staff.position || (staff.role_name ? staff.role_name.charAt(0).toUpperCase() + staff.role_name.slice(1) : 'Staff');
+        const badgeClass = getRoleBadgeClass(staff.position, staff.role_name);
+        const collapseId = `staffCollapse_${staff.id}`;
+
+        let actionButtonsHtml = `
+            <a href="/staff/${staff.id}" class="action-btn action-btn-view me-1" title="View Details">
+                <i class="fa-regular fa-eye"></i>
+            </a>
+        `;
+        if (window.userPermissions && window.userPermissions.canEdit) {
+            actionButtonsHtml += `
+                <button class="action-btn action-btn-perm manage-permissions me-1" data-id="${staff.id}" data-name="${staff.name}" data-role="${staff.role_name || 'staff'}" title="Manage Permissions">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </button>
+                <a href="/staff/${staff.id}/edit" class="action-btn action-btn-edit me-1" title="Edit Member">
+                    <i class="fa-regular fa-pen-to-square"></i>
+                </a>
+            `;
+        }
+        if (window.userPermissions && window.userPermissions.canDelete) {
+            actionButtonsHtml += `
+                <button class="action-btn action-btn-delete delete-staff" data-id="${staff.id}" data-name="${staff.name}" title="Delete Member">
+                    <i class="fa-regular fa-trash-can"></i>
+                </button>
+            `;
+        }
+
+        return `
+            <div class="border-bottom staff-mobile-item bg-body" style="min-width: 0;">
+                <div class="d-flex align-items-center justify-content-between p-3 staff-mobile-header" 
+                     data-bs-target="#${collapseId}" 
+                     aria-expanded="false" 
+                     aria-controls="${collapseId}"
+                     style="cursor: pointer; min-width: 0;">
+                    
+                    <div class="d-flex align-items-center gap-3 min-w-0 flex-grow-1 me-2" style="min-width: 0;">
+                        ${avatarHtml}
+                        <div class="min-w-0 flex-grow-1" style="min-width: 0;">
+                            <div class="fw-bold text-body-emphasis text-truncate" style="font-size: 0.95rem;">
+                                ${staff.name}
+                            </div>
+                            <div class="text-secondary text-truncate" style="font-size: 0.825rem;">
+                                ${staff.email}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2 flex-shrink-0 ms-auto">
+                        ${statusBadge}
+                        <button class="btn text-secondary p-0 border-0 shadow-none text-decoration-none lh-1 staff-action-toggle ms-1" 
+                                type="button" 
+                                aria-label="Toggle Staff Details">
+                            <i class="fa-solid fa-chevron-right chevron-icon" style="color: #6366f1; font-size: 0.85rem;"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="collapse" id="${collapseId}">
+                    <div class="p-3 bg-body border-top" style="font-size: 0.825rem;">
+                        <!-- Department Row -->
+                        <div class="d-flex align-items-center justify-content-between py-1">
+                            <div class="fw-semibold text-body-emphasis d-flex align-items-center me-2" style="font-size: 0.8rem;">
+                                <i class="fa-solid fa-briefcase me-1" style="color: #6366f1; width: 16px;"></i> Department :
+                            </div>
+                            <div class="fw-medium text-body-secondary text-end">
+                                ${staff.department || '-'}
+                            </div>
+                        </div>
+
+                        <!-- Role Row -->
+                        <div class="d-flex align-items-center justify-content-between py-1">
+                            <div class="fw-semibold text-body-emphasis d-flex align-items-center me-2" style="font-size: 0.8rem;">
+                                <i class="fa-solid fa-user me-1" style="color: #6366f1; width: 16px;"></i> Role :
+                            </div>
+                            <div class="text-end">
+                                <span class="role-badge ${badgeClass}">${positionDisplay}</span>
+                            </div>
+                        </div>
+
+                        <!-- Phone Row -->
+                        <div class="d-flex align-items-center justify-content-between py-1">
+                            <div class="fw-semibold text-body-emphasis d-flex align-items-center me-2" style="font-size: 0.8rem;">
+                                <i class="fa-solid fa-phone me-1" style="color: #6366f1; width: 16px;"></i> Phone No. :
+                            </div>
+                            <div class="fw-medium text-end" style="color: #0284c7;">
+                                ${staff.phone || '+1 (555) 000-0000'}
+                            </div>
+                        </div>
+
+                        <!-- Joined Row -->
+                        <div class="d-flex align-items-center justify-content-between py-1">
+                            <div class="fw-semibold text-body-emphasis d-flex align-items-center me-2" style="font-size: 0.8rem;">
+                                <i class="fa-solid fa-calendar-days me-1" style="color: #6366f1; width: 16px;"></i> Joined On :
+                            </div>
+                            <div class="fw-medium text-body-secondary text-end">
+                                ${formatDate(staff.joined_date || staff.created_at)}
+                            </div>
+                        </div>
+
+                        <!-- Actions Row -->
+                        <div class="d-flex align-items-center justify-content-between py-1">
+                            <div class="fw-semibold text-body-emphasis d-flex align-items-center me-2" style="font-size: 0.8rem;">
+                                <i class="fa-solid fa-gear me-1" style="color: #6366f1; width: 16px;"></i> Actions :
+                            </div>
+                            <div class="d-inline-flex align-items-center ms-auto">
+                                ${actionButtonsHtml}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         `;
     };
 
@@ -149,8 +294,47 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             emptyMessage: 'No staff members found matching your criteria.',
             rowRenderer: renderStaffRow,
-            onRendered: () => {
+            onRendered: (items) => {
                 if (selectAllCheckbox) selectAllCheckbox.checked = false;
+
+                // Render Mobile Staff Cards
+                const mobileCardList = document.getElementById('staffMobileCardList');
+                const mobileSummary = document.getElementById('mobilePaginationSummary');
+                const mobileControls = document.getElementById('mobilePaginationControls');
+                const desktopSummary = document.getElementById('paginationSummary');
+                const desktopControls = document.getElementById('paginationControls');
+
+                if (mobileCardList) {
+                    mobileCardList.innerHTML = '';
+                    if (!items || items.length === 0) {
+                        mobileCardList.innerHTML = `
+                            <div class="text-center py-4 text-secondary small">
+                                No staff members found matching your criteria.
+                            </div>
+                        `;
+                    } else {
+                        items.forEach(staff => {
+                            mobileCardList.insertAdjacentHTML('beforeend', renderStaffMobileCard(staff));
+                        });
+                    }
+                }
+
+                if (mobileSummary && desktopSummary) {
+                    mobileSummary.textContent = desktopSummary.textContent;
+                }
+                if (mobileControls && desktopControls) {
+                    mobileControls.innerHTML = desktopControls.innerHTML;
+                    if (!mobileControls.dataset.bound) {
+                        mobileControls.dataset.bound = 'true';
+                        mobileControls.addEventListener('click', (e) => {
+                            const btn = e.target.closest('.page-btn');
+                            if (btn && !btn.disabled && btn.dataset.page) {
+                                fetchStaffTable(parseInt(btn.dataset.page));
+                            }
+                        });
+                    }
+                }
+
                 attachEventListeners();
             }
         });
@@ -199,6 +383,42 @@ document.addEventListener('DOMContentLoaded', function () {
 
         updateBulkDeleteState();
     };
+
+    // Explicit click handler for staff mobile card header collapse toggle
+    document.addEventListener('click', function (e) {
+        const header = e.target.closest('.staff-mobile-header');
+        if (!header) return;
+
+        const targetId = header.getAttribute('data-bs-target');
+        if (targetId) {
+            const collapseEl = document.querySelector(targetId);
+            if (collapseEl && typeof bootstrap !== 'undefined') {
+                const bsCollapse = bootstrap.Collapse.getOrCreateInstance(collapseEl);
+                bsCollapse.toggle();
+            }
+        }
+    });
+
+    // Bootstrap Collapse events to sync chevron icon toggle state
+    document.addEventListener('show.bs.collapse', function (e) {
+        const item = e.target.closest('.staff-mobile-item');
+        if (item) {
+            const header = item.querySelector('.staff-mobile-header');
+            const toggle = item.querySelector('.staff-action-toggle');
+            if (header) header.setAttribute('aria-expanded', 'true');
+            if (toggle) toggle.setAttribute('aria-expanded', 'true');
+        }
+    });
+
+    document.addEventListener('hide.bs.collapse', function (e) {
+        const item = e.target.closest('.staff-mobile-item');
+        if (item) {
+            const header = item.querySelector('.staff-mobile-header');
+            const toggle = item.querySelector('.staff-action-toggle');
+            if (header) header.setAttribute('aria-expanded', 'false');
+            if (toggle) toggle.setAttribute('aria-expanded', 'false');
+        }
+    });
 
     // Single Staff Delete via bindDeleteAction
     bindDeleteAction({
@@ -412,7 +632,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const getCheckedPermissions = (container = document) => {
             const root = (container instanceof Element) ? container : document;
             const checkedBoxes = Array.from(root.querySelectorAll('.perm-checkbox:checked:not(:disabled)'));
-            return checkedBoxes.map(cb => getPermissionKey(cb));
+            const keys = checkedBoxes.map(cb => getPermissionKey(cb));
+            return Array.from(new Set(keys));
         };
 
         const setCheckedPermissions = (permissionsArray = [], container = document) => {
@@ -503,36 +724,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const roleSet = new Set(rolePermissions || []);
         const actions = ['view', 'create', 'edit', 'delete'];
 
-        let html = `
-            <div class="card border rounded-3 shadow-none overflow-hidden perm-matrix-card" id="modalPermissionsMatrixContainer">
-                <div class="card-header bg-body-tertiary d-flex align-items-center justify-content-between py-2.5 px-3 border-bottom">
-                    <div class="d-flex align-items-center gap-2 fw-semibold text-body-emphasis small">
-                        <i class="fa-solid fa-shield-halved" style="color: #6366F1;"></i>
-                        <span>Module Permissions Matrix</span>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <button type="button" id="modalSelectAllPermissions" class="btn btn-sm btn-purple-light fw-semibold border-0 perm-global-select-all" style="font-size: 0.775rem; color: #6366F1; background-color: #f3e8ff;">
-                            <i class="fa-solid fa-check-double me-1"></i> Select All Permissions
-                        </button>
-                        <button type="button" id="modalClearAllPermissions" class="btn btn-sm btn-light border text-secondary fw-semibold perm-global-clear-all" style="font-size: 0.775rem;">
-                            <i class="fa-solid fa-xmark me-1"></i> Clear All
-                        </button>
-                    </div>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0" id="modalPermissionsMatrix" style="font-size: 0.85rem;">
-                        <thead class="bg-body-tertiary border-bottom text-secondary">
-                            <tr class="fw-semibold" style="font-size: 0.75rem; letter-spacing: 0.03em;">
-                                <th class="ps-3 py-2 text-uppercase">Module</th>
-                                <th class="text-center py-2 text-uppercase" style="width: 15%;">View</th>
-                                <th class="text-center py-2 text-uppercase" style="width: 15%;">Create</th>
-                                <th class="text-center py-2 text-uppercase" style="width: 15%;">Edit</th>
-                                <th class="text-center py-2 text-uppercase" style="width: 15%;">Delete</th>
-                                <th class="pe-3 text-center py-2 text-uppercase" style="width: 15%;">All</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-        `;
+        let tableRowsHtml = '';
+        let accordionItemsHtml = '';
 
         for (const [group, perms] of Object.entries(groupedPermissions)) {
             const meta = groupMeta[group] || { title: group.charAt(0).toUpperCase() + group.slice(1), icon: 'fa-folder' };
@@ -544,12 +737,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
             let allRowChecked = true;
             let rowCells = '';
+            let accordionRows = '';
 
             actions.forEach(action => {
                 if (groupPermMap[action]) {
                     const perm = groupPermMap[action];
                     const isChecked = roleSet.has(perm) || directSet.has(perm);
                     const inputId = `modal_perm_${perm.replace('.', '_')}`;
+                    const mobInputId = `modal_perm_mob_${perm.replace('.', '_')}`;
 
                     if (!isChecked) allRowChecked = false;
 
@@ -569,12 +764,32 @@ document.addEventListener('DOMContentLoaded', function () {
                             </div>
                         </td>
                     `;
+
+                    accordionRows += `
+                        <div class="d-flex align-items-center justify-content-between py-2 border-bottom">
+                            <label class="form-check-label text-capitalize text-body-emphasis small fw-medium me-2" for="${mobInputId}">
+                                ${action} ${group}
+                            </label>
+                            <div class="form-check form-switch m-0">
+                                <input class="form-check-input perm-checkbox"
+                                       type="checkbox"
+                                       name="permissions[]"
+                                       value="${perm}"
+                                       id="${mobInputId}"
+                                       data-module="${group}"
+                                       data-group="${group}"
+                                       data-action="${action}"
+                                       data-permission="${perm}"
+                                       ${isChecked ? 'checked' : ''}>
+                            </div>
+                        </div>
+                    `;
                 } else {
                     rowCells += `<td class="text-center py-2"><span class="text-body-tertiary fw-light">—</span></td>`;
                 }
             });
 
-            html += `
+            tableRowsHtml += `
                 <tr class="perm-module-row" data-module="${group}" data-group="${group}">
                     <td class="ps-3 py-2 fw-semibold text-body-emphasis">
                         <div class="d-flex align-items-center gap-2">
@@ -596,11 +811,75 @@ document.addEventListener('DOMContentLoaded', function () {
                     </td>
                 </tr>
             `;
+
+            accordionItemsHtml += `
+                <div class="accordion-item border rounded-3 overflow-hidden perm-module-row mb-2" data-module="${group}" data-group="${group}">
+                    <div class="accordion-header d-flex align-items-center justify-content-between bg-body-tertiary px-3 py-2">
+                        <button class="accordion-button collapsed p-0 bg-transparent shadow-none flex-grow-1 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_modal_${group}">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="fa-solid ${meta.icon}" style="color: #6366F1; width: 16px;"></i>
+                                <span class="fw-semibold text-body-emphasis small">${meta.title}</span>
+                            </div>
+                        </button>
+                        <div class="form-check m-0 ms-2 d-flex align-items-center gap-1.5" onclick="event.stopPropagation();">
+                            <input class="form-check-input custom-checkbox perm-row-all perm-row-select-all"
+                                   type="checkbox"
+                                   id="modal_mob_row_all_${group}"
+                                   data-module="${group}"
+                                   data-group="${group}"
+                                   ${allRowChecked ? 'checked' : ''}
+                                   title="Select all permissions for ${meta.title}">
+                            <label class="form-check-label small fw-medium text-secondary" for="modal_mob_row_all_${group}" style="font-size: 0.775rem;">All</label>
+                        </div>
+                    </div>
+                    <div id="collapse_modal_${group}" class="accordion-collapse collapse" data-bs-parent="#modal_accordion_parent">
+                        <div class="accordion-body p-3 bg-body border-top">
+                            ${accordionRows}
+                        </div>
+                    </div>
+                </div>
+            `;
         }
 
-        html += `
+        let html = `
+            <div class="card border rounded-3 shadow-none overflow-hidden perm-matrix-card" id="modalPermissionsMatrixContainer">
+                <div class="card-header bg-body-tertiary d-flex flex-column flex-sm-row align-items-sm-center justify-content-between p-3 border-bottom gap-2">
+                    <div class="d-flex align-items-center gap-2 fw-semibold text-body-emphasis small">
+                        <i class="fa-solid fa-shield-halved" style="color: #6366F1;"></i>
+                        <span>Module Permissions Matrix</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="button" id="modalSelectAllPermissions" class="btn btn-sm btn-purple-light fw-semibold border-0 perm-global-select-all" style="font-size: 0.775rem; color: #6366F1; background-color: #f3e8ff;">
+                            <i class="fa-solid fa-check-double me-1"></i> Select All Permissions
+                        </button>
+                        <button type="button" id="modalClearAllPermissions" class="btn btn-sm btn-light border text-secondary fw-semibold perm-global-clear-all" style="font-size: 0.775rem;">
+                            <i class="fa-solid fa-xmark me-1"></i> Clear All
+                        </button>
+                    </div>
+                </div>
+                <!-- Desktop Table View -->
+                <div class="table-responsive d-none d-lg-block">
+                    <table class="table table-hover align-middle mb-0" id="modalPermissionsMatrix" style="font-size: 0.85rem;">
+                        <thead class="bg-body-tertiary border-bottom text-secondary">
+                            <tr class="fw-semibold" style="font-size: 0.75rem; letter-spacing: 0.03em;">
+                                <th class="ps-3 py-2 text-uppercase">Module</th>
+                                <th class="text-center py-2 text-uppercase" style="width: 15%;">View</th>
+                                <th class="text-center py-2 text-uppercase" style="width: 15%;">Create</th>
+                                <th class="text-center py-2 text-uppercase" style="width: 15%;">Edit</th>
+                                <th class="text-center py-2 text-uppercase" style="width: 15%;">Delete</th>
+                                <th class="pe-3 text-center py-2 text-uppercase" style="width: 15%;">All</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${tableRowsHtml}
                         </tbody>
                     </table>
+                </div>
+                <!-- Mobile Accordion View -->
+                <div class="d-lg-none p-3 bg-body" id="modal_mobile_accordion">
+                    <div class="accordion accordion-flush d-flex flex-column gap-2" id="modal_accordion_parent">
+                        ${accordionItemsHtml}
+                    </div>
                 </div>
             </div>
         `;

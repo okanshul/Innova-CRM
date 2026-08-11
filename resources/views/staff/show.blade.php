@@ -29,7 +29,7 @@
                 <!-- Profile Banner & Hero Header -->
                 <div class="position-relative">
                     <div class="profile-cover-banner"></div>
-                    <div class="px-4 pb-4 text-center border-bottom bg-body position-relative">
+                    <div class="p-3 text-center border-bottom bg-body position-relative">
                         <div class="profile-avatar-wrapper mb-3">
                             @php
                                 $avatarSrc = $staff->avatar
@@ -64,7 +64,7 @@
                 </div>
 
                 <!-- Details Grid -->
-                <div class="card-body p-4 p-md-4">
+                <div class="card-body p-3">
                     <div class="d-flex align-items-center justify-content-between mb-4 pb-2 border-bottom">
                         <h6 class="fw-bold mb-0 text-body-emphasis d-flex align-items-center gap-2">
                             <i class="fa-solid fa-id-badge text-primary"></i> Account Information
@@ -76,22 +76,22 @@
 
                     <div class="row g-3 g-md-4">
                         <!-- Email Address -->
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6">
                             <div class="info-card d-flex align-items-center gap-3">
-                                <div class="icon-box icon-box-indigo">
+                                <div class="icon-box icon-box-indigo flex-shrink-0">
                                     <i class="fa-solid fa-envelope"></i>
                                 </div>
                                 <div class="overflow-hidden">
                                     <div class="text-secondary text-uppercase fw-semibold mb-1" style="font-size: 0.7rem; letter-spacing: 0.5px;">Email Address</div>
-                                    <div class="fw-bold text-body-emphasis text-truncate" style="font-size: 0.925rem;">{{ $staff->email }}</div>
+                                    <div class="fw-bold text-body-emphasis text-truncate text-break" style="font-size: 0.925rem;">{{ $staff->email }}</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Phone Number -->
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6">
                             <div class="info-card d-flex align-items-center gap-3">
-                                <div class="icon-box icon-box-emerald">
+                                <div class="icon-box icon-box-emerald flex-shrink-0">
                                     <i class="fa-solid fa-phone"></i>
                                 </div>
                                 <div class="overflow-hidden">
@@ -102,9 +102,9 @@
                         </div>
 
                         <!-- Department -->
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6">
                             <div class="info-card d-flex align-items-center gap-3">
-                                <div class="icon-box icon-box-purple">
+                                <div class="icon-box icon-box-purple flex-shrink-0">
                                     <i class="fa-solid fa-building-user"></i>
                                 </div>
                                 <div class="overflow-hidden">
@@ -115,9 +115,9 @@
                         </div>
 
                         <!-- System Role -->
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6">
                             <div class="info-card d-flex align-items-center gap-3">
-                                <div class="icon-box icon-box-amber">
+                                <div class="icon-box icon-box-amber flex-shrink-0">
                                     <i class="fa-solid fa-shield-halved"></i>
                                 </div>
                                 <div class="overflow-hidden">
@@ -128,9 +128,9 @@
                         </div>
 
                         <!-- Joined Date -->
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6">
                             <div class="info-card d-flex align-items-center gap-3">
-                                <div class="icon-box icon-box-sky">
+                                <div class="icon-box icon-box-sky flex-shrink-0">
                                     <i class="fa-regular fa-calendar-check"></i>
                                 </div>
                                 <div class="overflow-hidden">
@@ -143,9 +143,9 @@
                         </div>
 
                         <!-- Staff Record ID -->
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6">
                             <div class="info-card d-flex align-items-center gap-3">
-                                <div class="icon-box icon-box-rose">
+                                <div class="icon-box icon-box-rose flex-shrink-0">
                                     <i class="fa-solid fa-id-card"></i>
                                 </div>
                                 <div class="overflow-hidden">

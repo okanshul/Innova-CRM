@@ -208,7 +208,7 @@
                                 <button class="btn btn-sm btn-link text-primary text-decoration-none rounded-3 py-1 px-1 shadow-none fw-semibold" style="font-size: 0.75rem;">View All Contacts</button>
                             </div>
 
-                            <div class="table-responsive flex-grow-1 rounded-3">
+                            <div class="table-responsive flex-grow-1 rounded-bottom-4">
                                 <table class="table table-hover align-middle mb-0" style="min-width: 600px;">
                                     <thead class="table-light">
                                         <tr>

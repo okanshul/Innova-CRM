@@ -1,7 +1,7 @@
 <div class="col-6 col-md-6 col-xl-3">
     <div class="card h-100 rounded-4 shadow-sm border-0">
         <div
-            class="card-body p-2.5 p-sm-3 d-flex align-items-center justify-content-between position-relative overflow-hidden">
+            class="card-body p-3 d-flex align-items-center justify-content-between position-relative overflow-hidden">
             <div class="d-flex align-items-center gap-2 gap-sm-3 w-100 position-relative z-1">
                 <!-- Solid Filled Icon Circle -->
                 <div class="stat-icon-circle rounded-circle d-flex align-items-center justify-content-center text-white flex-shrink-0 shadow-sm bg-{{ $stat['color'] }}"

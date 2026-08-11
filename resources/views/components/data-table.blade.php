@@ -15,7 +15,7 @@
             <thead class="border-bottom bg-body-tertiary">
                 <tr class="text-secondary fw-bold" style="font-size: 0.75rem; letter-spacing: 0.03em;">
                     @if($showCheckboxColumn)
-                        <th class="ps-4 py-3" style="width: 40px;">
+                        <th class="ps-3 py-3" style="width: 40px;">
                             <input type="checkbox" class="form-check-input custom-checkbox" id="{{ $selectAllId }}">
                         </th>
                     @endif
@@ -27,9 +27,9 @@
                             @php
                                 $isLast = $loop->last;
                                 $isFirst = $loop->first && !$showCheckboxColumn;
-                                $alignClass = (is_array($header) && isset($header['align'])) ? "text-{$header['align']}" : ($isLast ? 'text-end pe-4' : '');
+                                $alignClass = (is_array($header) && isset($header['align'])) ? "text-{$header['align']}" : ($isLast ? 'text-end pe-3' : '');
                                 $title = is_array($header) ? ($header['title'] ?? '') : $header;
-                                $paddingClass = $isFirst ? 'ps-4 py-3' : ($isLast ? 'pe-4 py-3' : 'py-3');
+                                $paddingClass = $isFirst ? 'ps-3 py-3' : ($isLast ? 'pe-3 py-3' : 'py-3');
                             @endphp
                             <th class="{{ $paddingClass }} {{ $alignClass }}">
                                 {{ strtoupper($title) }}
@@ -45,7 +45,7 @@
     </div>
 
     <!-- Footer Pagination -->
-    <div class="d-flex flex-wrap align-items-center justify-content-between px-4 py-3 bg-body" id="{{ $paginationRowId }}">
+    <div class="d-flex flex-wrap align-items-center justify-content-between p-3 bg-body" id="{{ $paginationRowId }}">
         <div class="text-secondary small fw-medium" id="{{ $summaryId }}">
             Showing 0 entries
         </div>

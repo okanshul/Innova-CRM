@@ -42,7 +42,7 @@
     <div id="main-content">
         @include('partials.header')
 
-        <main class="flex-grow-1 p-4">
+        <main class="flex-grow-1 p-3 p-md-4">
             @yield('content', $slot ?? '')
         </main>
 
