@@ -25,63 +25,72 @@
             @endif
 
             <!-- Controls / Filters Row -->
-            <div
-                class="d-flex flex-column flex-md-row align-items-stretch align-items-md-center justify-content-between gap-3">
-                <!-- Left Filters -->
-                <div class="d-flex flex-wrap align-items-center gap-2">
-                    <x-form.select name="filterDepartment" id="filterDepartment" style="width: auto; min-width: 165px;"
-                        class="custom-filter-select shadow-none flex-grow-1 flex-md-grow-0">
-                        <option value="">All Departments</option>
-                        <option value="Sales">Sales</option>
-                        <option value="Marketing">Marketing</option>
-                        <option value="Customer Support">Customer Support</option>
-                        <option value="Finance">Finance</option>
-                        <option value="IT">IT</option>
-                        <option value="Operations">Operations</option>
-                    </x-form.select>
+            <div class="filter-controls-wrapper d-flex flex-column flex-md-row align-items-stretch align-items-md-center justify-content-between gap-2">
+                <!-- Search Input Bar (Top full-width bar on mobile, right side on desktop) -->
+                <div class="search-input-box px-3 py-1 d-flex align-items-center order-1 order-md-2 ms-md-auto">
+                    <i class="fa-solid fa-magnifying-glass text-secondary me-2 fs-sm"></i>
+                    <input type="text" id="searchInput"
+                        class="form-control border-0 bg-transparent shadow-none p-1 fs-sm w-100"
+                        placeholder="Search staff...">
+                </div>
 
-                    <x-form.select name="filterStatus" id="filterStatus" style="width: auto; min-width: 140px;"
-                        class="custom-filter-select shadow-none flex-grow-1 flex-md-grow-0">
-                        <option value="">Status: All</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                    </x-form.select>
+                <!-- Filters Group (Departments & Status) -->
+                <div class="d-flex flex-wrap align-items-center gap-2 order-2 order-md-1 flex-grow-1 flex-md-grow-0">
+                    <div class="flex-grow-1 flex-sm-grow-0 filter-item-half">
+                        <x-form.select name="filterDepartment" id="filterDepartment"
+                            class="custom-filter-select w-100 shadow-none">
+                            <option value="">All Departments</option>
+                            <option value="Sales">Sales</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Customer Support">Customer Support</option>
+                            <option value="Finance">Finance</option>
+                            <option value="IT">IT</option>
+                            <option value="Operations">Operations</option>
+                        </x-form.select>
+                    </div>
+
+                    <div class="flex-grow-1 flex-sm-grow-0 filter-item-half">
+                        <x-form.select name="filterStatus" id="filterStatus"
+                            class="custom-filter-select w-100 shadow-none">
+                            <option value="">Status: All</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </x-form.select>
+                    </div>
 
                     @can('staff.delete')
-                        <button class="btn btn-delete-bulk shadow-none d-none align-items-center gap-1.5" id="btnBulkDelete">
+                        <button class="btn btn-delete-bulk shadow-none d-none align-items-center gap-1.5 flex-grow-1 flex-sm-grow-0" id="btnBulkDelete">
                             <i class="fa-regular fa-trash-can"></i> Delete Selected (<span id="selectedCount">0</span>)
                         </button>
                     @endcan
                 </div>
 
-                <!-- Right Search & Export Controls -->
-                <div class="d-flex flex-wrap align-items-center gap-2 ms-md-auto">
-                    <x-form.select name="perPage" id="perPage" style="width: auto; min-width: 140px;"
-                        class="custom-filter-select shadow-none flex-grow-1 flex-md-grow-0">
-                        <option value="10" selected>10 per page</option>
-                        <option value="25">25 per page</option>
-                        <option value="50">50 per page</option>
-                    </x-form.select>
-
-                    <div class="search-input-box px-3 py-1 d-flex align-items-center flex-grow-1 flex-md-grow-0"
-                        style="max-width: 250px;">
-                        <i class="fa-solid fa-magnifying-glass text-secondary me-2 fs-sm"></i>
-                        <input type="text" id="searchInput"
-                            class="form-control border-0 bg-transparent shadow-none p-1 fs-sm"
-                            placeholder="Search staff...">
+                <!-- Actions Group (PerPage, Reset, Export) -->
+                <div class="d-flex flex-wrap align-items-center gap-2 order-3 order-md-3">
+                    <div class="flex-grow-1 flex-sm-grow-0 filter-item-third">
+                        <x-form.select name="perPage" id="perPage"
+                            class="custom-filter-select w-100 shadow-none">
+                            <option value="10" selected>10 per page</option>
+                            <option value="25">25 per page</option>
+                            <option value="50">50 per page</option>
+                        </x-form.select>
                     </div>
 
-                    <button
-                        class="btn btn-filter-action shadow-none d-flex align-items-center gap-2 justify-content-center flex-grow-1 flex-md-grow-0"
-                        id="btnFilterTrigger">
-                        <i class="fa-solid fa-sliders"></i> Filter
-                    </button>
+                    <div class="flex-grow-1 flex-sm-grow-0 filter-item-third">
+                        <button
+                            class="btn btn-filter-action shadow-none w-100 d-flex align-items-center gap-2 justify-content-center text-nowrap"
+                            id="btnFilterTrigger" title="Reset Filters">
+                            <i class="fa-solid fa-rotate-left"></i> <span>Reset</span>
+                        </button>
+                    </div>
 
-                    <button
-                        class="btn btn-filter-action shadow-none d-flex align-items-center gap-2 justify-content-center flex-grow-1 flex-md-grow-0"
-                        id="btnExport">
-                        <i class="fa-solid fa-download"></i> Export
-                    </button>
+                    <div class="flex-grow-1 flex-sm-grow-0 filter-item-third">
+                        <button
+                            class="btn btn-filter-action shadow-none w-100 d-flex align-items-center gap-2 justify-content-center text-nowrap"
+                            id="btnExport" title="Export Staff">
+                            <i class="fa-solid fa-download"></i> <span>Export</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

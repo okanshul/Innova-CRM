@@ -864,11 +864,33 @@ $transition-speed: 0.3s;
 }
 
 /* Data Table Filters & Controls */
+.filter-controls-wrapper {
+    .filter-item-half {
+        flex: 1 1 calc(50% - 0.25rem);
+        min-width: 120px;
+
+        @media (min-width: 576px) {
+            flex: 0 0 auto;
+            width: auto;
+        }
+    }
+
+    .filter-item-third {
+        flex: 1 1 calc(33.333% - 0.35rem);
+        min-width: 90px;
+
+        @media (min-width: 576px) {
+            flex: 0 0 auto;
+            width: auto;
+        }
+    }
+}
+
 .custom-filter-select {
     background-color: #ffffff !important;
     border: 1px solid #e2e8f0 !important;
     border-radius: 8px !important;
-    height: 35px !important;
+    height: 36px !important;
     font-size: 0.825rem !important;
     font-weight: 500 !important;
     color: #475569 !important;
@@ -889,8 +911,14 @@ $transition-speed: 0.3s;
     background-color: #ffffff !important;
     border: 1px solid #e2e8f0 !important;
     border-radius: 8px !important;
-    height: 35px !important;
+    height: 36px !important;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    width: 100%;
+    transition: all 0.15s ease;
+
+    @media (min-width: 768px) {
+        width: 230px;
+    }
 
     &:focus-within {
         border-color: #6366f1 !important;
@@ -902,12 +930,14 @@ $transition-speed: 0.3s;
     background-color: #ffffff !important;
     border: 1px solid #e2e8f0 !important;
     border-radius: 8px !important;
-    height: 35px !important;
+    height: 36px !important;
     font-size: 0.825rem !important;
     font-weight: 500 !important;
     color: #475569 !important;
     padding-top: 0.25rem !important;
     padding-bottom: 0.25rem !important;
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
     transition: all 0.15s ease;
 
@@ -922,7 +952,7 @@ $transition-speed: 0.3s;
     background-color: #ffffff !important;
     border: 1px solid #ffe4e6 !important;
     border-radius: 8px !important;
-    height: 35px !important;
+    height: 36px !important;
     font-size: 0.825rem !important;
     font-weight: 500 !important;
     color: #e11d48 !important;

@@ -528,6 +528,75 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    const btnFilterTrigger = document.getElementById('btnFilterTrigger');
+    if (btnFilterTrigger) {
+        btnFilterTrigger.addEventListener('click', () => {
+            if (filterDepartment) filterDepartment.value = '';
+            if (filterStatus) filterStatus.value = '';
+            if (searchInput) searchInput.value = '';
+            currentDepartment = '';
+            currentStatus = '';
+            currentSearch = '';
+            fetchStaffTable(1);
+        });
+    }
+
+    const btnExport = document.getElementById('btnExport');
+    if (btnExport) {
+        btnExport.addEventListener('click', async () => {
+            try {
+                btnExport.disabled = true;
+                btnExport.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>Exporting...</span>`;
+                const params = new URLSearchParams({
+                    search: currentSearch,
+                    department: currentDepartment,
+                    status: currentStatus,
+                    per_page: 1000
+                });
+                const response = await fetch(`/api/staff?${params.toString()}`);
+                const resData = await response.json();
+                const items = resData.data || resData;
+
+                if (!Array.isArray(items) || items.length === 0) {
+                    if (typeof showErrorToast === 'function') showErrorToast('No staff data available to export.');
+                    return;
+                }
+
+                const headers = ['ID', 'Name', 'Email', 'Phone', 'Department', 'Role/Position', 'Status', 'Joined Date'];
+                const csvRows = [headers.join(',')];
+
+                items.forEach(staff => {
+                    const row = [
+                        staff.id,
+                        `"${(staff.name || '').replace(/"/g, '""')}"`,
+                        `"${(staff.email || '').replace(/"/g, '""')}"`,
+                        `"${(staff.phone || '').replace(/"/g, '""')}"`,
+                        `"${(staff.department || '').replace(/"/g, '""')}"`,
+                        `"${(staff.position || staff.role_name || '').replace(/"/g, '""')}"`,
+                        staff.status || '',
+                        `"${staff.joined_date || staff.created_at || ''}"`
+                    ];
+                    csvRows.push(row.join(','));
+                });
+
+                const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `staff_export_${new Date().toISOString().slice(0, 10)}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } catch (err) {
+                console.error('Export failed:', err);
+            } finally {
+                btnExport.disabled = false;
+                btnExport.innerHTML = `<i class="fa-solid fa-download"></i> <span>Export</span>`;
+            }
+        });
+    }
+
     /* ==========================================================================
        PERMISSIONS MATRIX & MODAL LOGIC
        ========================================================================== */
