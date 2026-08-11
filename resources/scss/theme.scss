@@ -713,8 +713,8 @@ $transition-speed: 0.3s;
 }
 
 @media (max-width: 767.98px) {
-    main {
-        padding-bottom: 75px !important;
+    .footer {
+        margin-bottom: 65px !important;
     }
 
     .pipeline-board {
