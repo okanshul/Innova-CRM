@@ -116,7 +116,7 @@
                 <!-- JS dynamically injects mobile card items here -->
             </div>
             <!-- Mobile Footer Pagination -->
-            <div class="d-flex flex-column flex-sm-row align-items-center justify-content-between p-3 bg-body gap-2"
+            <div class="d-flex flex-column flex-sm-row align-items-center justify-content-between p-3 bg-body gap-2 border-top"
                 id="mobilePaginationRow">
                 <div class="text-secondary small fw-medium text-center text-sm-start" id="mobilePaginationSummary">
                     Showing 0 entries

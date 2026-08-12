@@ -36,7 +36,7 @@ $border-radius-pill: 50rem;
     min-width: 0 !important;
 }
 
-.staff-mobile-header {
+.mobile-card-header {
     transition: background-color 0.15s ease;
 
     &:hover {
@@ -46,7 +46,7 @@ $border-radius-pill: 50rem;
     &[aria-expanded="true"] {
         background-color: rgba(99, 102, 241, 0.06) !important;
 
-        .staff-action-toggle {
+        .mobile-action-toggle {
             background-color: transparent !important;
 
             .chevron-icon {
@@ -57,7 +57,7 @@ $border-radius-pill: 50rem;
     }
 }
 
-.staff-action-toggle {
+.mobile-action-toggle {
     width: 30px;
     height: 30px;
     display: inline-flex;
@@ -344,10 +344,31 @@ $transition-speed: 0.3s;
 
     .card-body {
         padding: 1rem;
+        position: relative;
+        z-index: 2;
     }
 
     .card-footer {
         padding: 1rem;
+        border-bottom-left-radius: inherit;
+        border-bottom-right-radius: inherit;
+        position: relative;
+        z-index: 1;
+    }
+}
+
+form > .p-3 {
+    position: relative;
+    z-index: 2;
+}
+
+.form-select,
+.form-control {
+    position: relative;
+
+    &:focus,
+    &:active {
+        z-index: 1050 !important;
     }
 }
 

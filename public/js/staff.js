@@ -189,8 +189,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         return `
-            <div class="border-bottom staff-mobile-item bg-body" style="min-width: 0;">
-                <div class="d-flex align-items-center justify-content-between p-3 staff-mobile-header" 
+            <div class="border-bottom mobile-card-item bg-body" style="min-width: 0;">
+                <div class="d-flex align-items-center justify-content-between p-3 mobile-card-header" 
                      data-bs-target="#${collapseId}" 
                      aria-expanded="false" 
                      aria-controls="${collapseId}"
@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     <div class="d-flex align-items-center gap-2 flex-shrink-0 ms-auto">
                         ${statusBadge}
-                        <button class="btn text-secondary p-0 border-0 shadow-none text-decoration-none lh-1 staff-action-toggle ms-1" 
+                        <button class="btn text-secondary p-0 border-0 shadow-none text-decoration-none lh-1 mobile-action-toggle ms-1" 
                                 type="button" 
                                 aria-label="Toggle Staff Details">
                             <i class="fa-solid fa-chevron-right chevron-icon" style="color: #6366f1; font-size: 0.85rem;"></i>
@@ -384,9 +384,9 @@ document.addEventListener('DOMContentLoaded', function () {
         updateBulkDeleteState();
     };
 
-    // Explicit click handler for staff mobile card header collapse toggle
+    // Explicit click handler for mobile card header collapse toggle
     document.addEventListener('click', function (e) {
-        const header = e.target.closest('.staff-mobile-header');
+        const header = e.target.closest('.mobile-card-header');
         if (!header) return;
 
         const targetId = header.getAttribute('data-bs-target');
@@ -401,20 +401,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Bootstrap Collapse events to sync chevron icon toggle state
     document.addEventListener('show.bs.collapse', function (e) {
-        const item = e.target.closest('.staff-mobile-item');
+        const item = e.target.closest('.mobile-card-item');
         if (item) {
-            const header = item.querySelector('.staff-mobile-header');
-            const toggle = item.querySelector('.staff-action-toggle');
+            const header = item.querySelector('.mobile-card-header');
+            const toggle = item.querySelector('.mobile-action-toggle');
             if (header) header.setAttribute('aria-expanded', 'true');
             if (toggle) toggle.setAttribute('aria-expanded', 'true');
         }
     });
 
     document.addEventListener('hide.bs.collapse', function (e) {
-        const item = e.target.closest('.staff-mobile-item');
+        const item = e.target.closest('.mobile-card-item');
         if (item) {
-            const header = item.querySelector('.staff-mobile-header');
-            const toggle = item.querySelector('.staff-action-toggle');
+            const header = item.querySelector('.mobile-card-header');
+            const toggle = item.querySelector('.mobile-action-toggle');
             if (header) header.setAttribute('aria-expanded', 'false');
             if (toggle) toggle.setAttribute('aria-expanded', 'false');
         }

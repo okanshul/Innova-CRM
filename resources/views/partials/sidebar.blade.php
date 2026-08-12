@@ -17,54 +17,70 @@
                 <span class="sidebar-text">Dashboard</span>
             </a>
         </li>
+        @can('contacts.view')
         <li>
-            <a href="#" class="sidebar-link">
+            <a href="{{ route('contacts.index') }}" class="sidebar-link {{ request()->routeIs('contacts.*') ? 'active' : '' }}">
                 <i class="fa-regular fa-address-book"></i>
                 <span class="sidebar-text">Contacts</span>
             </a>
         </li>
+        @endcan
+        @can('deals.view')
         <li>
-            <a href="#" class="sidebar-link">
+            <a href="{{ route('deals.index') }}" class="sidebar-link {{ request()->routeIs('deals.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-gem"></i>
                 <span class="sidebar-text">Deals</span>
             </a>
         </li>
+        @endcan
+        @can('pipeline.view')
         <li>
-            <a href="#" class="sidebar-link">
+            <a href="{{ route('pipelines.index') }}" class="sidebar-link {{ request()->routeIs('pipelines.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-bars-staggered"></i>
                 <span class="sidebar-text">Pipeline</span>
             </a>
         </li>
+        @endcan
+        @can('reports.view')
         <li>
-            <a href="#" class="sidebar-link">
+            <a href="{{ route('reports.index') }}" class="sidebar-link {{ request()->routeIs('reports.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-chart-column"></i>
                 <span class="sidebar-text">Reports</span>
             </a>
         </li>
+        @endcan
+        @can('tasks.view')
         <li>
-            <a href="#" class="sidebar-link">
+            <a href="{{ route('tasks.index') }}" class="sidebar-link {{ request()->routeIs('tasks.*') ? 'active' : '' }}">
                 <i class="fa-regular fa-square-check"></i>
                 <span class="sidebar-text">Tasks</span>
             </a>
         </li>
+        @endcan
+        @can('calendar.view')
         <li>
-            <a href="#" class="sidebar-link">
+            <a href="{{ route('calendar.index') }}" class="sidebar-link {{ request()->routeIs('calendar.*') ? 'active' : '' }}">
                 <i class="fa-regular fa-calendar"></i>
                 <span class="sidebar-text">Calendar</span>
             </a>
         </li>
+        @endcan
+        @can('meetings.view')
         <li>
-            <a href="#" class="sidebar-link">
+            <a href="{{ route('meetings.index') }}" class="sidebar-link {{ request()->routeIs('meetings.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-video"></i>
                 <span class="sidebar-text">Meetings</span>
             </a>
         </li>
+        @endcan
+        @can('mail.view')
         <li>
-            <a href="#" class="sidebar-link">
+            <a href="{{ route('mail.index') }}" class="sidebar-link {{ request()->routeIs('mail.*') ? 'active' : '' }}">
                 <i class="fa-regular fa-envelope"></i>
                 <span class="sidebar-text">Mail</span>
             </a>
         </li>
+        @endcan
         @can('staff.view')
         <li>
             <a href="{{ route('staff.index') }}" class="sidebar-link {{ request()->routeIs('staff.*') ? 'active' : '' }}">
@@ -73,18 +89,22 @@
             </a>
         </li>
         @endcan
+        @can('roles.view')
         <li>
-            <a href="#" class="sidebar-link">
+            <a href="{{ route('roles.index') }}" class="sidebar-link {{ request()->routeIs('roles.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-user-shield"></i>
                 <span class="sidebar-text">Roles & Permissions</span>
             </a>
         </li>
+        @endcan
+        @can('settings.view')
         <li>
-            <a href="#" class="sidebar-link">
+            <a href="{{ route('settings.index') }}" class="sidebar-link {{ request()->routeIs('settings.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-gear"></i>
                 <span class="sidebar-text">Settings</span>
             </a>
         </li>
+        @endcan
     </ul>
 
     <!-- Upgrade Card -->
@@ -147,4 +167,3 @@
         </div>
     </div>
 </aside>
-

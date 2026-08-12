@@ -22,9 +22,13 @@ class RolesAndPermissionsSeeder extends Seeder
             'staff.view', 'staff.create', 'staff.edit', 'staff.delete',
             'contacts.view', 'contacts.create', 'contacts.edit', 'contacts.delete',
             'deals.view', 'deals.create', 'deals.edit', 'deals.delete',
-            'pipeline.view', 'pipeline.edit',
+            'pipeline.view', 'pipeline.create', 'pipeline.edit', 'pipeline.delete',
             'reports.view',
             'tasks.view', 'tasks.create', 'tasks.edit', 'tasks.delete',
+            'calendar.view', 'calendar.create', 'calendar.edit', 'calendar.delete',
+            'meetings.view', 'meetings.create', 'meetings.edit', 'meetings.delete',
+            'mail.view', 'mail.create',
+            'roles.view', 'roles.create', 'roles.edit', 'roles.delete',
             'settings.view', 'settings.edit',
         ];
 
@@ -43,7 +47,11 @@ class RolesAndPermissionsSeeder extends Seeder
             'deals.view', 'deals.create', 'deals.edit',
             'pipeline.view', 'pipeline.edit',
             'reports.view',
-            'tasks.view', 'tasks.create', 'tasks.edit'
+            'tasks.view', 'tasks.create', 'tasks.edit',
+            'calendar.view', 'calendar.create', 'calendar.edit',
+            'meetings.view', 'meetings.create', 'meetings.edit',
+            'mail.view', 'mail.create',
+            'settings.view'
         ]);
 
         $roleStaff = Role::firstOrCreate(['name' => 'staff']);
@@ -51,7 +59,10 @@ class RolesAndPermissionsSeeder extends Seeder
             'staff.view',
             'contacts.view',
             'deals.view',
-            'tasks.view'
+            'tasks.view',
+            'calendar.view',
+            'meetings.view',
+            'mail.view'
         ]);
     }
 }

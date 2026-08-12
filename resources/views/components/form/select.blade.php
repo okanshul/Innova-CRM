@@ -33,7 +33,7 @@
 @endphp
 
 @if($label || $wrapperC)
-    <div class="{{ $wrapperC ?? '' }}">
+    <div class="{{ $wrapperC ?? '' }} position-relative">
         @if($label)
             <label for="{{ $selectId }}" class="form-label fw-medium small text-secondary ps-2">
                 @if($icon)
