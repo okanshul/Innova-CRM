@@ -219,7 +219,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
 
                 <div class="collapse" id="${collapseId}">
-                    <div class="p-3 bg-body border-top" style="font-size: 0.825rem;">
+                    <div class="p-3 py-2 bg-body border-top" style="font-size: 0.825rem;">
                         <!-- Department Row -->
                         <div class="d-flex align-items-center justify-content-between py-1">
                             <div class="fw-semibold text-body-emphasis d-flex align-items-center me-2" style="font-size: 0.8rem;">

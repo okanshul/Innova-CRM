@@ -33,16 +33,36 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function toggleSidebarState(forceState = null) {
+        const isCurrentCollapsed = document.documentElement.classList.contains('sidebar-collapsed') || document.body.classList.contains('sidebar-collapsed');
+        const shouldBeCollapsed = forceState !== null ? forceState : !isCurrentCollapsed;
+
+        if (shouldBeCollapsed) {
+            document.documentElement.classList.add('sidebar-collapsed');
+            document.body.classList.add('sidebar-collapsed');
+            if (sidebar) sidebar.classList.add('sidebar-collapsed');
+            if (mainContent) mainContent.classList.add('content-expanded');
+        } else {
+            document.documentElement.classList.remove('sidebar-collapsed');
+            document.body.classList.remove('sidebar-collapsed');
+            if (sidebar) sidebar.classList.remove('sidebar-collapsed');
+            if (mainContent) mainContent.classList.remove('content-expanded');
+        }
+
+        localStorage.setItem('sidebarCollapsed', shouldBeCollapsed ? 'true' : 'false');
+        updateTooltipsState(shouldBeCollapsed);
+    }
+
     // Check stored state and apply on desktop
     const isStoredCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
-    if (isStoredCollapsed && window.innerWidth >= 992) {
-        document.body.classList.add('sidebar-collapsed');
-        if (sidebar) sidebar.classList.add('sidebar-collapsed');
-        if (mainContent) mainContent.classList.add('content-expanded');
+    if (window.innerWidth >= 992) {
+        toggleSidebarState(isStoredCollapsed);
+    } else {
+        document.documentElement.classList.remove('sidebar-collapsed');
+        document.body.classList.remove('sidebar-collapsed');
     }
 
     initTooltips();
-    updateTooltipsState(isStoredCollapsed);
 
     if (sidebarToggle) {
         sidebarToggle.addEventListener('click', (e) => {
@@ -56,13 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } else {
                 // Desktop mini-sidebar toggle
-                document.body.classList.toggle('sidebar-collapsed');
-                if (sidebar) sidebar.classList.toggle('sidebar-collapsed');
-                if (mainContent) mainContent.classList.toggle('content-expanded');
-
-                const isCollapsed = document.body.classList.contains('sidebar-collapsed');
-                localStorage.setItem('sidebarCollapsed', isCollapsed);
-                updateTooltipsState(isCollapsed);
+                toggleSidebarState();
             }
         });
     }

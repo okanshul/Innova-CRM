@@ -17,24 +17,29 @@
             </x-page-header>
 
             @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show rounded-3 mb-3" role="alert" style="font-size: 0.875rem;">
+                <div class="alert alert-success alert-dismissible fade show rounded-3 mb-3" role="alert"
+                    style="font-size: 0.875rem;">
                     <i class="fa-solid fa-circle-check me-1.5"></i> {{ session('success') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
 
             <!-- Controls / Filters Row -->
-            <div class="filter-controls-wrapper d-flex flex-column flex-md-row align-items-stretch align-items-md-center justify-content-between gap-2">
+            <div
+                class="filter-controls-wrapper d-flex flex-column flex-md-row align-items-stretch align-items-md-center justify-content-between gap-2">
                 <!-- Search Input Bar (Top full-width bar on mobile, right side on desktop) -->
                 <div class="search-input-box px-3 py-1 d-flex align-items-center order-1 order-md-2 ms-md-auto">
                     <i class="fa-solid fa-magnifying-glass text-secondary me-2 fs-sm"></i>
-                    <input type="text" id="searchInput" class="form-control border-0 bg-transparent shadow-none p-1 fs-sm w-100" placeholder="Search staff...">
+                    <input type="text" id="searchInput"
+                        class="form-control border-0 bg-transparent shadow-none p-1 fs-sm w-100"
+                        placeholder="Search staff...">
                 </div>
 
                 <!-- Filters Group (Departments & Status) -->
                 <div class="d-flex flex-wrap align-items-center gap-2 order-2 order-md-1 flex-grow-1 flex-md-grow-0">
                     <div class="flex-grow-1 flex-sm-grow-0 filter-item-half">
-                        <x-form.select name="filterDepartment" id="filterDepartment" class="custom-filter-select w-100 shadow-none">
+                        <x-form.select name="filterDepartment" id="filterDepartment"
+                            class="custom-filter-select w-100 shadow-none">
                             <option value="">All Departments</option>
                             <option value="Sales">Sales</option>
                             <option value="Marketing">Marketing</option>
@@ -54,7 +59,9 @@
                     </div>
 
                     @can('staff.delete')
-                        <button class="btn btn-delete-bulk shadow-none d-none align-items-center gap-1.5 flex-grow-1 flex-sm-grow-0" id="btnBulkDelete">
+                        <button
+                            class="btn btn-delete-bulk shadow-none d-none align-items-center gap-1.5 flex-grow-1 flex-sm-grow-0"
+                            id="btnBulkDelete">
                             <i class="fa-regular fa-trash-can"></i> Delete Selected (<span id="selectedCount">0</span>)
                         </button>
                     @endcan
@@ -63,8 +70,7 @@
                 <!-- Actions Group (PerPage, Reset, Export) -->
                 <div class="d-flex flex-wrap align-items-center gap-2 order-3 order-md-3">
                     <div class="flex-grow-1 flex-sm-grow-0 filter-item-third">
-                        <x-form.select name="perPage" id="perPage"
-                            class="custom-filter-select w-100 shadow-none">
+                        <x-form.select name="perPage" id="perPage" class="custom-filter-select w-100 shadow-none">
                             <option value="10" selected>10 per page</option>
                             <option value="25">25 per page</option>
                             <option value="50">50 per page</option>
@@ -110,7 +116,8 @@
                 <!-- JS dynamically injects mobile card items here -->
             </div>
             <!-- Mobile Footer Pagination -->
-            <div class="d-flex flex-column flex-sm-row align-items-center justify-content-between p-3 bg-body gap-2" id="mobilePaginationRow">
+            <div class="d-flex flex-column flex-sm-row align-items-center justify-content-between p-3 bg-body gap-2"
+                id="mobilePaginationRow">
                 <div class="text-secondary small fw-medium text-center text-sm-start" id="mobilePaginationSummary">
                     Showing 0 entries
                 </div>

@@ -385,9 +385,9 @@ function bindDeleteAction(options = {}) {
 /**
  * 6. initCustomSelects(targetSelector)
  * Converts standard select elements into modern custom themed dropdowns
- * with instant two-way event synchronization.
+ * matching the design aesthetic with instant two-way event synchronization.
  */
-function initCustomSelects(targetSelector = '.custom-filter-select') {
+function initCustomSelects(targetSelector = 'select:not(.no-custom-select), .form-select:not(.no-custom-select), .custom-filter-select') {
     const selects = document.querySelectorAll(targetSelector);
     selects.forEach(select => {
         if (select.dataset.customSelectInit === 'true' || select.closest('.custom-select-wrapper')) return;
@@ -396,9 +396,12 @@ function initCustomSelects(targetSelector = '.custom-filter-select') {
         const wrapper = document.createElement('div');
         wrapper.className = 'custom-select-wrapper';
 
-        // Transfer width/flex classes from select to wrapper
+        // Inherit layout/grid classes from select to wrapper
         if (select.className) {
-            const classList = select.className.split(' ').filter(c => c.startsWith('col-') || c.startsWith('w-') || c.startsWith('flex-'));
+            const classList = select.className.split(' ').filter(c => 
+                c.startsWith('col-') || c.startsWith('w-') || c.startsWith('flex-') || 
+                c.startsWith('mb-') || c.startsWith('mt-') || c.startsWith('me-') || c.startsWith('ms-') || c === 'shadow-none'
+            );
             if (classList.length > 0) wrapper.classList.add(...classList);
         }
 
@@ -407,7 +410,7 @@ function initCustomSelects(targetSelector = '.custom-filter-select') {
         select.classList.add('custom-select-hidden');
 
         const trigger = document.createElement('div');
-        trigger.className = 'custom-select-trigger';
+        trigger.className = 'custom-select-trigger' + (select.disabled ? ' disabled' : '') + (select.classList.contains('is-invalid') ? ' is-invalid' : '');
         trigger.tabIndex = 0;
 
         const labelSpan = document.createElement('span');
@@ -427,7 +430,7 @@ function initCustomSelects(targetSelector = '.custom-filter-select') {
         const renderMenuOptions = () => {
             menu.innerHTML = '';
             const selectedOption = select.options[select.selectedIndex] || select.options[0];
-            labelSpan.textContent = selectedOption ? selectedOption.text : 'Select...';
+            labelSpan.textContent = selectedOption ? selectedOption.text : (select.getAttribute('placeholder') || 'Select...');
 
             Array.from(select.options).forEach((opt, idx) => {
                 const optItem = document.createElement('div');
@@ -444,6 +447,7 @@ function initCustomSelects(targetSelector = '.custom-filter-select') {
 
                     select.selectedIndex = idx;
                     select.dispatchEvent(new Event('change', { bubbles: true }));
+                    select.dispatchEvent(new Event('input', { bubbles: true }));
                     closeMenu();
                 });
 
@@ -452,6 +456,7 @@ function initCustomSelects(targetSelector = '.custom-filter-select') {
         };
 
         const openMenu = () => {
+            if (select.disabled || trigger.classList.contains('disabled')) return;
             document.querySelectorAll('.custom-select-menu.show').forEach(m => {
                 if (m !== menu) {
                     m.classList.remove('show');
@@ -486,13 +491,30 @@ function initCustomSelects(targetSelector = '.custom-filter-select') {
             }
         });
 
+        // Sync focus when native select or associated label is focused
+        select.addEventListener('focus', () => {
+            trigger.focus();
+        });
+
+        // Handle select disabled or invalid state updates
         select.addEventListener('change', () => {
             const selectedOption = select.options[select.selectedIndex];
             if (selectedOption) {
                 labelSpan.textContent = selectedOption.text;
             }
+            if (select.classList.contains('is-invalid')) {
+                trigger.classList.add('is-invalid');
+            } else {
+                trigger.classList.remove('is-invalid');
+            }
             renderMenuOptions();
         });
+
+        // MutationObserver to update custom menu if <select> options change dynamically
+        const observer = new MutationObserver(() => {
+            renderMenuOptions();
+        });
+        observer.observe(select, { childList: true, subtree: true, attributes: true });
 
         renderMenuOptions();
     });

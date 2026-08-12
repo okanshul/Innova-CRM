@@ -15,7 +15,7 @@
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <!-- Bootstrap 5 CSS (Assuming vite compiles app.scss or similar, but using CDN for isolated styling guarantee if needed, or stick to vite) -->
+    <!-- Theme SCSS -->
     @vite(['resources/scss/theme.scss'])
 
     <style>
@@ -40,7 +40,7 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--light-bg-right);
-            color: #ffffff;
+            color: var(--light-text-main);
             margin: 0;
             padding: 0;
             overflow-x: hidden;
@@ -90,7 +90,7 @@
             z-index: 0;
         }
 
-        /* Constellation Lines (CSS trick) */
+        /* Constellation Lines */
         .constellation {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -122,14 +122,17 @@
         }
 
         .brand-icon {
-            width: 32px;
-            height: 32px;
-            background-color: var(--brand-purple);
-            border-radius: 8px;
+            width: 38px;
+            height: 38px;
+            min-width: 38px;
+            background: linear-gradient(135deg, #6366f1, #a855f7) !important;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1rem;
+            font-size: 1.1rem;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
 
         .hero-title {
@@ -138,10 +141,11 @@
             line-height: 1.1;
             margin-bottom: 1.5rem;
             letter-spacing: -0.02em;
+            color: #ffffff;
         }
 
         .text-gradient {
-            background: linear-gradient(to right, var(--brand-purple-light), var(--brand-purple));
+            background: linear-gradient(to right, #818cf8, var(--brand-purple));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -172,9 +176,9 @@
             width: 32px;
             height: 32px;
             min-width: 32px;
-            border-radius: 20%;
+            border-radius: 8px;
             background-color: rgba(99, 102, 241, 0.15);
-            color: var(--brand-purple-light);
+            color: #818cf8;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -193,28 +197,6 @@
             font-size: 0.875rem;
             color: var(--text-gray);
             margin: 0;
-        }
-
-        /* Mock Dashboard Card */
-        .mock-card {
-            background: rgba(26, 26, 46, 0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            padding: 1.5rem;
-            max-width: 350px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            position: relative;
-            overflow: hidden;
-            margin-bottom: auto;
-        }
-        
-        .mock-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; height: 2px;
-            background: linear-gradient(to right, transparent, var(--brand-purple), transparent);
-            opacity: 0.5;
         }
 
         /* --- RIGHT PANEL (LIGHT THEME) --- */
@@ -236,6 +218,7 @@
             width: 100%;
             max-width: 460px;
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+            transition: padding 0.2s ease, border-radius 0.2s ease;
         }
 
         .login-card h3 {
@@ -256,6 +239,7 @@
             font-size: 0.875rem;
             font-weight: 500;
             margin-bottom: 0.5rem;
+            display: block;
         }
 
         .light-input-group {
@@ -266,6 +250,7 @@
             align-items: center;
             overflow: hidden;
             transition: all 0.2s ease;
+            min-height: 46px;
         }
 
         .light-input-group:focus-within {
@@ -277,14 +262,20 @@
         .light-input-group .input-icon {
             padding: 0.75rem 0.75rem 0.75rem 1rem;
             color: #64748B;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 40px;
         }
 
         .light-input-group input {
             background: transparent;
             border: none;
             color: var(--light-text-main);
-            padding: 0.75rem 1rem 0.75rem 0;
+            padding: 0.75rem 0.75rem 0.75rem 0;
             width: 100%;
+            min-width: 0;
+            flex: 1;
             outline: none;
             font-size: 0.95rem;
         }
@@ -297,24 +288,44 @@
             background: transparent;
             border: none;
             color: #64748B;
-            padding: 0 1rem;
+            padding: 0.75rem 1rem;
             cursor: pointer;
             transition: color 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .light-input-group .toggle-password:hover {
             color: var(--light-text-main);
         }
 
-        .form-check-label {
-            color: var(--light-text-muted);
-            font-size: 0.875rem;
+        .options-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: nowrap;
+            width: 100%;
+            gap: 0.5rem;
+        }
+
+        .form-check {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding-left: 0 !important;
+            margin: 0 !important;
         }
 
         .form-check-input {
+            margin: 0 !important;
+            float: none !important;
+            cursor: pointer;
+            width: 1rem;
+            height: 1rem;
+            flex-shrink: 0;
             background-color: #FFFFFF;
             border-color: #CBD5E1;
-            cursor: pointer;
         }
         
         .form-check-input:checked {
@@ -322,12 +333,23 @@
             border-color: var(--brand-purple);
         }
 
+        .form-check-label {
+            color: var(--light-text-muted);
+            font-size: 0.875rem;
+            white-space: nowrap;
+            cursor: pointer;
+            user-select: none;
+            margin-bottom: 0;
+        }
+
         .forgot-link {
             color: var(--brand-purple);
             font-size: 0.875rem;
             text-decoration: none;
             font-weight: 500;
+            white-space: nowrap;
             transition: color 0.2s ease;
+            flex-shrink: 0;
         }
 
         .forgot-link:hover {
@@ -343,8 +365,11 @@
             padding: 0.875rem;
             border-radius: 10px;
             width: 100%;
+            min-height: 46px;
             transition: all 0.2s ease;
             box-shadow: 0 4px 12px rgba(90, 64, 248, 0.25);
+            font-size: 0.95rem;
+            cursor: pointer;
         }
 
         .btn-gradient:hover {
@@ -375,13 +400,44 @@
             color: #991B1B;
         }
 
-        /* Responsive */
+        /* --- RESPONSIVE BREAKPOINTS --- */
         @media (max-width: 991.98px) {
+            .split-layout {
+                flex-direction: column;
+            }
             .left-panel {
                 display: none;
             }
             .right-panel {
                 width: 100%;
+                min-height: 100vh;
+                padding: 2rem 1.25rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .right-panel {
+                padding: 1.25rem 0.75rem;
+            }
+            .login-card {
+                padding: 1.5rem 1rem;
+                border-radius: 14px;
+            }
+            .login-card h3 {
+                font-size: 1.4rem;
+            }
+            .login-card .subtitle {
+                font-size: 0.85rem;
+                margin-bottom: 1.25rem;
+            }
+            .light-input-group input {
+                font-size: 0.875rem;
+            }
+            .light-input-group input::placeholder {
+                font-size: 0.85rem;
+            }
+            .form-check-label, .forgot-link {
+                font-size: 0.8rem;
             }
         }
     </style>
@@ -396,7 +452,7 @@
             <div class="left-content">
                 <div class="brand-logo">
                     <div class="brand-icon">
-                        <i class="fa-solid fa-cube"></i>
+                        <i class="fa-solid fa-layer-group fs-5"></i>
                     </div>
                     <span class="fs-4 fw-bold text-white">InnovaCRM</span>
                 </div>
@@ -447,6 +503,16 @@
         <!-- RIGHT PANEL -->
         <div class="right-panel">
             <div class="login-card">
+                <!-- Mobile Brand Header (visible only on mobile/tablet screens <992px) -->
+                <div class="d-lg-none text-center mb-3">
+                    <div class="d-inline-flex align-items-center gap-2">
+                        <div class="brand-icon">
+                            <i class="fa-solid fa-layer-group fs-5"></i>
+                        </div>
+                        <span class="fs-4 fw-bold text-dark">InnovaCRM</span>
+                    </div>
+                </div>
+
                 <div class="text-center">
                     <h3>Welcome back 👋</h3>
                     <p class="subtitle">Sign in to your InnovaCRM account</p>
@@ -456,7 +522,7 @@
                     @csrf
 
                     <!-- Email -->
-                    <div class="mb-4">
+                    <div class="mb-3">
                         <label for="email" class="form-label ps-2">Email address</label>
                         <div class="light-input-group">
                             <span class="input-icon"><i class="fa-regular fa-envelope"></i></span>
@@ -468,12 +534,12 @@
                     </div>
 
                     <!-- Password -->
-                    <div class="mb-4">
+                    <div class="mb-3">
                         <label for="password" class="form-label ps-2">Password</label>
                         <div class="light-input-group">
                             <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
                             <input type="password" id="password" name="password" autocomplete="current-password" placeholder="Enter your password">
-                            <button type="button" class="toggle-password" id="togglePassword"><i class="fa-regular fa-eye"></i></button>
+                            <button type="button" class="toggle-password" id="togglePassword" aria-label="Toggle password visibility"><i class="fa-regular fa-eye"></i></button>
                         </div>
                         @error('password')
                             <div class="text-danger small mt-1" style="color: #DC2626 !important;">{{ $message }}</div>
@@ -481,8 +547,8 @@
                     </div>
 
                     <!-- Options -->
-                    <div class="d-flex justify-content-between align-items-center mb-4 pb-1">
-                        <div class="form-check m-0">
+                    <div class="options-row mb-3 pb-1">
+                        <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
                             <label class="form-check-label" for="remember">Remember me</label>
                         </div>
@@ -513,3 +579,5 @@
 </body>
 
 </html>
+
+
