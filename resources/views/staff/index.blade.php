@@ -19,7 +19,7 @@
             @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show rounded-3 mb-3" role="alert"
                     style="font-size: 0.875rem;">
-                    <i class="fa-solid fa-circle-check me-1.5"></i> {{ session('success') }}
+                    <i class="fa-solid fa-circle-check me-2"></i> {{ session('success') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
@@ -60,7 +60,7 @@
 
                     @can('staff.delete')
                         <button
-                            class="btn btn-delete-bulk shadow-none d-none align-items-center gap-1.5 flex-grow-1 flex-sm-grow-0"
+                            class="btn btn-delete-bulk shadow-none d-none align-items-center gap-2 flex-grow-1 flex-sm-grow-0"
                             id="btnBulkDelete">
                             <i class="fa-regular fa-trash-can"></i> Delete Selected (<span id="selectedCount">0</span>)
                         </button>
@@ -116,7 +116,7 @@
                 <!-- JS dynamically injects mobile card items here -->
             </div>
             <!-- Mobile Footer Pagination -->
-            <div class="d-flex flex-column flex-sm-row align-items-center justify-content-between p-3 bg-body gap-2 border-top"
+            <div class="d-flex flex-column flex-sm-row align-items-center justify-content-between p-3 bg-body gap-2 border-top rounded-bottom-4"
                 id="mobilePaginationRow">
                 <div class="text-secondary small fw-medium text-center text-sm-start" id="mobilePaginationSummary">
                     Showing 0 entries
@@ -152,7 +152,7 @@
 
         <x-slot:footer>
             <x-button.secondary data-bs-dismiss="modal" label="Cancel" />
-            <x-button.primary id="btnSavePermissions" type="submit" icon="fa-solid fa-check me-1.5" label="Save Permissions" />
+            <x-button.primary id="btnSavePermissions" type="submit" icon="fa-solid fa-check me-2" label="Save Permissions" />
         </x-slot:footer>
     </x-modal>
 @endsection

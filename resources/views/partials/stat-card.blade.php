@@ -13,7 +13,7 @@
                             <i class="fa-solid fa-sliders text-secondary opacity-50 fs-xs ms-auto d-none d-sm-inline"></i>
                         @endif
                     </div>
-                    <h4 class="mb-0.5 fw-bold text-body-emphasis mt-0.5 text-truncate fs-5 fs-sm-4" style="letter-spacing: -0.02em;">{{ $stat['value'] }}</h4>
+                    <h4 class="mb-1 fw-bold text-body-emphasis mt-1 text-truncate fs-5 fs-sm-4" style="letter-spacing: -0.02em;">{{ $stat['value'] }}</h4>
                     <div class="d-flex align-items-center gap-1 text-truncate small {{ $stat['is_positive'] ? 'text-success' : 'text-danger' }}" style="font-size: 0.675rem;">
                         <i class="fa-solid {{ $stat['is_positive'] ? 'fa-arrow-up' : 'fa-arrow-down' }}"></i>
                         <span class="fw-semibold">{{ $stat['change'] }}</span>

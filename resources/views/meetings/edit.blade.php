@@ -9,7 +9,7 @@
 
     <div class="row justify-content-center">
         <div class="col-12">
-            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-body">
+            <div class="card border-0 shadow-sm rounded-4 bg-body">
                 <x-page-header title="Edit Meeting" subtitle="Update meeting details." icon="fa-solid fa-video">
                     <x-slot:actions>
                         <x-button.secondary href="{{ route('meetings.index') }}" icon="fa-solid fa-angle-left pe-1" label="Back" />
@@ -19,7 +19,7 @@
                 <form id="meetingEditForm" action="{{ route('crm.api.meetings.update', $meeting->id) }}" method="POST">
                     @csrf
                     @method('PUT')
-                    <div class="p-3">
+                    <div class="p-3 position-relative z-2">
                         <x-form.input class="mb-3" name="title" label="Meeting Title" icon="fa-solid fa-heading" :required="true" :value="$meeting->title" />
                         <x-form.textarea class="mb-3" name="description" label="Agenda / Notes" icon="fa-solid fa-paragraph" :value="$meeting->description" />
 
@@ -46,7 +46,7 @@
                         </div>
                     </div>
 
-                    <div class="card-footer border-top bg-body p-3 d-flex align-items-center justify-content-end gap-2">
+                    <div class="card-footer border-top bg-body p-3 d-flex align-items-center justify-content-end gap-2 rounded-bottom-4 position-relative z-1">
                         <x-button.secondary href="{{ route('meetings.index') }}" label="Cancel" />
                         <x-button.primary type="submit" label="Update Meeting" />
                     </div>

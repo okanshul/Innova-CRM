@@ -9,6 +9,7 @@
     'id' => null,
     'containerClass' => null,
     'wrapperClass' => null,
+    'searchable' => null,
 ])
 
 @php
@@ -27,9 +28,15 @@
         $selectClass = $attributesClass;
     }
 
-    $selectAttributes = $attributes->except(['class'])->merge([
+    $extraAttrs = [
         'class' => 'form-select ' . $selectClass . ($errors->has($name) ? ' is-invalid' : '')
-    ]);
+    ];
+
+    if ($searchable) {
+        $extraAttrs['data-searchable'] = 'true';
+    }
+
+    $selectAttributes = $attributes->except(['class'])->merge($extraAttrs);
 @endphp
 
 @if($label || $wrapperC)

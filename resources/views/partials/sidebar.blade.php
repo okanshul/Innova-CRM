@@ -5,7 +5,7 @@
                 style="width: 38px; height: 38px; min-width: 38px; background: linear-gradient(135deg, #6366f1, #a855f7) !important;">
                 <i class="fa-solid fa-layer-group fs-5"></i>
             </div>
-            <span class="fs-4 fw-bold sidebar-text ms-2.5" style="letter-spacing: -0.02em;">InnovaCRM</span>
+            <span class="fs-4 fw-bold sidebar-text ms-2" style="letter-spacing: -0.02em;">InnovaCRM</span>
         </a>
         <button type="button" class="btn-close btn-close-white d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" aria-label="Close"></button>
     </div>

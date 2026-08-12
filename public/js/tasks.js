@@ -53,18 +53,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function getPriorityBadgeClass(priority) {
         const p = (priority || '').toLowerCase();
-        if (p === 'urgent') return `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #fee2e2; color: #dc2626; font-size: 0.75rem;">URGENT</span>`;
-        if (p === 'high') return `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #ffedd5; color: #c2410c; font-size: 0.75rem;">HIGH</span>`;
-        if (p === 'medium') return `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #e0f2fe; color: #0369a1; font-size: 0.75rem;">MEDIUM</span>`;
-        return `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #f1f5f9; color: #475569; font-size: 0.75rem;">LOW</span>`;
+        if (p === 'urgent') return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #fee2e2; color: #dc2626; font-size: 0.75rem;">URGENT</span>`;
+        if (p === 'high') return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #ffedd5; color: #c2410c; font-size: 0.75rem;">HIGH</span>`;
+        if (p === 'medium') return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #e0f2fe; color: #0369a1; font-size: 0.75rem;">MEDIUM</span>`;
+        return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #f1f5f9; color: #475569; font-size: 0.75rem;">LOW</span>`;
     }
 
-    function getStatusBadgeClass(status) {
-        const s = (status || '').toLowerCase();
-        if (s === 'completed') return `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #dcfce7; color: #16a34a; font-size: 0.75rem;">Completed</span>`;
-        if (s === 'in_progress') return `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #e0e7ff; color: #4338ca; font-size: 0.75rem;">In Progress</span>`;
-        if (s === 'cancelled') return `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #fee2e2; color: #dc2626; font-size: 0.75rem;">Cancelled</span>`;
-        return `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #fef3c7; color: #d97706; font-size: 0.75rem;">Pending</span>`;
+    function getStatusBadgeClass(s) {
+        if (s === 'completed') return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #dcfce7; color: #16a34a; font-size: 0.75rem;">Completed</span>`;
+        if (s === 'in_progress') return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #e0e7ff; color: #4338ca; font-size: 0.75rem;">In Progress</span>`;
+        if (s === 'cancelled') return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #fee2e2; color: #dc2626; font-size: 0.75rem;">Cancelled</span>`;
+        return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #fef3c7; color: #d97706; font-size: 0.75rem;">Pending</span>`;
     }
 
     function syncMobilePagination() {
@@ -163,7 +162,14 @@ document.addEventListener('DOMContentLoaded', function () {
         mobileList.innerHTML = '';
 
         if (!tasks || tasks.length === 0) {
-            mobileList.innerHTML = `<div class="text-center py-4 text-secondary small">No tasks found.</div>`;
+            mobileList.innerHTML = getEmptyStateHtml({ title: 'No tasks found', module: 'tasks' });
+            const clearBtn = mobileList.querySelector('.btn-clear-filters-action');
+            if (clearBtn) {
+                clearBtn.addEventListener('click', () => {
+                    const resetTrigger = document.getElementById('btnFilterTrigger') || document.getElementById('btnResetFilters');
+                    if (resetTrigger) resetTrigger.click();
+                });
+            }
             return;
         }
 

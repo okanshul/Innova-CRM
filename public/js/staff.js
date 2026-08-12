@@ -24,14 +24,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Helper: Department Icon
     const getDeptIcon = (dept) => {
-        if (!dept) return '<i class="fa-solid fa-briefcase me-1.5" style="color:#8b5cf6;"></i> N/A';
+        if (!dept) return '<i class="fa-solid fa-briefcase me-1" style="color:#8b5cf6;"></i> N/A';
         const lower = dept.toLowerCase();
-        if (lower.includes('sales')) return `<i class="fa-solid fa-briefcase me-1.5" style="color:#8b5cf6;"></i> Sales`;
-        if (lower.includes('market')) return `<i class="fa-solid fa-bullhorn me-1.5" style="color:#0284c7;"></i> Marketing`;
-        if (lower.includes('support')) return `<i class="fa-solid fa-shield-cat me-1.5" style="color:#c2410c;"></i> Customer Support`;
-        if (lower.includes('finan')) return `<i class="fa-solid fa-coins me-1.5" style="color:#16a34a;"></i> Finance`;
-        if (lower.includes('it') || lower.includes('engine')) return `<i class="fa-solid fa-server me-1.5" style="color:#2563eb;"></i> IT`;
-        return `<i class="fa-solid fa-gears me-1.5" style="color:#64748b;"></i> ${dept}`;
+        if (lower.includes('sales')) return `<i class="fa-solid fa-briefcase me-1" style="color:#8b5cf6;"></i> Sales`;
+        if (lower.includes('market')) return `<i class="fa-solid fa-bullhorn me-2" style="color:#0284c7;"></i> Marketing`;
+        if (lower.includes('support')) return `<i class="fa-solid fa-shield-cat me-2" style="color:#c2410c;"></i> Customer Support`;
+        if (lower.includes('finan')) return `<i class="fa-solid fa-coins me-2" style="color:#16a34a;"></i> Finance`;
+        if (lower.includes('it') || lower.includes('engine')) return `<i class="fa-solid fa-server me-2" style="color:#2563eb;"></i> IT`;
+        return `<i class="fa-solid fa-gears me-2" style="color:#64748b;"></i> ${dept}`;
     };
 
     // Helper: Role Badge Class
@@ -158,8 +158,8 @@ document.addEventListener('DOMContentLoaded', function () {
             : `<div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 fw-bold text-white shadow-sm" style="width: 42px; height: 42px; background-color: ${avatarBg}; font-size: 0.9rem; letter-spacing: 0.5px;">${initials}</div>`;
 
         const statusBadge = staff.status === 'active'
-            ? `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #dcfce7; color: #16a34a; font-size: 0.75rem;">Active</span>`
-            : `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #fee2e2; color: #dc2626; font-size: 0.75rem;">Inactive</span>`;
+            ? `<span class="badge rounded-pill fw-semibold px-2 py-1" style="background-color: #dcfce7; color: #16a34a; font-size: 0.75rem;">Active</span>`
+            : `<span class="badge rounded-pill fw-semibold px-2 py-1" style="background-color: #fee2e2; color: #dc2626; font-size: 0.75rem;">Inactive</span>`;
 
         const positionDisplay = staff.position || (staff.role_name ? staff.role_name.charAt(0).toUpperCase() + staff.role_name.slice(1) : 'Staff');
         const badgeClass = getRoleBadgeClass(staff.position, staff.role_name);
@@ -307,11 +307,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (mobileCardList) {
                     mobileCardList.innerHTML = '';
                     if (!items || items.length === 0) {
-                        mobileCardList.innerHTML = `
-                            <div class="text-center py-4 text-secondary small">
-                                No staff members found matching your criteria.
-                            </div>
-                        `;
+                        mobileCardList.innerHTML = getEmptyStateHtml({ title: 'No staff found', module: 'staff' });
+                        const clearBtn = mobileCardList.querySelector('.btn-clear-filters-action');
+                        if (clearBtn) {
+                            clearBtn.addEventListener('click', () => {
+                                const resetTrigger = document.getElementById('btnFilterTrigger') || document.getElementById('btnResetFilters');
+                                if (resetTrigger) resetTrigger.click();
+                            });
+                        }
                     } else {
                         items.forEach(staff => {
                             mobileCardList.insertAdjacentHTML('beforeend', renderStaffMobileCard(staff));
@@ -468,7 +471,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             try {
                 btnBulkDelete.disabled = true;
-                btnBulkDelete.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1.5"></i> Deleting...';
+                btnBulkDelete.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i> Deleting...';
 
                 const deletePromises = selectedIds.map(id => apiRequest(`/api/staff/${id}`, { method: 'DELETE' }));
                 await Promise.all(deletePromises);
@@ -837,14 +840,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
             tableRowsHtml += `
                 <tr class="perm-module-row" data-module="${group}" data-group="${group}">
-                    <td class="ps-3 py-2.5 fw-semibold text-body-emphasis">
+                    <td class="ps-3 py-3 fw-semibold text-body-emphasis">
                         <div class="d-flex align-items-center gap-2">
                             <i class="fa-solid ${meta.icon}" style="color: #6366F1; width: 18px; font-size: 0.95rem;"></i>
                             <span class="text-nowrap" style="font-size: 0.875rem;">${meta.title}</span>
                         </div>
                     </td>
                     ${rowCells}
-                    <td class="pe-3 text-center py-2.5">
+                    <td class="pe-3 text-center py-3">
                         <div class="form-check d-inline-block m-0">
                             <input class="form-check-input custom-checkbox perm-row-all perm-row-select-all"
                                    type="checkbox"
@@ -963,7 +966,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const originalBtnText = submitBtn ? submitBtn.innerHTML : 'Save Permissions';
             if (submitBtn) {
                 submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1.5"></i> Saving...';
+                submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i> Saving...';
             }
 
             try {

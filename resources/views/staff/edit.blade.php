@@ -11,7 +11,7 @@
     <!-- Edit Staff Form Card -->
     <div class="row justify-content-center">
         <div class="col-12">
-            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-body">
+            <div class="card border-0 shadow-sm rounded-4 bg-body">
                 <!-- Page Header Component inside Card Header -->
                 <x-page-header title="Edit Staff" subtitle="Update information for {{ $staff->name }}."
                     icon="fa-solid fa-user-pen" iconBg="#e0f2fe" iconColor="#0284c7">
@@ -107,7 +107,7 @@
                     </div>
 
                     <!-- Card Footer with Actions -->
-                    <div class="card-footer border-top bg-body p-3 d-flex align-items-center justify-content-end gap-2">
+                    <div class="card-footer border-top bg-body p-3 d-flex align-items-center justify-content-end gap-2 rounded-bottom-4 position-relative z-1">
                         <x-button.secondary href="{{ route('staff.index') }}" label="Cancel" />
                         <x-button.primary type="submit" label="Update" />
                     </div>

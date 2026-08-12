@@ -5,12 +5,12 @@
 
     <div class="row justify-content-center">
         <div class="col-12">
-            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-body">
+            <div class="card border-0 shadow-sm rounded-4 bg-body">
                 <x-page-header title="System Settings" subtitle="Configure application preferences." icon="fa-solid fa-gear" />
 
                 <form id="settingsForm" action="{{ route('crm.api.settings.store') }}" method="POST">
                     @csrf
-                    <div class="p-4">
+                    <div class="p-4 position-relative z-2">
                         <div id="settingsAlert"></div>
 
                         <div class="mb-4">
@@ -26,8 +26,8 @@
                         </div>
                     </div>
 
-                    <div class="card-footer border-top bg-body p-3 d-flex align-items-center justify-content-end gap-2">
-                        <x-button.primary type="submit" icon="fa-solid fa-check me-1.5" label="Save Settings" />
+                    <div class="card-footer border-top bg-body p-3 d-flex align-items-center justify-content-end gap-2 rounded-bottom-4 position-relative z-1">
+                        <x-button.primary type="submit" icon="fa-solid fa-check me-2" label="Save Settings" />
                     </div>
                 </form>
             </div>

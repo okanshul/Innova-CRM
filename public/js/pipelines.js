@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 </td>
                 <td class="py-3 text-secondary" style="font-size: 0.85rem;">${item.description || 'N/A'}</td>
                 <td class="py-3"><span class="badge bg-info-subtle text-info">${item.stages ? item.stages.length : 0} stages</span></td>
-                <td class="py-3">${item.is_default ? '<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #dcfce7; color: #16a34a; font-size: 0.75rem;">Default</span>' : '<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #f1f5f9; color: #475569; font-size: 0.75rem;">No</span>'}</td>
+                <td class="py-3">${item.is_default ? '<span class="badge rounded-pill fw-semibold px-2 py-1" style="background-color: #dcfce7; color: #16a34a; font-size: 0.75rem;">Default</span>' : '<span class="badge rounded-pill fw-semibold px-2 py-1" style="background-color: #f1f5f9; color: #475569; font-size: 0.75rem;">No</span>'}</td>
                 <td class="text-end pe-3 py-3">
                     <div class="d-inline-flex align-items-center justify-content-end">
                         <a href="/pipelines/${item.id}" class="action-btn action-btn-view me-1" title="View Details">
@@ -91,8 +91,8 @@ document.addEventListener('DOMContentLoaded', function () {
         pipelines.forEach(item => {
             const collapseId = `pipelineCollapse_${item.id}`;
             const defaultBadge = item.is_default 
-                ? `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #dcfce7; color: #16a34a; font-size: 0.75rem;">Default</span>`
-                : `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #f1f5f9; color: #475569; font-size: 0.75rem;">Standard</span>`;
+                ? `<span class="badge rounded-pill fw-semibold px-2 py-1" style="background-color: #dcfce7; color: #16a34a; font-size: 0.75rem;">Default</span>`
+                : `<span class="badge rounded-pill fw-semibold px-2 py-1" style="background-color: #f1f5f9; color: #475569; font-size: 0.75rem;">Standard</span>`;
 
             let actionButtonsHtml = `
                 <a href="/pipelines/${item.id}" class="action-btn action-btn-view me-1" title="View Details">

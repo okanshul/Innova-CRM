@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         </div>
 
                         <div class="d-flex align-items-center gap-2 flex-shrink-0 ms-auto">
-                            <span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #e0e7ff; color: #4338ca; font-size: 0.75rem;">${item.guard_name || 'web'}</span>
+                            <span class="badge rounded-pill fw-semibold px-2 py-1" style="background-color: #e0e7ff; color: #4338ca; font-size: 0.75rem;">${item.guard_name || 'web'}</span>
                             <button class="btn text-secondary p-0 border-0 shadow-none text-decoration-none lh-1 mobile-action-toggle ms-1" 
                                     type="button" 
                                     aria-label="Toggle Details">

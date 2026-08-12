@@ -45,7 +45,7 @@
     </div>
 
     <!-- Footer Pagination -->
-    <div class="d-flex flex-wrap align-items-center justify-content-between p-3 bg-body" id="{{ $paginationRowId }}">
+    <div class="d-flex flex-wrap align-items-center justify-content-between p-3 bg-body rounded-bottom-4" id="{{ $paginationRowId }}">
         <div class="text-secondary small fw-medium" id="{{ $summaryId }}">
             Showing 0 entries
         </div>

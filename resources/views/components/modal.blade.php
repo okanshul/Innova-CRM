@@ -41,7 +41,7 @@
                         @endif
                     </div>
                 </div>
-                <button type="button" class="btn-close flex-shrink-0 mt-0.5" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close flex-shrink-0 mt-1" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body p-3 bg-body" @if ($bodyId) id="{{ $bodyId }}" @endif>

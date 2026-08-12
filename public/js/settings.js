@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (res.success && settingsAlert) {
                     settingsAlert.innerHTML = `
                         <div class="alert alert-success alert-dismissible fade show rounded-3 mb-3" role="alert">
-                            <i class="fa-solid fa-circle-check me-1.5"></i> ${res.message}
+                            <i class="fa-solid fa-circle-check me-2"></i> ${res.message}
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     `;

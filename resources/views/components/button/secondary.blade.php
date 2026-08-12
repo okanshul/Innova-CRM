@@ -7,7 +7,7 @@
 ])
 
 @php
-    $baseClasses = 'btn btn-light border rounded-3 px-4 py-2 fw-medium text-secondary d-inline-flex align-items-center gap-1.5';
+    $baseClasses = 'btn btn-light border rounded-3 px-4 py-2 fw-medium text-secondary d-inline-flex align-items-center gap-2';
 @endphp
 
 @if($href)

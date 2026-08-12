@@ -6,7 +6,7 @@
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-body mb-4">
         <x-page-header title="Reports & Analytics" subtitle="Comprehensive performance metrics and sales overview." icon="fa-solid fa-chart-column" />
 
-        <div class="p-4">
+        <div class="p-3">
             <div class="row g-4">
                 <div class="col-12 col-sm-6 col-lg-3">
                     <div class="card border-0 shadow-sm rounded-4 p-3 bg-body-tertiary">

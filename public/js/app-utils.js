@@ -95,6 +95,53 @@ async function confirmDelete(itemName = 'this item') {
 }
 
 /**
+ * Helper to check if search or filter params are active
+ */
+function hasActiveFilters(params = {}) {
+    if (!params || typeof params !== 'object') return false;
+    return Object.entries(params).some(([key, val]) => {
+        if (['page', 'per_page', 'sort', 'order'].includes(key)) return false;
+        if (val === null || val === undefined) return false;
+        const strVal = String(val).trim().toLowerCase();
+        return strVal !== '' && strVal !== 'all';
+    });
+}
+
+/**
+ * Helper to generate empty state UI matching design
+ */
+function getEmptyStateHtml(options = {}) {
+    const {
+        title = null,
+        module = 'records',
+        message = null,
+        showClearBtn = true
+    } = options;
+
+    const displayTitle = title || `No ${module} found`;
+    const displayMessage = showClearBtn
+        ? (message || `We couldn't find any ${module} matching your search or filters. Try adjusting your search criteria.`)
+        : (message || `There are currently no ${module} available.`);
+
+    return `
+        <div class="empty-state-container text-center py-5 px-3 my-2">
+            <div class="empty-state-illustration position-relative mb-3 d-inline-block">
+                <div class="position-relative d-inline-block">
+                    <i class="fa-solid fa-clipboard-list" style="font-size: 3.5rem; color: #cbd5e1;"></i>
+                </div>
+            </div>
+            <h5 class="fw-bold text-body-emphasis mb-1 fs-5">${displayTitle}</h5>
+            <p class="text-secondary small mb-3 mx-auto" style="max-width: 420px; line-height: 1.5; font-size: 0.85rem;">${displayMessage}</p>
+            ${showClearBtn ? `
+                <button type="button" class="btn btn-sm px-3 py-1 rounded-3 fw-medium btn-clear-filters-action d-inline-flex align-items-center gap-2" style="border: 1px solid #c7d2fe; color: #4f46e5; background-color: #f5f3ff;">
+                    <i class="fa-solid fa-filter"></i> Clear Filters
+                </button>
+            ` : ''}
+        </div>
+    `;
+}
+
+/**
  * 2. loadDataTable({ url, tableBodyId, rowRenderer, emptyMessage, paginationContainerId, summaryId, controlsId, page, perPage, params })
  * Dynamic data table loader and pagination renderer.
  */
@@ -142,11 +189,41 @@ async function loadDataTable(options = {}) {
         tableBody.innerHTML = '';
 
         if (!items || items.length === 0) {
+            let moduleName = 'records';
+            const cleanTitle = emptyMessage.replace(/\.$/, '');
+            if (cleanTitle.toLowerCase().includes('task')) moduleName = 'tasks';
+            else if (cleanTitle.toLowerCase().includes('contact')) moduleName = 'contacts';
+            else if (cleanTitle.toLowerCase().includes('deal')) moduleName = 'deals';
+            else if (cleanTitle.toLowerCase().includes('meeting')) moduleName = 'meetings';
+            else if (cleanTitle.toLowerCase().includes('staff')) moduleName = 'staff';
+            else if (cleanTitle.toLowerCase().includes('role')) moduleName = 'roles';
+            else if (cleanTitle.toLowerCase().includes('pipeline')) moduleName = 'pipelines';
+
+            const isFiltered = hasActiveFilters(params);
+
             tableBody.innerHTML = `
                 <tr>
-                    <td colspan="100" class="text-center py-5 text-secondary">${emptyMessage}</td>
+                    <td colspan="100" class="p-0">
+                        ${getEmptyStateHtml({ title: cleanTitle, module: moduleName, showClearBtn: isFiltered })}
+                    </td>
                 </tr>
             `;
+
+            const clearBtn = tableBody.querySelector('.btn-clear-filters-action');
+            if (clearBtn) {
+                clearBtn.addEventListener('click', () => {
+                    const resetTrigger = document.getElementById('btnFilterTrigger') || document.getElementById('btnResetFilters');
+                    if (resetTrigger) {
+                        resetTrigger.click();
+                    } else {
+                        document.querySelectorAll('input[type="text"][id*="Search"], input[type="search"]').forEach(i => {
+                            i.value = '';
+                            i.dispatchEvent(new Event('input', { bubbles: true }));
+                        });
+                    }
+                });
+            }
+
             if (paginationSummary) paginationSummary.textContent = 'Showing 0 entries';
             if (paginationControls) paginationControls.innerHTML = '';
             if (typeof onRendered === 'function') onRendered(items, pagination);
@@ -217,7 +294,7 @@ async function loadDataTable(options = {}) {
         tableBody.innerHTML = `
             <tr>
                 <td colspan="100" class="text-center py-4 text-danger">
-                    <i class="fa-solid fa-circle-exclamation me-1.5"></i> Failed to load data. Please try again.
+                    <i class="fa-solid fa-circle-exclamation me-1"></i> Failed to load data. Please try again.
                 </td>
             </tr>
         `;
@@ -254,7 +331,7 @@ function bindFormSubmit(config = {}) {
         if (submitBtn) {
             originalBtnText = submitBtn.innerHTML;
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1.5"></i> Submitting...';
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i> Submitting...';
         }
 
         try {
@@ -299,8 +376,23 @@ function bindFormSubmit(config = {}) {
                         errorDiv.className = 'invalid-feedback-ajax text-danger ps-2 mt-1';
                         errorDiv.textContent = messages[0];
 
-                        const container = input.closest('.position-relative') || input.parentNode;
-                        container.appendChild(errorDiv);
+                        if (input.classList.contains('custom-select-hidden')) {
+                            const selectWrapper = input.closest('.custom-select-wrapper');
+                            if (selectWrapper) {
+                                selectWrapper.appendChild(errorDiv);
+                            } else {
+                                input.insertAdjacentElement('afterend', errorDiv);
+                            }
+                        } else if (input.type === 'password') {
+                            const relWrapper = input.closest('.position-relative');
+                            if (relWrapper) {
+                                relWrapper.insertAdjacentElement('afterend', errorDiv);
+                            } else {
+                                input.insertAdjacentElement('afterend', errorDiv);
+                            }
+                        } else {
+                            input.insertAdjacentElement('afterend', errorDiv);
+                        }
                     }
                 }
 
@@ -329,8 +421,24 @@ function bindFormSubmit(config = {}) {
     form.querySelectorAll('.form-control, .form-select').forEach(input => {
         const clearError = function () {
             this.classList.remove('is-invalid');
-            const container = this.closest('.position-relative') || this.parentNode;
-            const errDiv = container.querySelector('.invalid-feedback-ajax');
+            
+            let errDiv;
+            if (this.classList.contains('custom-select-hidden')) {
+                const selectWrapper = this.closest('.custom-select-wrapper');
+                if (selectWrapper) {
+                    errDiv = selectWrapper.querySelector('.invalid-feedback-ajax');
+                }
+            } else if (this.type === 'password') {
+                const relWrapper = this.closest('.position-relative');
+                if (relWrapper && relWrapper.nextElementSibling && relWrapper.nextElementSibling.classList.contains('invalid-feedback-ajax')) {
+                    errDiv = relWrapper.nextElementSibling;
+                }
+            } else {
+                if (this.nextElementSibling && this.nextElementSibling.classList.contains('invalid-feedback-ajax')) {
+                    errDiv = this.nextElementSibling;
+                }
+            }
+            
             if (errDiv) errDiv.remove();
         };
         input.addEventListener('input', clearError);
@@ -427,10 +535,84 @@ function initCustomSelects(targetSelector = 'select:not(.no-custom-select), .for
         menu.className = 'custom-select-menu';
         wrapper.appendChild(menu);
 
+        let searchInput = null;
+
         const renderMenuOptions = () => {
             menu.innerHTML = '';
+            searchInput = null;
+
             const selectedOption = select.options[select.selectedIndex] || select.options[0];
             labelSpan.textContent = selectedOption ? selectedOption.text : (select.getAttribute('placeholder') || 'Select...');
+
+            // Only show search bar for dynamic data selects or explicitly searchable selects
+            const isDynamicSelect = 
+                select.dataset.searchable === 'true' || 
+                select.classList.contains('searchable') || 
+                ['assigned_to', 'user_id', 'staff_id', 'company_id', 'contact_id', 'host_id', 'pipeline_id', 'stage_id', 'role_id', 'department_id', 'department'].includes(select.name) ||
+                (select.options.length >= 6 && !['priority', 'status', 'per_page', 'limit', 'guard_name'].includes(select.name));
+
+            if (isDynamicSelect) {
+                const searchContainer = document.createElement('div');
+                searchContainer.className = 'custom-select-search-wrapper p-2 border-bottom sticky-top bg-body';
+                searchContainer.style.zIndex = '10';
+                
+                searchContainer.innerHTML = `
+                    <div class="position-relative d-flex align-items-center">
+                        <input type="text" class="form-control form-control-sm custom-select-search-input" placeholder="Search..." autocomplete="off" style="font-size: 0.8rem; border-radius: 6px;">
+                        <i class="fa-solid fa-magnifying-glass text-secondary" style="font-size: 0.75rem;"></i>
+                    </div>
+                `;
+
+                searchInput = searchContainer.querySelector('.custom-select-search-input');
+                
+                searchContainer.addEventListener('click', (e) => e.stopPropagation());
+                searchInput.addEventListener('keydown', (e) => {
+                    e.stopPropagation();
+                    if (e.key === 'Escape') closeMenu();
+                });
+
+                searchInput.addEventListener('input', () => {
+                    const term = searchInput.value.toLowerCase().trim();
+                    let matchCount = 0;
+                    const items = optionsListContainer.querySelectorAll('.custom-select-option');
+                    items.forEach(item => {
+                        const txt = item.textContent.toLowerCase();
+                        if (txt.includes(term)) {
+                            item.style.display = '';
+                            matchCount++;
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+
+                    let noResultsEl = optionsListContainer.querySelector('.custom-select-no-results');
+                    if (matchCount === 0) {
+                        if (!noResultsEl) {
+                            noResultsEl = document.createElement('div');
+                            noResultsEl.className = 'custom-select-no-results text-center py-2 text-secondary small fs-xs';
+                            noResultsEl.textContent = 'No options found';
+                            optionsListContainer.appendChild(noResultsEl);
+                        } else {
+                            noResultsEl.style.display = '';
+                        }
+                    } else if (noResultsEl) {
+                        noResultsEl.style.display = 'none';
+                    }
+                });
+
+                menu.appendChild(searchContainer);
+            }
+
+            const optionsListContainer = document.createElement('div');
+            optionsListContainer.className = 'custom-select-options-list';
+
+            const validDataOptions = Array.from(select.options).filter(opt => opt.value !== '');
+            if (select.options.length === 0 || validDataOptions.length === 0) {
+                const emptyMsg = document.createElement('div');
+                emptyMsg.className = 'custom-select-no-results text-center py-3 text-secondary small fs-xs fw-medium';
+                emptyMsg.innerHTML = '<i class="fa-solid fa-folder-open me-1 opacity-50"></i> No options available';
+                optionsListContainer.appendChild(emptyMsg);
+            }
 
             Array.from(select.options).forEach((opt, idx) => {
                 const optItem = document.createElement('div');
@@ -451,8 +633,10 @@ function initCustomSelects(targetSelector = 'select:not(.no-custom-select), .for
                     closeMenu();
                 });
 
-                menu.appendChild(optItem);
+                optionsListContainer.appendChild(optItem);
             });
+
+            menu.appendChild(optionsListContainer);
         };
 
         const openMenu = () => {
@@ -466,6 +650,9 @@ function initCustomSelects(targetSelector = 'select:not(.no-custom-select), .for
             renderMenuOptions();
             menu.classList.add('show');
             trigger.classList.add('active');
+            if (searchInput) {
+                setTimeout(() => searchInput.focus(), 50);
+            }
         };
 
         const closeMenu = () => {

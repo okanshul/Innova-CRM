@@ -7,7 +7,7 @@
         <x-page-header title="Mail Inbox" subtitle="Manage client communications and emails." icon="fa-regular fa-envelope">
             <x-slot:actions>
                 <button class="btn btn-primary rounded-3 px-3 py-2 fw-semibold border-0 shadow-sm" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
-                    <i class="fa-solid fa-pen-to-square me-1.5"></i> Compose Email
+                    <i class="fa-solid fa-pen-to-square me-2"></i> Compose Email
                 </button>
             </x-slot:actions>
         </x-page-header>

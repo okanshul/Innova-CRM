@@ -52,10 +52,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function getContactStatusBadge(status) {
         const s = (status || '').toLowerCase();
-        if (s === 'customer') return `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #dcfce7; color: #16a34a; font-size: 0.75rem;">Customer</span>`;
-        if (s === 'prospect') return `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #e0e7ff; color: #4338ca; font-size: 0.75rem;">Prospect</span>`;
-        if (s === 'lead') return `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #e0f2fe; color: #0369a1; font-size: 0.75rem;">Lead</span>`;
-        return `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #fee2e2; color: #dc2626; font-size: 0.75rem;">Inactive</span>`;
+        if (s === 'customer') return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #dcfce7; color: #16a34a; font-size: 0.75rem;">Customer</span>`;
+        if (s === 'prospect') return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #e0e7ff; color: #4338ca; font-size: 0.75rem;">Prospect</span>`;
+        if (s === 'lead') return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #e0f2fe; color: #0369a1; font-size: 0.75rem;">Lead</span>`;
+        return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #fee2e2; color: #dc2626; font-size: 0.75rem;">Inactive</span>`;
     }
 
     function syncMobilePagination() {
@@ -160,7 +160,14 @@ document.addEventListener('DOMContentLoaded', function () {
         mobileList.innerHTML = '';
 
         if (!contacts || contacts.length === 0) {
-            mobileList.innerHTML = `<div class="text-center py-4 text-secondary small">No contacts found.</div>`;
+            mobileList.innerHTML = getEmptyStateHtml({ title: 'No contacts found', module: 'contacts' });
+            const clearBtn = mobileList.querySelector('.btn-clear-filters-action');
+            if (clearBtn) {
+                clearBtn.addEventListener('click', () => {
+                    const resetTrigger = document.getElementById('btnFilterTrigger') || document.getElementById('btnResetFilters');
+                    if (resetTrigger) resetTrigger.click();
+                });
+            }
             return;
         }
 

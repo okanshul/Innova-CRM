@@ -53,7 +53,7 @@
                     <div class="d-flex align-items-center justify-content-between mb-3">
                         <h6 class="fw-bold mb-0 fs-sm">Revenue Overview</h6>
                         <div class="dropdown">
-                            <button class="btn btn-sm btn-light border text-body-secondary dropdown-toggle shadow-none rounded-3 py-1 px-2.5" style="font-size: 0.75rem;" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="btn btn-sm btn-light border text-body-secondary dropdown-toggle shadow-none rounded-3 py-1 px-3" style="font-size: 0.75rem;" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 This Year
                             </button>
                             <ul class="dropdown-menu shadow-sm">

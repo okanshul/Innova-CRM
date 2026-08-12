@@ -9,7 +9,7 @@
 
     <div class="row justify-content-center">
         <div class="col-12">
-            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-body">
+            <div class="card border-0 shadow-sm rounded-4 bg-body">
                 <x-page-header title="Edit Deal" subtitle="Update deal details." icon="fa-solid fa-gem">
                     <x-slot:actions>
                         <x-button.secondary href="{{ route('deals.index') }}" icon="fa-solid fa-angle-left pe-1" label="Back" />
@@ -19,7 +19,7 @@
                 <form id="dealEditForm" action="{{ route('crm.api.deals.update', $deal->id) }}" method="POST">
                     @csrf
                     @method('PUT')
-                    <div class="p-3">
+                    <div class="p-3 position-relative z-2">
                         <div class="row">
                             <x-form.input class="col-12 col-md-6 mb-3" name="title" label="Deal Title" icon="fa-solid fa-heading" :required="true" :value="$deal->title" />
                             <x-form.input class="col-12 col-md-3 mb-3" type="number" step="0.01" name="value" label="Deal Value ($)" icon="fa-solid fa-dollar-sign" :required="true" :value="$deal->value" />
@@ -65,7 +65,7 @@
                         </div>
                     </div>
 
-                    <div class="card-footer border-top bg-body p-3 d-flex align-items-center justify-content-end gap-2">
+                    <div class="card-footer border-top bg-body p-3 d-flex align-items-center justify-content-end gap-2 rounded-bottom-4 position-relative z-1">
                         <x-button.secondary href="{{ route('deals.index') }}" label="Cancel" />
                         <x-button.primary type="submit" label="Update Deal" />
                     </div>

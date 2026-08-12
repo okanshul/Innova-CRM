@@ -15,7 +15,7 @@
 
             @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show rounded-3 mb-3" role="alert" style="font-size: 0.875rem;">
-                    <i class="fa-solid fa-circle-check me-1.5"></i> {{ session('success') }}
+                    <i class="fa-solid fa-circle-check me-2"></i> {{ session('success') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
@@ -48,7 +48,7 @@
                     </div>
 
                     @can('tasks.delete')
-                        <button class="btn btn-delete-bulk shadow-none d-none align-items-center gap-1.5 flex-grow-1 flex-sm-grow-0" id="btnBulkDelete">
+                        <button class="btn btn-delete-bulk shadow-none d-none align-items-center gap-2 flex-grow-1 flex-sm-grow-0" id="btnBulkDelete">
                             <i class="fa-regular fa-trash-can"></i> Delete Selected (<span id="selectedCount">0</span>)
                         </button>
                     @endcan
@@ -85,7 +85,7 @@
 
         <div class="d-lg-none border-top">
             <div id="tasksMobileCardList" class="d-flex flex-column bg-body"></div>
-            <div class="d-flex flex-column flex-sm-row align-items-center justify-content-between p-3 bg-body gap-2 border-top" id="mobilePaginationRow">
+            <div class="d-flex flex-column flex-sm-row align-items-center justify-content-between p-3 bg-body gap-2 border-top rounded-bottom-4" id="mobilePaginationRow">
                 <div class="text-secondary small fw-medium text-center text-sm-start" id="mobilePaginationSummary">Showing 0 entries</div>
                 <div class="d-flex align-items-center gap-2" id="mobilePaginationControls"></div>
             </div>

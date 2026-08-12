@@ -9,7 +9,7 @@
 
     <div class="row justify-content-center">
         <div class="col-12">
-            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-body">
+            <div class="card border-0 shadow-sm rounded-4 bg-body">
                 <x-page-header title="Edit Contact" subtitle="Update contact details." icon="fa-regular fa-address-book">
                     <x-slot:actions>
                         <x-button.secondary href="{{ route('contacts.index') }}" icon="fa-solid fa-angle-left pe-1" label="Back" />
@@ -19,7 +19,7 @@
                 <form id="contactEditForm" action="{{ route('crm.api.contacts.update', $contact->id) }}" method="POST">
                     @csrf
                     @method('PUT')
-                    <div class="p-3">
+                    <div class="p-3 position-relative z-2">
                         <div class="row">
                             <x-form.input class="col-12 col-md-6 mb-3" name="first_name" label="First Name" icon="fa-solid fa-user" :required="true" :value="$contact->first_name" />
                             <x-form.input class="col-12 col-md-6 mb-3" name="last_name" label="Last Name" icon="fa-solid fa-user" :value="$contact->last_name" />
@@ -45,7 +45,7 @@
                         </div>
                     </div>
 
-                    <div class="card-footer border-top bg-body p-3 d-flex align-items-center justify-content-end gap-2">
+                    <div class="card-footer border-top bg-body p-3 d-flex align-items-center justify-content-end gap-2 rounded-bottom-4 position-relative z-1">
                         <x-button.secondary href="{{ route('contacts.index') }}" label="Cancel" />
                         <x-button.primary type="submit" label="Update Contact" />
                     </div>

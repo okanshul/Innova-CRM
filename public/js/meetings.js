@@ -52,10 +52,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function getMeetingStatusBadge(status) {
         const s = (status || '').toLowerCase();
-        if (s === 'completed') return `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #dcfce7; color: #16a34a; font-size: 0.75rem;">Completed</span>`;
-        if (s === 'cancelled') return `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #fee2e2; color: #dc2626; font-size: 0.75rem;">Cancelled</span>`;
-        if (s === 'rescheduled') return `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #ffedd5; color: #c2410c; font-size: 0.75rem;">Rescheduled</span>`;
-        return `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #e0f2fe; color: #0369a1; font-size: 0.75rem;">Scheduled</span>`;
+        if (s === 'completed') return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #dcfce7; color: #16a34a; font-size: 0.75rem;">Completed</span>`;
+        if (s === 'cancelled') return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #fee2e2; color: #dc2626; font-size: 0.75rem;">Cancelled</span>`;
+        if (s === 'rescheduled') return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #ffedd5; color: #c2410c; font-size: 0.75rem;">Rescheduled</span>`;
+        return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #e0f2fe; color: #0369a1; font-size: 0.75rem;">Scheduled</span>`;
     }
 
     function syncMobilePagination() {
@@ -154,7 +154,14 @@ document.addEventListener('DOMContentLoaded', function () {
         mobileList.innerHTML = '';
 
         if (!meetings || meetings.length === 0) {
-            mobileList.innerHTML = `<div class="text-center py-4 text-secondary small">No meetings found.</div>`;
+            mobileList.innerHTML = getEmptyStateHtml({ title: 'No meetings found', module: 'meetings' });
+            const clearBtn = mobileList.querySelector('.btn-clear-filters-action');
+            if (clearBtn) {
+                clearBtn.addEventListener('click', () => {
+                    const resetTrigger = document.getElementById('btnFilterTrigger') || document.getElementById('btnResetFilters');
+                    if (resetTrigger) resetTrigger.click();
+                });
+            }
             return;
         }
 

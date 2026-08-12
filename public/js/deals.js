@@ -52,9 +52,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function getDealStatusBadge(status) {
         const s = (status || '').toLowerCase();
-        if (s === 'won' || s === 'closed_won') return `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #dcfce7; color: #16a34a; font-size: 0.75rem;">Closed Won</span>`;
-        if (s === 'lost' || s === 'closed_lost') return `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #fee2e2; color: #dc2626; font-size: 0.75rem;">Closed Lost</span>`;
-        return `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #e0f2fe; color: #0369a1; font-size: 0.75rem;">Open</span>`;
+        if (s === 'won' || s === 'closed_won') return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #dcfce7; color: #16a34a; font-size: 0.75rem;">Closed Won</span>`;
+        if (s === 'lost' || s === 'closed_lost') return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #fee2e2; color: #dc2626; font-size: 0.75rem;">Closed Lost</span>`;
+        return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #e0f2fe; color: #0369a1; font-size: 0.75rem;">Open</span>`;
     }
 
     function syncMobilePagination() {
@@ -153,7 +153,14 @@ document.addEventListener('DOMContentLoaded', function () {
         mobileList.innerHTML = '';
 
         if (!deals || deals.length === 0) {
-            mobileList.innerHTML = `<div class="text-center py-4 text-secondary small">No deals found.</div>`;
+            mobileList.innerHTML = getEmptyStateHtml({ title: 'No deals found', module: 'deals' });
+            const clearBtn = mobileList.querySelector('.btn-clear-filters-action');
+            if (clearBtn) {
+                clearBtn.addEventListener('click', () => {
+                    const resetTrigger = document.getElementById('btnFilterTrigger') || document.getElementById('btnResetFilters');
+                    if (resetTrigger) resetTrigger.click();
+                });
+            }
             return;
         }
 
