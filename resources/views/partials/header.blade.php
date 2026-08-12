@@ -68,8 +68,6 @@
                 <div class="position-relative">
                     <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : 'https://ui-avatars.com/api/?name='.urlencode(auth()->user()->name).'&background=6366F1&color=fff' }}" alt="{{ auth()->user()->name }}" width="36" height="36"
                         class="rounded-circle object-fit-cover shadow-sm border border-2 border-white">
-                    <span class="position-absolute bottom-0 end-0 p-1 bg-success border border-white rounded-circle"
-                        style="width:9px; height:9px;"></span>
                 </div>
                 <div class="d-none d-md-flex align-items-center gap-2 text-start ms-2 me-1">
                     <div class="d-flex flex-column lh-1">
@@ -77,7 +75,6 @@
                         <span class="text-secondary text-capitalize" style="font-size: 0.7rem;">{{ auth()->user()->getRoleNames()->first() ?? 'Staff' }}</span>
                     </div>
                 </div>
-                <i class="fa-solid fa-chevron-down ms-1 fs-xs text-secondary opacity-75 d-none d-md-inline"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-end shadow-lg rounded-4 border-0 p-2 mt-2"
                 aria-labelledby="dropdownUserHeader" style="min-width: 230px;">

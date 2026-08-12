@@ -98,19 +98,16 @@
 
         <!-- User Profile -->
         <div class="dropdown">
-            <a href="javascript:void(0)" class="dropdown-toggle d-flex align-items-center text-white text-decoration-none px-2 py-1.5 rounded-3 hover-bg sidebar-user"
+            <a href="javascript:void(0)" class="dropdown-toggle d-flex align-items-center text-white text-decoration-none px-2 py-1 rounded-3 hover-bg sidebar-user"
                 id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false" role="button">
                 <div class="position-relative d-flex justify-content-center align-items-center">
                     <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : 'https://ui-avatars.com/api/?name='.urlencode(auth()->user()->name).'&background=6366F1&color=fff' }}" alt="{{ auth()->user()->name }}"
                         width="36" height="36" class="rounded-circle avatar object-fit-cover">
-                    <span class="position-absolute bottom-0 end-0 p-1 bg-success border border-dark rounded-circle"
-                        style="width: 10px; height: 10px;"></span>
                 </div>
-                <div class="d-flex flex-column lh-sm sidebar-text ms-2.5 text-start me-auto">
+                <div class="d-flex flex-column lh-sm sidebar-text ms-2 text-start me-auto">
                     <strong class="fs-6 fw-semibold text-white" style="font-size: 0.875rem;">{{ auth()->user()->name }}</strong>
                     <span class="text-secondary text-capitalize" style="font-size: 0.75rem; color: #9ca3af !important;">{{ auth()->user()->getRoleNames()->first() ?? 'Administrator' }}</span>
                 </div>
-                <i class="fa-solid fa-chevron-down text-secondary fs-xs ms-1"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-dark text-small shadow-lg rounded-4 border-0 p-2 mt-2"
                 aria-labelledby="dropdownUser1" style="min-width: 220px; background-color: #1a1a30;">

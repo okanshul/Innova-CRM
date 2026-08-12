@@ -23,25 +23,25 @@
         <{{ $hasForm ? 'form' : 'div' }} @if ($formId) id="{{ $formId }}" @endif
             @if ($formAction) action="{{ $formAction }}" method="{{ $formMethod }}" @endif
             class="modal-content rounded-4 border-0 shadow">
-            <div class="modal-header border-bottom p-3 bg-body">
-                <div class="d-flex align-items-center gap-3">
+            <div class="modal-header border-bottom p-3 bg-body align-items-start">
+                <div class="d-flex align-items-start gap-2 gap-sm-3 flex-grow-1 min-w-0 me-2">
                     @if ($icon)
-                        <div class="rounded-3 d-flex align-items-center justify-content-center"
-                            style="background: {{ $iconBg }}; color: {{ $iconColor }}; width: 44px; height: 44px;">
+                        <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                            style="background: {{ $iconBg }}; color: {{ $iconColor }}; width: 42px; height: 42px;">
                             <i class="{{ $icon }} fs-5"></i>
                         </div>
                     @endif
-                    <div>
+                    <div class="min-w-0 flex-grow-1">
                         <h6 class="modal-title fw-bold text-body-emphasis mb-0" id="{{ $labelId }}">
                             {{ $title }}</h6>
                         @if ($subtitle || isset($headerSubtitle))
-                            <div class="text-secondary small d-flex align-items-center gap-2 mt-0.5">
+                            <div class="text-secondary small d-flex flex-wrap align-items-center gap-1 mt-1" style="font-size: 0.8125rem;">
                                 {{ $headerSubtitle ?? $subtitle }}
                             </div>
                         @endif
                     </div>
                 </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close flex-shrink-0 mt-0.5" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body p-3 bg-body" @if ($bodyId) id="{{ $bodyId }}" @endif>
@@ -56,3 +56,4 @@
             </{{ $hasForm ? 'form' : 'div' }}>
     </div>
 </div>
+

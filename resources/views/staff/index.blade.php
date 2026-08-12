@@ -132,7 +132,7 @@
     <x-modal id="permissionsModal" title="Manage Permissions" size="lg" icon="fa-solid fa-shield-halved"
         formId="permissionsModalForm" bodyId="permissionsModalBody">
         <x-slot:headerSubtitle>
-            <span>Set individual permissions for <strong id="permStaffName" class="text-body-emphasis">...</strong></span>
+            <span class="d-inline-flex flex-wrap align-items-center gap-1">Set individual permissions for <strong id="permStaffName" class="text-body-emphasis">...</strong></span>
             <x-badge.status value="Staff" type="role" id="permStaffRoleBadge" />
         </x-slot:headerSubtitle>
 
