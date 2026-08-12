@@ -55,6 +55,12 @@
         </li>
         <li>
             <a href="#" class="sidebar-link">
+                <i class="fa-solid fa-video"></i>
+                <span class="sidebar-text">Meetings</span>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="sidebar-link">
                 <i class="fa-regular fa-envelope"></i>
                 <span class="sidebar-text">Mail</span>
             </a>
