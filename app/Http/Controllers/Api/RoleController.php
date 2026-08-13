@@ -13,13 +13,19 @@ class RoleController extends Controller
     {
         Gate::authorize('roles.view');
 
-        $roles = Role::with('permissions')->get();
+        $query = Role::with('permissions');
+
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        $perPage = $request->get('per_page', 10);
+        $roles = $query->orderBy('id', 'asc')->paginate($perPage);
 
         return response()->json([
             'success' => true,
-            'data' => [
-                'data' => $roles
-            ]
+            'data' => $roles
         ]);
     }
 

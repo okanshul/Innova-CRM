@@ -98,13 +98,30 @@ async function confirmDelete(itemName = 'this item') {
  * Helper to check if search or filter params are active
  */
 function hasActiveFilters(params = {}) {
-    if (!params || typeof params !== 'object') return false;
-    return Object.entries(params).some(([key, val]) => {
-        if (['page', 'per_page', 'sort', 'order'].includes(key)) return false;
-        if (val === null || val === undefined) return false;
-        const strVal = String(val).trim().toLowerCase();
-        return strVal !== '' && strVal !== 'all';
-    });
+    let isFiltered = false;
+
+    if (params && typeof params === 'object') {
+        isFiltered = Object.entries(params).some(([key, val]) => {
+            if (['page', 'per_page', 'sort', 'order'].includes(key)) return false;
+            if (val === null || val === undefined) return false;
+            const strVal = String(val).trim().toLowerCase();
+            return strVal !== '' && strVal !== 'all';
+        });
+    }
+
+    if (isFiltered) return true;
+
+    // Check DOM elements for active filters (search, select, date inputs, etc.)
+    const filterInputs = document.querySelectorAll('.filter-controls-wrapper input, .filter-controls-wrapper select, input[id*="filter"], select[id*="filter"], input[type="date"], input[id*="Date"], input[name*="date"]');
+    for (let input of filterInputs) {
+        if (input.id === 'perPage' || input.name === 'perPage') continue;
+        const val = (input.value || '').trim().toLowerCase();
+        if (val !== '' && val !== 'all') {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /**
@@ -216,9 +233,11 @@ async function loadDataTable(options = {}) {
                     if (resetTrigger) {
                         resetTrigger.click();
                     } else {
-                        document.querySelectorAll('input[type="text"][id*="Search"], input[type="search"]').forEach(i => {
+                        document.querySelectorAll('.filter-controls-wrapper input, .filter-controls-wrapper select, input[id*="filter"], select[id*="filter"], input[type="date"], input[id*="Date"], input[name*="date"]').forEach(i => {
+                            if (i.id === 'perPage' || i.name === 'perPage') return;
                             i.value = '';
                             i.dispatchEvent(new Event('input', { bubbles: true }));
+                            i.dispatchEvent(new Event('change', { bubbles: true }));
                         });
                     }
                 });
@@ -722,3 +741,78 @@ document.addEventListener('DOMContentLoaded', () => {
     initCustomSelects();
 });
 
+/**
+ * Global helper to export table/API data to CSV
+ */
+async function exportTableData(options = {}) {
+    const {
+        url,
+        filename = 'export.csv',
+        headers = [],
+        formatRow,
+        params = {},
+        btnId = 'btnExport'
+    } = options;
+
+    const btn = document.getElementById(btnId);
+    let originalHtml = '';
+
+    try {
+        if (btn) {
+            btn.disabled = true;
+            originalHtml = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>Exporting...</span>`;
+        }
+
+        const queryParams = new URLSearchParams({
+            per_page: 1000,
+            ...params
+        });
+
+        const data = await apiRequest(`${url}?${queryParams.toString()}`);
+        const rawPayload = (data && typeof data === 'object' && data.data) ? data.data : data;
+        const records = Array.isArray(rawPayload) 
+            ? rawPayload 
+            : (rawPayload && typeof rawPayload === 'object' && Array.isArray(rawPayload.data) ? rawPayload.data : []);
+
+        if (!Array.isArray(records) || records.length === 0) {
+            if (typeof showErrorToast === 'function') showErrorToast('No records available to export.');
+            return;
+        }
+
+        const csvRows = [headers.join(',')];
+
+        records.forEach(item => {
+            if (typeof formatRow === 'function') {
+                const formatted = formatRow(item);
+                if (Array.isArray(formatted)) {
+                    const escapedRow = formatted.map(val => {
+                        if (val === null || val === undefined) return '""';
+                        const str = String(val).replace(/"/g, '""');
+                        return `"${str}"`;
+                    });
+                    csvRows.push(escapedRow.join(','));
+                }
+            }
+        });
+
+        const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+        const downloadUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = downloadUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(downloadUrl);
+        if (typeof showSuccessToast === 'function') showSuccessToast('Data exported successfully.');
+    } catch (err) {
+        console.error('Export error:', err);
+        if (typeof showErrorToast === 'function') showErrorToast(err.message || 'Failed to export data.');
+    } finally {
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = originalHtml || `<i class="fa-solid fa-download"></i> <span>Export</span>`;
+        }
+    }
+}

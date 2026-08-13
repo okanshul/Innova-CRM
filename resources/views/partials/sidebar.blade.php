@@ -124,10 +124,16 @@
 
         <!-- User Profile -->
         <div class="dropdown">
+            @php
+                $sidebarAvatar = (auth()->user()->avatar && \Illuminate\Support\Facades\Storage::disk('public')->exists(auth()->user()->avatar))
+                    ? asset('storage/' . auth()->user()->avatar)
+                    : 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) . '&background=6366F1&color=fff';
+                $sidebarUiAvatar = 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) . '&background=6366F1&color=fff';
+            @endphp
             <a href="javascript:void(0)" class="dropdown-toggle d-flex align-items-center text-white text-decoration-none px-2 py-1 rounded-3 hover-bg sidebar-user"
                 id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false" role="button">
                 <div class="position-relative d-flex justify-content-center align-items-center">
-                    <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : 'https://ui-avatars.com/api/?name='.urlencode(auth()->user()->name).'&background=6366F1&color=fff' }}" alt="{{ auth()->user()->name }}"
+                    <img src="{{ $sidebarAvatar }}" onerror="this.onerror=null;this.src='{{ $sidebarUiAvatar }}';" alt="{{ auth()->user()->name }}"
                         width="36" height="36" class="rounded-circle avatar object-fit-cover">
                 </div>
                 <div class="d-flex flex-column lh-sm sidebar-text ms-2 text-start me-auto">
@@ -138,7 +144,7 @@
             <div class="dropdown-menu dropdown-menu-dark text-small shadow-lg rounded-4 border-0 p-2 mt-2"
                 aria-labelledby="dropdownUser1" style="min-width: 220px; background-color: #1a1a30;">
                 <div class="d-flex align-items-center gap-3 p-2 mb-2 bg-white bg-opacity-10 rounded-3">
-                    <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : 'https://ui-avatars.com/api/?name='.urlencode(auth()->user()->name).'&background=6366F1&color=fff' }}" alt="{{ auth()->user()->name }}"
+                    <img src="{{ $sidebarAvatar }}" onerror="this.onerror=null;this.src='{{ $sidebarUiAvatar }}';" alt="{{ auth()->user()->name }}"
                         width="36" height="36" class="rounded-circle avatar object-fit-cover">
                     <div class="d-flex flex-column lh-sm text-truncate">
                         <strong class="fw-bold text-white" style="font-size: 0.85rem;">{{ auth()->user()->name }}</strong>
@@ -146,7 +152,7 @@
                     </div>
                 </div>
                 <div class="dropdown-divider my-1 opacity-25"></div>
-                <a class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2 text-white-50" href="#">
+                <a class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2 text-white-50" href="{{ route('profile.index') }}">
                     <i class="fa-regular fa-user text-primary" style="width: 18px;"></i>
                     <span class="text-white">Profile</span>
                 </a>

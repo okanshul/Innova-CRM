@@ -42,4 +42,9 @@ Route::middleware(['web', 'auth'])->name('crm.')->group(function () {
     // Settings API
     Route::get('settings', [SettingController::class, 'index'])->name('api.settings.index');
     Route::post('settings', [SettingController::class, 'store'])->name('api.settings.store');
+
+    // Profile API
+    Route::get('profile', [\App\Http\Controllers\Api\ProfileController::class, 'show'])->name('api.profile.show');
+    Route::post('profile', [\App\Http\Controllers\Api\ProfileController::class, 'update'])->name('api.profile.update');
+    Route::put('profile/password', [\App\Http\Controllers\Api\ProfileController::class, 'updatePassword'])->name('api.profile.password');
 });

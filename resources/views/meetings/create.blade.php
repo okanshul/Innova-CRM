@@ -47,7 +47,7 @@
 
                     <div class="card-footer border-top bg-body p-3 d-flex align-items-center justify-content-end gap-2 rounded-bottom-4 position-relative z-1">
                         <x-button.secondary href="{{ route('meetings.index') }}" label="Cancel" />
-                        <x-button.primary type="submit" label="Schedule Meeting" />
+                        <x-button.primary type="submit" label="Submit" />
                     </div>
                 </form>
             </div>

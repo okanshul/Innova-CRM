@@ -19,6 +19,33 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    const searchInput = document.getElementById('searchInput');
+    const perPageSelect = document.getElementById('perPage');
+    const btnFilterReset = document.getElementById('btnFilterTrigger');
+
+    function syncMobilePagination() {
+        const mobileSummary = document.getElementById('mobilePaginationSummary');
+        const mobileControls = document.getElementById('mobilePaginationControls');
+        const desktopSummary = document.getElementById('paginationSummary');
+        const desktopControls = document.getElementById('paginationControls');
+
+        if (mobileSummary && desktopSummary) {
+            mobileSummary.textContent = desktopSummary.textContent;
+        }
+        if (mobileControls && desktopControls) {
+            mobileControls.innerHTML = desktopControls.innerHTML;
+            if (!mobileControls.dataset.bound) {
+                mobileControls.dataset.bound = 'true';
+                mobileControls.addEventListener('click', (e) => {
+                    const btn = e.target.closest('.page-btn');
+                    if (btn && !btn.disabled && btn.dataset.page) {
+                        fetchRoles(parseInt(btn.dataset.page));
+                    }
+                });
+            }
+        }
+    }
+
     function fetchRoles(page = 1) {
         if (!tableBody && !mobileList) return;
         currentPage = page;
@@ -29,11 +56,15 @@ document.addEventListener('DOMContentLoaded', function () {
             summaryId: 'paginationSummary',
             controlsId: 'paginationControls',
             page: currentPage,
-            perPage: 10,
+            perPage: perPageSelect ? parseInt(perPageSelect.value) : 10,
+            params: {
+                search: searchInput ? searchInput.value : ''
+            },
             emptyMessage: 'No roles found.',
             rowRenderer: renderRoleRow,
             onRendered: (items) => {
                 renderMobile(items);
+                syncMobilePagination();
                 bindDeleteButtons();
             }
         });
@@ -240,6 +271,39 @@ document.addEventListener('DOMContentLoaded', function () {
                         showErrorToast(err.message || 'Failed to delete role.');
                     }
                 }
+            });
+        });
+    }
+
+    if (searchInput) searchInput.addEventListener('input', () => fetchRoles(1));
+    if (perPageSelect) perPageSelect.addEventListener('change', () => fetchRoles(1));
+    if (btnFilterReset) {
+        btnFilterReset.addEventListener('click', function () {
+            if (searchInput) searchInput.value = '';
+            if (perPageSelect) {
+                perPageSelect.value = '10';
+                perPageSelect.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+            fetchRoles(1);
+        });
+    }
+
+    const btnExport = document.getElementById('btnExport');
+    if (btnExport) {
+        btnExport.addEventListener('click', () => {
+            exportTableData({
+                url: '/api/roles',
+                filename: `roles_export_${new Date().toISOString().slice(0, 10)}.csv`,
+                headers: ['ID', 'Name', 'Guard', 'Permissions Count'],
+                params: {
+                    search: searchInput ? searchInput.value : ''
+                },
+                formatRow: (item) => [
+                    item.id,
+                    item.name,
+                    item.guard_name || 'web',
+                    item.permissions ? item.permissions.length : 0
+                ]
             });
         });
     }

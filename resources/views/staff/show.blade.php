@@ -29,14 +29,16 @@
                 <!-- Profile Banner & Hero Header -->
                 <div class="position-relative">
                     <div class="profile-cover-banner"></div>
-                    <div class="p-3 text-center border-bottom bg-body position-relative">
+                    <div class="p-3 text-center bg-body position-relative rounded-bottom-4">
                         <div class="profile-avatar-wrapper mb-3">
                             @php
-                                $avatarSrc = $staff->avatar
+                                $hasAvatar = $staff->avatar && \Illuminate\Support\Facades\Storage::disk('public')->exists($staff->avatar);
+                                $avatarSrc = $hasAvatar
                                     ? asset('storage/' . $staff->avatar)
                                     : 'https://ui-avatars.com/api/?name=' . urlencode($staff->name) . '&background=6366F1&color=fff';
+                                $uiAvatar = 'https://ui-avatars.com/api/?name=' . urlencode($staff->name) . '&background=6366F1&color=fff';
                             @endphp
-                            <img src="{{ $avatarSrc }}" class="profile-avatar-img" alt="{{ $staff->name }}">
+                            <img src="{{ $avatarSrc }}" onerror="this.onerror=null;this.src='{{ $uiAvatar }}';" class="profile-avatar-img" alt="{{ $staff->name }}">
                         </div>
                         <h3 class="fw-bold mb-1 text-body-emphasis">{{ $staff->name }}</h3>
                         <p class="text-secondary mb-3 small fw-medium d-flex align-items-center justify-content-center gap-2">

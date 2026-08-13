@@ -162,7 +162,8 @@ document.addEventListener('DOMContentLoaded', function () {
         mobileList.innerHTML = '';
 
         if (!tasks || tasks.length === 0) {
-            mobileList.innerHTML = getEmptyStateHtml({ title: 'No tasks found', module: 'tasks' });
+            const isFiltered = hasActiveFilters({ search: searchInput ? searchInput.value : '', priority: filterPriority ? filterPriority.value : '', status: filterStatus ? filterStatus.value : '' });
+            mobileList.innerHTML = getEmptyStateHtml({ title: 'No tasks found', module: 'tasks', showClearBtn: isFiltered });
             const clearBtn = mobileList.querySelector('.btn-clear-filters-action');
             if (clearBtn) {
                 clearBtn.addEventListener('click', () => {
@@ -394,9 +395,43 @@ document.addEventListener('DOMContentLoaded', function () {
     if (btnFilterReset) {
         btnFilterReset.addEventListener('click', function () {
             if (searchInput) searchInput.value = '';
-            if (filterPriority) filterPriority.value = '';
-            if (filterStatus) filterStatus.value = '';
+            if (filterPriority) {
+                filterPriority.value = '';
+                filterPriority.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+            if (filterStatus) {
+                filterStatus.value = '';
+                filterStatus.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+            document.querySelectorAll('.filter-controls-wrapper input[type="date"], .filter-controls-wrapper input[id*="date"], input[name*="date"]').forEach(i => {
+                i.value = '';
+                i.dispatchEvent(new Event('change', { bubbles: true }));
+            });
             fetchTasks(1);
+        });
+    }
+
+    const btnExport = document.getElementById('btnExport');
+    if (btnExport) {
+        btnExport.addEventListener('click', () => {
+            exportTableData({
+                url: '/api/tasks',
+                filename: `tasks_export_${new Date().toISOString().slice(0, 10)}.csv`,
+                headers: ['ID', 'Title', 'Assigned To', 'Priority', 'Status', 'Due Date'],
+                params: {
+                    search: searchInput ? searchInput.value : '',
+                    priority: filterPriority ? filterPriority.value : '',
+                    status: filterStatus ? filterStatus.value : ''
+                },
+                formatRow: (item) => [
+                    item.id,
+                    item.title,
+                    item.assigned_to ? item.assigned_to.name : 'Unassigned',
+                    item.priority,
+                    item.status,
+                    item.due_date || 'N/A'
+                ]
+            });
         });
     }
 

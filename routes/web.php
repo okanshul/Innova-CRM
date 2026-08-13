@@ -13,6 +13,7 @@ use App\Http\Controllers\MeetingController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\LoginController;
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login')->middleware('guest');
@@ -25,6 +26,7 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
 
     Route::resource('staff', StaffController::class)->only(['index', 'create', 'show', 'edit']);
     Route::resource('contacts', ContactController::class)->only(['index', 'create', 'show', 'edit']);

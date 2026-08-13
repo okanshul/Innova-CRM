@@ -358,16 +358,16 @@ $transition-speed: 0.3s;
     border-radius: $border-radius-xl;
     overflow: visible !important;
 
-    > *:first-child,
-    > form > *:first-child,
+    >*:first-child,
+    >form>*:first-child,
     .card-header,
     .page-header-wrapper {
         border-top-left-radius: $border-radius-xl !important;
         border-top-right-radius: $border-radius-xl !important;
     }
 
-    > *:last-child,
-    > form > *:last-child,
+    >*:last-child,
+    >form>*:last-child,
     .card-footer,
     #tablePaginationRow,
     #mobilePaginationRow,
@@ -403,8 +403,8 @@ $transition-speed: 0.3s;
     overflow: visible !important;
 }
 
-form > .p-3,
-form > div {
+form>.p-3,
+form>div {
     position: relative;
     z-index: 2;
 }
@@ -935,6 +935,16 @@ form > div {
 
 /* Data Table Filters & Controls */
 .filter-controls-wrapper {
+    .filter-item-full {
+        flex: 1 1 100%;
+        width: 100%;
+
+        @media (min-width: 576px) {
+            flex: 0 0 auto;
+            width: auto;
+        }
+    }
+
     .filter-item-half {
         flex: 1 1 calc(50% - 0.25rem);
         min-width: 120px;
@@ -956,7 +966,7 @@ form > div {
     }
 }
 
-.custom-filter-select {
+select.custom-filter-select:not(.custom-select-hidden) {
     background-color: #ffffff !important;
     border: 1px solid #e2e8f0 !important;
     border-radius: 8px !important;
@@ -966,14 +976,61 @@ form > div {
     color: #475569 !important;
     padding-top: 0.25rem !important;
     padding-bottom: 0.25rem !important;
+    padding-left: 0.85rem !important;
     padding-right: 2.25rem !important;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
     transition: all 0.15s ease;
+    cursor: pointer !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m2.5 5.5 5.5 5.5 5.5-5.5'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 0.75rem center !important;
+    background-size: 14px 10px !important;
 
-    &:hover,
-    &:focus {
+    &:hover {
+        background-color: #f8fafc !important;
         border-color: #cbd5e1 !important;
         color: #0f172a !important;
+    }
+
+    &:focus,
+    &:focus-within,
+    &.active {
+        border-color: #6366f1 !important;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15) !important;
+        color: #0f172a !important;
+        outline: 0 !important;
+    }
+}
+
+.filter-controls-wrapper .custom-select-trigger,
+.custom-select-wrapper:has(.custom-filter-select) .custom-select-trigger {
+    height: 36px !important;
+    min-height: 36px !important;
+    padding: 0.25rem 0.85rem !important;
+    font-size: 0.825rem !important;
+    font-weight: 500 !important;
+    color: #475569 !important;
+    background-color: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+    transition: all 0.15s ease-in-out !important;
+
+    &:hover {
+        background-color: #f8fafc !important;
+        border-color: #cbd5e1 !important;
+        color: #0f172a !important;
+    }
+
+    &:focus,
+    &.active {
+        border-color: #6366f1 !important;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15) !important;
+        color: #0f172a !important;
+        outline: 0 !important;
     }
 }
 
@@ -987,7 +1044,7 @@ form > div {
     transition: all 0.15s ease;
 
     @media (min-width: 768px) {
-        width: 230px;
+        width: 200px;
     }
 
     &:focus-within {
@@ -1144,10 +1201,11 @@ select,
     width: 100%;
 
     select.custom-select-hidden {
+        display: none !important;
         position: absolute !important;
         opacity: 0 !important;
-        width: 1px !important;
-        height: 1px !important;
+        width: 0 !important;
+        height: 0 !important;
         pointer-events: none !important;
         z-index: -1 !important;
         overflow: hidden !important;
@@ -1240,7 +1298,7 @@ select,
 
         .custom-select-search-input {
             padding-left: 28px !important;
-            
+
             &:focus {
                 z-index: 1 !important;
             }
@@ -1316,6 +1374,7 @@ select,
         opacity: 0;
         transform: translateY(-4px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -1582,12 +1641,46 @@ select,
         background-color: #131728 !important;
     }
 
-    .custom-filter-select,
+    select.custom-filter-select,
     .search-input-box,
-    .btn-filter-action {
+    .btn-filter-action,
+    .filter-controls-wrapper .custom-select-trigger,
+    .custom-select-wrapper:has(.custom-filter-select) .custom-select-trigger {
         background-color: #1a1e36 !important;
         border-color: rgba(255, 255, 255, 0.1) !important;
         color: #cbd5e1 !important;
+    }
+
+    select.custom-filter-select:not(.custom-select-hidden) {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m2.5 5.5 5.5 5.5 5.5-5.5'/%3e%3c/svg%3e") !important;
+
+        &:hover {
+            background-color: #222744 !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+            color: #ffffff !important;
+        }
+
+        &:focus {
+            border-color: #6366f1 !important;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25) !important;
+            color: #ffffff !important;
+        }
+    }
+
+    .filter-controls-wrapper .custom-select-trigger,
+    .custom-select-wrapper:has(.custom-filter-select) .custom-select-trigger {
+        &:hover {
+            background-color: #222744 !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+            color: #ffffff !important;
+        }
+
+        &:focus,
+        &.active {
+            border-color: #6366f1 !important;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25) !important;
+            color: #ffffff !important;
+        }
     }
 
     select,

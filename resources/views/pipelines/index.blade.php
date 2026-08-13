@@ -19,6 +19,42 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
+
+            <!-- Controls / Filters Row -->
+            <div class="filter-controls-wrapper d-flex flex-column flex-md-row align-items-stretch align-items-md-center justify-content-between gap-2">
+                <!-- Filters Group (PerPage) - Left Side -->
+                <div class="d-flex flex-wrap align-items-center gap-2 order-2 order-md-1">
+                    <div class="filter-item-half">
+                        <x-form.select name="perPage" id="perPage" class="custom-filter-select w-100 shadow-none">
+                            <option value="5">5 per page</option>
+                            <option value="10" selected>10 per page</option>
+                            <option value="25">25 per page</option>
+                            <option value="50">50 per page</option>
+                            <option value="100">100 per page</option>
+                        </x-form.select>
+                    </div>
+                </div>
+
+                <!-- Search & Actions Group (Search, Reset, Export) - Right Side -->
+                <div class="d-flex flex-wrap flex-sm-nowrap align-items-center gap-2 order-1 order-md-2 ms-md-auto">
+                    <div class="search-input-box px-3 py-1 d-flex align-items-center flex-grow-1 flex-sm-grow-0">
+                        <i class="fa-solid fa-magnifying-glass text-secondary me-2 fs-sm"></i>
+                        <input type="text" id="searchInput" class="form-control border-0 bg-transparent shadow-none p-1 fs-sm w-100" placeholder="Search pipelines...">
+                    </div>
+
+                    <div class="filter-item-half">
+                        <button class="btn btn-filter-action shadow-none w-100 d-flex align-items-center gap-2 justify-content-center text-nowrap" id="btnFilterTrigger" title="Reset Filters">
+                            <i class="fa-solid fa-rotate-left"></i> <span>Reset</span>
+                        </button>
+                    </div>
+
+                    <div class="filter-item-half">
+                        <button class="btn btn-filter-action shadow-none w-100 d-flex align-items-center gap-2 justify-content-center text-nowrap" id="btnExport" title="Export Pipelines">
+                            <i class="fa-solid fa-download"></i> <span>Export</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="d-none d-lg-block">
@@ -33,6 +69,10 @@
 
         <div class="d-lg-none border-top">
             <div id="pipelinesMobileCardList" class="d-flex flex-column bg-body"></div>
+            <div class="d-flex flex-column flex-sm-row align-items-center justify-content-between p-3 bg-body gap-2 border-top rounded-bottom-4" id="mobilePaginationRow">
+                <div class="text-secondary small fw-medium text-center text-sm-start" id="mobilePaginationSummary">Showing 0 entries</div>
+                <div class="d-flex align-items-center gap-2" id="mobilePaginationControls"></div>
+            </div>
         </div>
     </div>
 @endsection

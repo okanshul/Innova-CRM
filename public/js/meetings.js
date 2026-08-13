@@ -154,7 +154,8 @@ document.addEventListener('DOMContentLoaded', function () {
         mobileList.innerHTML = '';
 
         if (!meetings || meetings.length === 0) {
-            mobileList.innerHTML = getEmptyStateHtml({ title: 'No meetings found', module: 'meetings' });
+            const isFiltered = hasActiveFilters({ search: searchInput ? searchInput.value : '', status: filterStatus ? filterStatus.value : '' });
+            mobileList.innerHTML = getEmptyStateHtml({ title: 'No meetings found', module: 'meetings', showClearBtn: isFiltered });
             const clearBtn = mobileList.querySelector('.btn-clear-filters-action');
             if (clearBtn) {
                 clearBtn.addEventListener('click', () => {
@@ -394,8 +395,39 @@ document.addEventListener('DOMContentLoaded', function () {
     if (btnFilterReset) {
         btnFilterReset.addEventListener('click', function () {
             if (searchInput) searchInput.value = '';
-            if (filterStatus) filterStatus.value = '';
+            if (filterStatus) {
+                filterStatus.value = '';
+                filterStatus.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+            document.querySelectorAll('.filter-controls-wrapper input[type="date"], .filter-controls-wrapper input[id*="date"], input[name*="date"]').forEach(i => {
+                i.value = '';
+                i.dispatchEvent(new Event('change', { bubbles: true }));
+            });
             fetchMeetings(1);
+        });
+    }
+
+    const btnExport = document.getElementById('btnExport');
+    if (btnExport) {
+        btnExport.addEventListener('click', () => {
+            exportTableData({
+                url: '/api/meetings',
+                filename: `meetings_export_${new Date().toISOString().slice(0, 10)}.csv`,
+                headers: ['ID', 'Title', 'Host', 'Start Time', 'End Time', 'Location/Link', 'Status'],
+                params: {
+                    search: searchInput ? searchInput.value : '',
+                    status: filterStatus ? filterStatus.value : ''
+                },
+                formatRow: (item) => [
+                    item.id,
+                    item.title,
+                    item.host ? item.host.name : 'N/A',
+                    item.start_at || '',
+                    item.end_at || '',
+                    item.location || item.meeting_link || '',
+                    item.status
+                ]
+            });
         });
     }
 

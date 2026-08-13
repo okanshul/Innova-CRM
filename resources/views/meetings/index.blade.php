@@ -21,13 +21,9 @@
             @endif
 
             <div class="filter-controls-wrapper d-flex flex-column flex-md-row align-items-stretch align-items-md-center justify-content-between gap-2">
-                <div class="search-input-box px-3 py-1 d-flex align-items-center order-1 order-md-2 ms-md-auto">
-                    <i class="fa-solid fa-magnifying-glass text-secondary me-2 fs-sm"></i>
-                    <input type="text" id="searchInput" class="form-control border-0 bg-transparent shadow-none p-1 fs-sm w-100" placeholder="Search meetings...">
-                </div>
-
-                <div class="d-flex flex-wrap align-items-center gap-2 order-2 order-md-1 flex-grow-1 flex-md-grow-0">
-                    <div class="flex-grow-1 flex-sm-grow-0 filter-item-half">
+                <!-- Filters Group - Left Side -->
+                <div class="d-flex flex-wrap align-items-center gap-2 order-2 order-md-1">
+                    <div class="filter-item-half">
                         <x-form.select name="filterStatus" id="filterStatus" class="custom-filter-select w-100 shadow-none">
                             <option value="">Status: All</option>
                             <option value="scheduled">Scheduled</option>
@@ -37,25 +33,39 @@
                         </x-form.select>
                     </div>
 
+                    <div class="filter-item-half">
+                        <x-form.select name="perPage" id="perPage" class="custom-filter-select w-100 shadow-none">
+                            <option value="5">5 per page</option>
+                            <option value="10" selected>10 per page</option>
+                            <option value="25">25 per page</option>
+                            <option value="50">50 per page</option>
+                            <option value="100">100 per page</option>
+                        </x-form.select>
+                    </div>
+
                     @can('meetings.delete')
-                        <button class="btn btn-delete-bulk shadow-none d-none align-items-center gap-2 flex-grow-1 flex-sm-grow-0" id="btnBulkDelete">
+                        <button class="btn btn-delete-bulk shadow-none d-none align-items-center gap-2 filter-item-half" id="btnBulkDelete">
                             <i class="fa-regular fa-trash-can"></i> Delete Selected (<span id="selectedCount">0</span>)
                         </button>
                     @endcan
                 </div>
 
-                <div class="d-flex flex-wrap align-items-center gap-2 order-3 order-md-3">
-                    <div class="flex-grow-1 flex-sm-grow-0 filter-item-third">
-                        <x-form.select name="perPage" id="perPage" class="custom-filter-select w-100 shadow-none">
-                            <option value="10" selected>10 per page</option>
-                            <option value="25">25 per page</option>
-                            <option value="50">50 per page</option>
-                        </x-form.select>
+                <!-- Search & Actions Group - Right Side -->
+                <div class="d-flex flex-wrap flex-sm-nowrap align-items-center gap-2 order-1 order-md-2 ms-md-auto">
+                    <div class="search-input-box px-3 py-1 d-flex align-items-center flex-grow-1 flex-sm-grow-0">
+                        <i class="fa-solid fa-magnifying-glass text-secondary me-2 fs-sm"></i>
+                        <input type="text" id="searchInput" class="form-control border-0 bg-transparent shadow-none p-1 fs-sm w-100" placeholder="Search meetings...">
                     </div>
 
-                    <div class="flex-grow-1 flex-sm-grow-0 filter-item-third">
+                    <div class="filter-item-half">
                         <button class="btn btn-filter-action shadow-none w-100 d-flex align-items-center gap-2 justify-content-center text-nowrap" id="btnFilterTrigger" title="Reset Filters">
                             <i class="fa-solid fa-rotate-left"></i> <span>Reset</span>
+                        </button>
+                    </div>
+
+                    <div class="filter-item-half">
+                        <button class="btn btn-filter-action shadow-none w-100 d-flex align-items-center gap-2 justify-content-center text-nowrap" id="btnExport" title="Export Meetings">
+                            <i class="fa-solid fa-download"></i> <span>Export</span>
                         </button>
                     </div>
                 </div>

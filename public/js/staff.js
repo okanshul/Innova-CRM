@@ -307,7 +307,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (mobileCardList) {
                     mobileCardList.innerHTML = '';
                     if (!items || items.length === 0) {
-                        mobileCardList.innerHTML = getEmptyStateHtml({ title: 'No staff found', module: 'staff' });
+                        const isFiltered = hasActiveFilters({ search: currentSearch, department: currentDepartment, status: currentStatus });
+                        mobileCardList.innerHTML = getEmptyStateHtml({ title: 'No staff found', module: 'staff', showClearBtn: isFiltered });
                         const clearBtn = mobileCardList.querySelector('.btn-clear-filters-action');
                         if (clearBtn) {
                             clearBtn.addEventListener('click', () => {
@@ -534,9 +535,19 @@ document.addEventListener('DOMContentLoaded', function () {
     const btnFilterTrigger = document.getElementById('btnFilterTrigger');
     if (btnFilterTrigger) {
         btnFilterTrigger.addEventListener('click', () => {
-            if (filterDepartment) filterDepartment.value = '';
-            if (filterStatus) filterStatus.value = '';
+            if (filterDepartment) {
+                filterDepartment.value = '';
+                filterDepartment.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+            if (filterStatus) {
+                filterStatus.value = '';
+                filterStatus.dispatchEvent(new Event('change', { bubbles: true }));
+            }
             if (searchInput) searchInput.value = '';
+            document.querySelectorAll('.filter-controls-wrapper input[type="date"], .filter-controls-wrapper input[id*="date"], input[name*="date"]').forEach(i => {
+                i.value = '';
+                i.dispatchEvent(new Event('change', { bubbles: true }));
+            });
             currentDepartment = '';
             currentStatus = '';
             currentSearch = '';
@@ -546,57 +557,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const btnExport = document.getElementById('btnExport');
     if (btnExport) {
-        btnExport.addEventListener('click', async () => {
-            try {
-                btnExport.disabled = true;
-                btnExport.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>Exporting...</span>`;
-                const params = new URLSearchParams({
+        btnExport.addEventListener('click', () => {
+            exportTableData({
+                url: '/api/staff',
+                filename: `staff_export_${new Date().toISOString().slice(0, 10)}.csv`,
+                headers: ['ID', 'Name', 'Email', 'Phone', 'Department', 'Role/Position', 'Status', 'Joined Date'],
+                params: {
                     search: currentSearch,
                     department: currentDepartment,
-                    status: currentStatus,
-                    per_page: 1000
-                });
-                const response = await fetch(`/api/staff?${params.toString()}`);
-                const resData = await response.json();
-                const items = resData.data || resData;
-
-                if (!Array.isArray(items) || items.length === 0) {
-                    if (typeof showErrorToast === 'function') showErrorToast('No staff data available to export.');
-                    return;
-                }
-
-                const headers = ['ID', 'Name', 'Email', 'Phone', 'Department', 'Role/Position', 'Status', 'Joined Date'];
-                const csvRows = [headers.join(',')];
-
-                items.forEach(staff => {
-                    const row = [
-                        staff.id,
-                        `"${(staff.name || '').replace(/"/g, '""')}"`,
-                        `"${(staff.email || '').replace(/"/g, '""')}"`,
-                        `"${(staff.phone || '').replace(/"/g, '""')}"`,
-                        `"${(staff.department || '').replace(/"/g, '""')}"`,
-                        `"${(staff.position || staff.role_name || '').replace(/"/g, '""')}"`,
-                        staff.status || '',
-                        `"${staff.joined_date || staff.created_at || ''}"`
-                    ];
-                    csvRows.push(row.join(','));
-                });
-
-                const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `staff_export_${new Date().toISOString().slice(0, 10)}.csv`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            } catch (err) {
-                console.error('Export failed:', err);
-            } finally {
-                btnExport.disabled = false;
-                btnExport.innerHTML = `<i class="fa-solid fa-download"></i> <span>Export</span>`;
-            }
+                    status: currentStatus
+                },
+                formatRow: (staff) => [
+                    staff.id,
+                    staff.name,
+                    staff.email || '',
+                    staff.phone || '',
+                    staff.department || '',
+                    staff.position || staff.role_name || '',
+                    staff.status || '',
+                    staff.joined_date || staff.created_at || ''
+                ]
+            });
         });
     }
 

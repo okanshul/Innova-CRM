@@ -13,13 +13,22 @@ class PipelineController extends Controller
     {
         Gate::authorize('pipeline.view');
 
-        $pipelines = Pipeline::with('stages')->orderBy('order')->get();
+        $query = Pipeline::with('stages');
+
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        $perPage = $request->get('per_page', 10);
+        $pipelines = $query->orderBy('order')->paginate($perPage);
 
         return response()->json([
             'success' => true,
-            'data' => [
-                'data' => $pipelines
-            ]
+            'data' => $pipelines
         ]);
     }
 

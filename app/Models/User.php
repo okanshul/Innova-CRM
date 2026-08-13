@@ -64,6 +64,11 @@ class User extends Authenticatable
                     ->withTimestamps();
     }
 
+    public function tasks(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Task::class, 'assigned_to');
+    }
+
     public function assignedTasks(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Task::class, 'assigned_to');

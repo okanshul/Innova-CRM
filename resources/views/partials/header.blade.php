@@ -61,12 +61,18 @@
 
         <!-- User Dropdown Profile -->
         <div class="dropdown ms-1">
-            <a href="javascript:void(0)"
+            @php
+                $userAvatar = (auth()->user()->avatar && \Illuminate\Support\Facades\Storage::disk('public')->exists(auth()->user()->avatar))
+                    ? asset('storage/' . auth()->user()->avatar)
+                    : 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) . '&background=6366F1&color=fff';
+                $uiAvatar = 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) . '&background=6366F1&color=fff';
+            @endphp
+            <a href="#"
                 class="dropdown-toggle d-flex align-items-center text-body-emphasis text-decoration-none shadow-none p-0 rounded"
                 id="dropdownUserHeader" data-bs-toggle="dropdown" aria-expanded="false" role="button"
                 style="outline: none; box-shadow: none;">
                 <div class="position-relative">
-                    <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : 'https://ui-avatars.com/api/?name='.urlencode(auth()->user()->name).'&background=6366F1&color=fff' }}" alt="{{ auth()->user()->name }}" width="36" height="36"
+                    <img src="{{ $userAvatar }}" onerror="this.onerror=null;this.src='{{ $uiAvatar }}';" alt="{{ auth()->user()->name }}" width="36" height="36"
                         class="rounded-circle object-fit-cover shadow-sm border border-2 border-white">
                 </div>
                 <div class="d-none d-md-flex align-items-center gap-2 text-start ms-2 me-1">
@@ -79,7 +85,7 @@
             <div class="dropdown-menu dropdown-menu-end shadow-lg rounded-4 border-0 p-2 mt-2"
                 aria-labelledby="dropdownUserHeader" style="min-width: 230px;">
                 <div class="d-flex align-items-center gap-3 p-2 mb-2 bg-body-tertiary rounded-3">
-                    <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : 'https://ui-avatars.com/api/?name='.urlencode(auth()->user()->name).'&background=6366F1&color=fff' }}" alt="{{ auth()->user()->name }}" width="38" height="38"
+                    <img src="{{ $userAvatar }}" onerror="this.onerror=null;this.src='{{ $uiAvatar }}';" alt="{{ auth()->user()->name }}" width="38" height="38"
                         class="rounded-circle object-fit-cover">
                     <div class="d-flex flex-column lh-sm text-truncate">
                         <strong class="fw-bold text-body-emphasis" style="font-size: 0.85rem;">{{ auth()->user()->name }}</strong>
@@ -88,7 +94,7 @@
                     </div>
                 </div>
                 <div class="dropdown-divider my-1 opacity-25"></div>
-                <a class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2" href="{{ route('staff.show', auth()->user()->id) }}">
+                <a class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2" href="{{ route('profile.index') }}">
                     <i class="fa-regular fa-user text-secondary transition-colors" style="width: 18px;"></i>
                     <span class="fw-medium">My Profile</span>
                 </a>

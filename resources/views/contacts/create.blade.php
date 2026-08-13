@@ -46,7 +46,7 @@
 
                     <div class="card-footer border-top bg-body p-3 d-flex align-items-center justify-content-end gap-2 rounded-bottom-4">
                         <x-button.secondary href="{{ route('contacts.index') }}" label="Cancel" />
-                        <x-button.primary type="submit" label="Save Contact" />
+                        <x-button.primary type="submit" label="Submit" />
                     </div>
                 </form>
             </div>

@@ -153,7 +153,8 @@ document.addEventListener('DOMContentLoaded', function () {
         mobileList.innerHTML = '';
 
         if (!deals || deals.length === 0) {
-            mobileList.innerHTML = getEmptyStateHtml({ title: 'No deals found', module: 'deals' });
+            const isFiltered = hasActiveFilters({ search: searchInput ? searchInput.value : '', status: filterStatus ? filterStatus.value : '' });
+            mobileList.innerHTML = getEmptyStateHtml({ title: 'No deals found', module: 'deals', showClearBtn: isFiltered });
             const clearBtn = mobileList.querySelector('.btn-clear-filters-action');
             if (clearBtn) {
                 clearBtn.addEventListener('click', () => {
@@ -392,8 +393,39 @@ document.addEventListener('DOMContentLoaded', function () {
     if (btnFilterReset) {
         btnFilterReset.addEventListener('click', function () {
             if (searchInput) searchInput.value = '';
-            if (filterStatus) filterStatus.value = '';
+            if (filterStatus) {
+                filterStatus.value = '';
+                filterStatus.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+            document.querySelectorAll('.filter-controls-wrapper input[type="date"], .filter-controls-wrapper input[id*="date"], input[name*="date"]').forEach(i => {
+                i.value = '';
+                i.dispatchEvent(new Event('change', { bubbles: true }));
+            });
             fetchDeals(1);
+        });
+    }
+
+    const btnExport = document.getElementById('btnExport');
+    if (btnExport) {
+        btnExport.addEventListener('click', () => {
+            exportTableData({
+                url: '/api/deals',
+                filename: `deals_export_${new Date().toISOString().slice(0, 10)}.csv`,
+                headers: ['ID', 'Title', 'Value', 'Stage', 'Company/Contact', 'Status', 'Expected Close Date'],
+                params: {
+                    search: searchInput ? searchInput.value : '',
+                    status: filterStatus ? filterStatus.value : ''
+                },
+                formatRow: (item) => [
+                    item.id,
+                    item.title,
+                    item.value,
+                    item.stage ? item.stage.name : 'N/A',
+                    item.company ? item.company.name : (item.contact ? `${item.contact.first_name} ${item.contact.last_name || ''}`.trim() : 'N/A'),
+                    item.status,
+                    item.expected_close_date || 'N/A'
+                ]
+            });
         });
     }
 

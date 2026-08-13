@@ -160,7 +160,8 @@ document.addEventListener('DOMContentLoaded', function () {
         mobileList.innerHTML = '';
 
         if (!contacts || contacts.length === 0) {
-            mobileList.innerHTML = getEmptyStateHtml({ title: 'No contacts found', module: 'contacts' });
+            const isFiltered = hasActiveFilters({ search: searchInput ? searchInput.value : '', status: filterStatus ? filterStatus.value : '' });
+            mobileList.innerHTML = getEmptyStateHtml({ title: 'No contacts found', module: 'contacts', showClearBtn: isFiltered });
             const clearBtn = mobileList.querySelector('.btn-clear-filters-action');
             if (clearBtn) {
                 clearBtn.addEventListener('click', () => {
@@ -388,8 +389,39 @@ document.addEventListener('DOMContentLoaded', function () {
     if (btnFilterReset) {
         btnFilterReset.addEventListener('click', function () {
             if (searchInput) searchInput.value = '';
-            if (filterStatus) filterStatus.value = '';
+            if (filterStatus) {
+                filterStatus.value = '';
+                filterStatus.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+            document.querySelectorAll('.filter-controls-wrapper input[type="date"], .filter-controls-wrapper input[id*="date"], input[name*="date"]').forEach(i => {
+                i.value = '';
+                i.dispatchEvent(new Event('change', { bubbles: true }));
+            });
             fetchContacts(1);
+        });
+    }
+
+    const btnExport = document.getElementById('btnExport');
+    if (btnExport) {
+        btnExport.addEventListener('click', () => {
+            exportTableData({
+                url: '/api/contacts',
+                filename: `contacts_export_${new Date().toISOString().slice(0, 10)}.csv`,
+                headers: ['ID', 'First Name', 'Last Name', 'Email', 'Phone', 'Company', 'Status'],
+                params: {
+                    search: searchInput ? searchInput.value : '',
+                    status: filterStatus ? filterStatus.value : ''
+                },
+                formatRow: (item) => [
+                    item.id,
+                    item.first_name,
+                    item.last_name || '',
+                    item.email || '',
+                    item.phone || '',
+                    item.company ? item.company.name : 'N/A',
+                    item.status
+                ]
+            });
         });
     }
 
