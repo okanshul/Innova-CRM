@@ -46,9 +46,9 @@
         @endforeach
     </div>
 
-    <button
+    <a href="{{ route('deals.create', !empty($column['stage_id']) ? ['stage_id' => $column['stage_id']] : []) }}"
         class="btn btn-link text-secondary text-decoration-none shadow-none text-start p-1 mt-auto w-100 d-flex align-items-center justify-content-center gap-1 hover-primary"
         style="font-size: 0.75rem; border: 1px dashed rgba(0,0,0,0.1); border-radius: 6px;">
         <i class="fa-solid fa-plus"></i> Add Deal
-    </button>
+    </a>
 </div>

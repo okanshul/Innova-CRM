@@ -157,13 +157,17 @@ document.addEventListener('DOMContentLoaded', () => {
         gradientFill.addColorStop(0, 'rgba(99, 102, 241, 0.35)');
         gradientFill.addColorStop(1, 'rgba(99, 102, 241, 0.0)');
 
+        const revData = (window.dashboardChartData && window.dashboardChartData.monthlyRevenue)
+            ? window.dashboardChartData.monthlyRevenue
+            : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
         revenueChart = new Chart(revenueCtx, {
             type: 'line',
             data: {
                 labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                 datasets: [{
                     label: 'Revenue',
-                    data: [15, 22, 18, 28, 35, 32, 40, 38, 45, 58, 52, 65],
+                    data: revData,
                     borderColor: '#6366F1',
                     backgroundColor: gradientFill,
                     borderWidth: 2.5,
@@ -187,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         beginAtZero: true,
                         ticks: {
                             callback: function (value) {
-                                return '$' + value + 'K';
+                                return '$' + value;
                             }
                         },
                         grid: {
@@ -209,19 +213,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // Leads by Source Donut Chart
     const leadsCtx = document.getElementById('leadsChart');
     if (leadsCtx) {
+        const leadsItems = (window.dashboardChartData && window.dashboardChartData.leadsBySource)
+            ? window.dashboardChartData.leadsBySource
+            : [];
+
+        const leadsLabels = leadsItems.length ? leadsItems.map(item => item.source) : ['Website', 'Referral', 'Social Media', 'Email Campaign', 'Other'];
+        const leadsData = leadsItems.length ? leadsItems.map(item => item.count) : [0, 0, 0, 0, 0];
+        const leadsColors = leadsItems.length ? leadsItems.map(item => item.hex) : ['#6366F1', '#3b82f6', '#06b6d4', '#f59e0b', '#9ca3af'];
+
         leadsChart = new Chart(leadsCtx, {
             type: 'doughnut',
             data: {
-                labels: ['Website', 'Referral', 'Social Media', 'Email Campaign', 'Other'],
+                labels: leadsLabels,
                 datasets: [{
-                    data: [35, 25, 20, 10, 10],
-                    backgroundColor: [
-                        '#6366F1', // Purple
-                        '#3b82f6', // Blue
-                        '#06b6d4', // Cyan
-                        '#f59e0b', // Yellow/Orange
-                        '#9ca3af'  // Gray
-                    ],
+                    data: leadsData,
+                    backgroundColor: leadsColors,
                     borderWidth: 0,
                     hoverOffset: 4
                 }]
@@ -237,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     tooltip: {
                         callbacks: {
                             label: function (context) {
-                                return context.label + ': ' + context.parsed + '%';
+                                return context.label + ': ' + context.parsed + ' leads';
                             }
                         }
                     }

@@ -1,5 +1,15 @@
 @extends('layouts.app', ['title' => 'InnovaCRM - Dashboard'])
 
+@push('scripts')
+    <script>
+        window.dashboardChartData = {
+            monthlyRevenue: @json($monthlyRevenue ?? []),
+            leadsBySource: @json($leadsBySourceData ?? []),
+            totalLeads: {{ $totalLeadsCount ?? 0 }}
+        };
+    </script>
+@endpush
+
 @section('content')
     <!-- Stats Row (2x2 Grid on Mobile) -->
     <div class="row g-2 g-sm-3 mb-3">
@@ -14,11 +24,11 @@
             <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
                 <h5 class="fw-bold mb-0">Sales Pipeline</h5>
                 <div class="d-flex gap-2 align-items-center">
-                    <button
+                    <a href="{{ route('deals.index') }}"
                         class="btn btn-sm btn-light border text-body-secondary d-flex align-items-center gap-2 rounded-3 shadow-none px-3 py-1"
                         style="font-size: 0.75rem;">
                         <i class="fa-solid fa-filter text-secondary"></i> Filter
-                    </button>
+                    </a>
                     <div class="dropdown">
                         <button
                             class="btn btn-sm btn-light border text-body-secondary dropdown-toggle d-flex align-items-center gap-2 rounded-3 shadow-none px-3 py-1"
@@ -32,7 +42,9 @@
                             <li><a class="dropdown-item" href="#">This Year</a></li>
                         </ul>
                     </div>
-                    <button class="btn btn-sm btn-link text-secondary p-0 shadow-none text-decoration-none px-1"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                    <a href="{{ route('pipelines.index') }}" class="btn btn-sm btn-link text-secondary p-0 shadow-none text-decoration-none px-1" title="Manage Pipelines">
+                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                    </a>
                 </div>
             </div>
 
@@ -79,62 +91,24 @@
                             <canvas id="leadsChart"></canvas>
                             <!-- Center Text overlay for donut -->
                             <div class="position-absolute text-center d-flex flex-column align-items-center justify-content-center pointer-events-none w-100" style="pointer-events: none;">
-                                <h6 class="mb-0 fw-bold fs-5">1,242</h6>
+                                <h6 class="mb-0 fw-bold fs-5">{{ number_format($totalLeadsCount) }}</h6>
                                 <span class="text-secondary" style="font-size:0.6rem">Total Leads</span>
                             </div>
                         </div>
-                        <!-- Custom Side Legend -->
+                        <!-- Dynamic Side Legend -->
                         <div class="d-flex flex-column gap-2 ps-sm-1 w-100">
-                            <div class="d-flex align-items-center justify-content-between justify-content-sm-start gap-3" style="font-size: 0.725rem;">
-                                <div class="d-flex align-items-center gap-2" style="min-width: 105px;">
-                                    <span class="d-inline-block rounded-circle bg-primary" style="width:7px;height:7px;"></span>
-                                    <span class="text-body-emphasis fw-medium">Website</span>
+                            @foreach ($leadsBySourceData as $item)
+                                <div class="d-flex align-items-center justify-content-between justify-content-sm-start gap-3" style="font-size: 0.725rem;">
+                                    <div class="d-flex align-items-center gap-2" style="min-width: 105px;">
+                                        <span class="d-inline-block rounded-circle {{ $item['color_class'] }}" style="width:7px;height:7px;"></span>
+                                        <span class="text-body-emphasis fw-medium">{{ $item['source'] }}</span>
+                                    </div>
+                                    <div class="d-flex gap-1">
+                                        <span class="text-body-emphasis fw-bold">{{ $item['percentage'] }}%</span>
+                                        <span class="text-secondary">({{ $item['count'] }})</span>
+                                    </div>
                                 </div>
-                                <div class="d-flex gap-1">
-                                    <span class="text-body-emphasis fw-bold">35%</span>
-                                    <span class="text-secondary">(435)</span>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-between justify-content-sm-start gap-3" style="font-size: 0.725rem;">
-                                <div class="d-flex align-items-center gap-2" style="min-width: 105px;">
-                                    <span class="d-inline-block rounded-circle bg-primary opacity-75" style="width:7px;height:7px; background-color: #3b82f6 !important"></span>
-                                    <span class="text-body-emphasis fw-medium">Referral</span>
-                                </div>
-                                <div class="d-flex gap-1">
-                                    <span class="text-body-emphasis fw-bold">25%</span>
-                                    <span class="text-secondary">(311)</span>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-between justify-content-sm-start gap-3" style="font-size: 0.725rem;">
-                                <div class="d-flex align-items-center gap-2" style="min-width: 105px;">
-                                    <span class="d-inline-block rounded-circle bg-info" style="width:7px;height:7px;"></span>
-                                    <span class="text-body-emphasis fw-medium">Social Media</span>
-                                </div>
-                                <div class="d-flex gap-1">
-                                    <span class="text-body-emphasis fw-bold">20%</span>
-                                    <span class="text-secondary">(248)</span>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-between justify-content-sm-start gap-3" style="font-size: 0.725rem;">
-                                <div class="d-flex align-items-center gap-2" style="min-width: 105px;">
-                                    <span class="d-inline-block rounded-circle bg-warning" style="width:7px;height:7px;"></span>
-                                    <span class="text-body-emphasis fw-medium">Email Campaign</span>
-                                </div>
-                                <div class="d-flex gap-1">
-                                    <span class="text-body-emphasis fw-bold">10%</span>
-                                    <span class="text-secondary">(124)</span>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-between justify-content-sm-start gap-3" style="font-size: 0.725rem;">
-                                <div class="d-flex align-items-center gap-2" style="min-width: 105px;">
-                                    <span class="d-inline-block rounded-circle bg-secondary" style="width:7px;height:7px;"></span>
-                                    <span class="text-body-emphasis fw-medium">Other</span>
-                                </div>
-                                <div class="d-flex gap-1">
-                                    <span class="text-body-emphasis fw-bold">10%</span>
-                                    <span class="text-secondary">(124)</span>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -147,7 +121,7 @@
                 <div class="card-body p-3 pb-0 d-flex flex-column">
                     <div class="d-flex align-items-center justify-content-between mb-2">
                         <h6 class="fw-bold mb-0 fs-sm">Recent Activity</h6>
-                        <button class="btn btn-sm btn-link text-primary text-decoration-none rounded-3 py-1 px-1 shadow-none fw-semibold" style="font-size: 0.75rem;">View All</button>
+                        <a href="{{ route('tasks.index') }}" class="btn btn-sm btn-link text-primary text-decoration-none rounded-3 py-1 px-1 shadow-none fw-semibold" style="font-size: 0.75rem;">View All</a>
                     </div>
                     <div class="list-group list-group-flush border-0 flex-grow-1">
                         @foreach ($activities as $activity)
@@ -166,7 +140,7 @@
                 <div class="card-body p-0 d-flex flex-column">
                     <div class="d-flex align-items-center justify-content-between px-3 pt-3 pb-2">
                         <h6 class="fw-bold mb-0">Recent Contacts</h6>
-                        <button class="btn btn-sm btn-link text-primary text-decoration-none rounded-3 py-1 px-1 shadow-none fw-semibold" style="font-size: 0.75rem;">View All Contacts</button>
+                        <a href="{{ route('contacts.index') }}" class="btn btn-sm btn-link text-primary text-decoration-none rounded-3 py-1 px-1 shadow-none fw-semibold" style="font-size: 0.75rem;">View All Contacts</a>
                     </div>
 
                     <div class="table-responsive flex-grow-1 rounded-bottom-4">
@@ -206,7 +180,7 @@
                                         <td class="py-2 fw-bold text-body-emphasis text-end" style="font-size: 0.8rem;">{{ $contact['value'] }}</td>
                                         <td class="py-2">
                                             <div class="d-flex align-items-center gap-2">
-                                                <img src="https://i.pravatar.cc/150?img={{ $loop->index + 10 }}" class="avatar avatar-sm rounded-circle" alt="{{ $contact['owner'] }}" style="width: 24px; height: 24px;">
+                                                <img src="https://ui-avatars.com/api/?name={{ urlencode($contact['owner']) }}&background=6366F1&color=fff" class="avatar avatar-sm rounded-circle" alt="{{ $contact['owner'] }}" style="width: 24px; height: 24px;">
                                                 <span class="text-secondary d-none d-xl-inline" style="font-size: 0.75rem;">{{ $contact['owner'] }}</span>
                                             </div>
                                         </td>

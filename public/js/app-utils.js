@@ -816,3 +816,173 @@ async function exportTableData(options = {}) {
         }
     }
 }
+
+/* ==========================================================================
+   GLOBAL PERMISSIONS MATRIX UTILITY
+   ========================================================================== */
+if (typeof window.PermissionsMatrix === 'undefined') {
+    const PermissionsMatrix = (() => {
+        const getModule = (el) => el.dataset.module || el.dataset.group || el.getAttribute('data-module') || el.getAttribute('data-group');
+        const getPermissionKey = (cb) => cb.dataset.permission || cb.value;
+
+        const updateRowAllState = (module, container = document) => {
+            if (!module) return;
+            const root = (container instanceof Element) ? container : document;
+            const row = root.querySelector(`.perm-module-row[data-module="${module}"], .perm-module-row[data-group="${module}"]`);
+            if (!row) return;
+
+            const rowAllCheckbox = row.querySelector('.perm-row-all, .perm-row-select-all');
+            if (!rowAllCheckbox) return;
+
+            const rowCheckboxes = Array.from(row.querySelectorAll('.perm-checkbox'));
+            if (rowCheckboxes.length === 0) {
+                rowAllCheckbox.checked = false;
+                rowAllCheckbox.indeterminate = false;
+                return;
+            }
+
+            const checkedCount = rowCheckboxes.filter(cb => cb.checked).length;
+            const totalCount = rowCheckboxes.length;
+
+            if (checkedCount === totalCount) {
+                rowAllCheckbox.checked = true;
+                rowAllCheckbox.indeterminate = false;
+            } else if (checkedCount === 0) {
+                rowAllCheckbox.checked = false;
+                rowAllCheckbox.indeterminate = false;
+            } else {
+                rowAllCheckbox.checked = false;
+                rowAllCheckbox.indeterminate = true;
+            }
+        };
+
+        const updateAllRowStates = (container = document) => {
+            const root = (container instanceof Element) ? container : document;
+            const rows = root.querySelectorAll('.perm-module-row');
+            rows.forEach(row => {
+                const module = getModule(row);
+                if (module) updateRowAllState(module, root);
+            });
+        };
+
+        const handleRowAllChange = (rowAllCheckbox) => {
+            const module = getModule(rowAllCheckbox);
+            const row = rowAllCheckbox.closest('.perm-module-row') || document;
+            const isChecked = rowAllCheckbox.checked;
+
+            rowAllCheckbox.indeterminate = false;
+            row.querySelectorAll(`.perm-checkbox[data-module="${module}"]:not(:disabled), .perm-checkbox[data-group="${module}"]:not(:disabled)`).forEach(cb => {
+                cb.checked = isChecked;
+            });
+
+            const container = rowAllCheckbox.closest('.perm-matrix-card') || rowAllCheckbox.closest('form') || document;
+            updateRowAllState(module, container);
+        };
+
+        const handleActionCheckboxChange = (checkbox) => {
+            const module = getModule(checkbox);
+            const action = checkbox.dataset.action || (checkbox.dataset.permission ? checkbox.dataset.permission.split('.')[1] : '');
+            const row = checkbox.closest('.perm-module-row') || document;
+            const container = checkbox.closest('.perm-matrix-card') || checkbox.closest('form') || document;
+
+            if (action === 'view' && !checkbox.checked) {
+                row.querySelectorAll(`.perm-checkbox[data-module="${module}"]:not(:disabled), .perm-checkbox[data-group="${module}"]:not(:disabled)`).forEach(cb => {
+                    cb.checked = false;
+                });
+            } else if ((action === 'create' || action === 'edit' || action === 'delete') && checkbox.checked) {
+                const viewCheckbox = row.querySelector(`.perm-checkbox[data-action="view"]`);
+                if (viewCheckbox && !viewCheckbox.disabled) {
+                    viewCheckbox.checked = true;
+                }
+            }
+
+            updateRowAllState(module, container);
+        };
+
+        const selectAllPermissions = (container = document) => {
+            const root = (container instanceof Element) ? container : document;
+            root.querySelectorAll('.perm-checkbox:not(:disabled)').forEach(cb => cb.checked = true);
+            root.querySelectorAll('.perm-row-all, .perm-row-select-all').forEach(cb => {
+                cb.checked = true;
+                cb.indeterminate = false;
+            });
+            updateAllRowStates(root);
+        };
+
+        const clearAllPermissions = (container = document) => {
+            const root = (container instanceof Element) ? container : document;
+            root.querySelectorAll('.perm-checkbox:not(:disabled)').forEach(cb => cb.checked = false);
+            root.querySelectorAll('.perm-row-all, .perm-row-select-all').forEach(cb => {
+                cb.checked = false;
+                cb.indeterminate = false;
+            });
+            updateAllRowStates(root);
+        };
+
+        const getCheckedPermissions = (container = document) => {
+            const root = (container instanceof Element) ? container : document;
+            const checkedBoxes = Array.from(root.querySelectorAll('.perm-checkbox:checked:not(:disabled)'));
+            const keys = checkedBoxes.map(cb => getPermissionKey(cb));
+            return Array.from(new Set(keys));
+        };
+
+        const setCheckedPermissions = (permissionsArray = [], container = document) => {
+            const root = (container instanceof Element) ? container : document;
+            const permSet = new Set(permissionsArray || []);
+            root.querySelectorAll('.perm-checkbox:not(:disabled)').forEach(cb => {
+                const key = getPermissionKey(cb);
+                cb.checked = permSet.has(key);
+            });
+            updateAllRowStates(root);
+        };
+
+        const init = () => {
+            document.addEventListener('change', (e) => {
+                if (e.target.classList.contains('perm-checkbox')) {
+                    handleActionCheckboxChange(e.target);
+                } else if (e.target.classList.contains('perm-row-all') || e.target.classList.contains('perm-row-select-all')) {
+                    handleRowAllChange(e.target);
+                }
+            });
+
+            document.addEventListener('click', (e) => {
+                const selectAllBtn = e.target.closest('#selectAllPermissions, .perm-global-select-all');
+                if (selectAllBtn) {
+                    e.preventDefault();
+                    const container = selectAllBtn.closest('.perm-matrix-card') || selectAllBtn.closest('form') || document;
+                    selectAllPermissions(container);
+                    return;
+                }
+
+                const clearAllBtn = e.target.closest('#clearAllPermissions, .perm-global-clear-all');
+                if (clearAllBtn) {
+                    e.preventDefault();
+                    const container = clearAllBtn.closest('.perm-matrix-card') || clearAllBtn.closest('form') || document;
+                    clearAllPermissions(container);
+                    return;
+                }
+            });
+
+            updateAllRowStates();
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+
+        return {
+            updateRowAllState,
+            handleRowAllChange,
+            handleActionCheckboxChange,
+            selectAllPermissions,
+            clearAllPermissions,
+            getCheckedPermissions,
+            setCheckedPermissions,
+            updateAllRowStates
+        };
+    })();
+
+    window.PermissionsMatrix = PermissionsMatrix;
+}
