@@ -45,7 +45,7 @@
                                 @endforeach
                             </x-form.select>
 
-                            <x-form.input class="col-12 col-md-6 mb-3" type="date" name="due_date" label="Due Date" icon="fa-regular fa-calendar" :value="$task->due_date ? $task->due_date->format('Y-m-d') : ''" />
+                            <x-form.datetime-picker class="col-12 col-md-6 mb-3" type="date" name="due_date" label="Due Date" icon="fa-regular fa-calendar" :value="$task->due_date ? $task->due_date->format('Y-m-d') : ''" />
                         </div>
                     </div>
 

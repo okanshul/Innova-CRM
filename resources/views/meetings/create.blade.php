@@ -23,8 +23,8 @@
                         <x-form.textarea class="mb-3" name="description" label="Agenda / Notes" icon="fa-solid fa-paragraph" placeholder="Meeting agenda items..." />
 
                         <div class="row">
-                            <x-form.input class="col-12 col-md-6 mb-3" type="datetime-local" name="start_at" label="Start Time" icon="fa-regular fa-clock" :required="true" />
-                            <x-form.input class="col-12 col-md-6 mb-3" type="datetime-local" name="end_at" label="End Time" icon="fa-regular fa-clock" :required="true" />
+                            <x-form.datetime-picker class="col-12 col-md-6 mb-3" type="datetime" name="start_at" label="Start Time" icon="fa-regular fa-clock" :required="true" />
+                            <x-form.datetime-picker class="col-12 col-md-6 mb-3" type="datetime" name="end_at" label="End Time" icon="fa-regular fa-clock" :required="true" />
 
                             <x-form.input class="col-12 col-md-6 mb-3" name="location" label="Location" icon="fa-solid fa-location-dot" placeholder="Conference Room 1 or Online" />
                             <x-form.input class="col-12 col-md-6 mb-3" name="meeting_link" label="Virtual Link" icon="fa-solid fa-link" placeholder="https://zoom.us/j/123456789" />

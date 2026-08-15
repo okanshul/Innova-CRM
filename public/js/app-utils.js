@@ -440,7 +440,7 @@ function bindFormSubmit(config = {}) {
     form.querySelectorAll('.form-control, .form-select').forEach(input => {
         const clearError = function () {
             this.classList.remove('is-invalid');
-            
+
             let errDiv;
             if (this.classList.contains('custom-select-hidden')) {
                 const selectWrapper = this.closest('.custom-select-wrapper');
@@ -457,7 +457,7 @@ function bindFormSubmit(config = {}) {
                     errDiv = this.nextElementSibling;
                 }
             }
-            
+
             if (errDiv) errDiv.remove();
         };
         input.addEventListener('input', clearError);
@@ -517,7 +517,15 @@ function bindDeleteAction(options = {}) {
 function initCustomSelects(targetSelector = 'select:not(.no-custom-select), .form-select:not(.no-custom-select), .custom-filter-select') {
     const selects = document.querySelectorAll(targetSelector);
     selects.forEach(select => {
-        if (select.dataset.customSelectInit === 'true' || select.closest('.custom-select-wrapper')) return;
+        if (
+            select.dataset.customSelectInit === 'true' ||
+            select.closest('.custom-select-wrapper') ||
+            select.closest('.flatpickr-calendar') ||
+            select.closest('.swal2-container') ||
+            select.classList.contains('flatpickr-monthDropdown-months')
+        ) {
+            return;
+        }
         select.dataset.customSelectInit = 'true';
 
         const wrapper = document.createElement('div');
@@ -525,8 +533,8 @@ function initCustomSelects(targetSelector = 'select:not(.no-custom-select), .for
 
         // Inherit layout/grid classes from select to wrapper
         if (select.className) {
-            const classList = select.className.split(' ').filter(c => 
-                c.startsWith('col-') || c.startsWith('w-') || c.startsWith('flex-') || 
+            const classList = select.className.split(' ').filter(c =>
+                c.startsWith('col-') || c.startsWith('w-') || c.startsWith('flex-') ||
                 c.startsWith('mb-') || c.startsWith('mt-') || c.startsWith('me-') || c.startsWith('ms-') || c === 'shadow-none'
             );
             if (classList.length > 0) wrapper.classList.add(...classList);
@@ -562,11 +570,16 @@ function initCustomSelects(targetSelector = 'select:not(.no-custom-select), .for
 
             const selectedOption = select.options[select.selectedIndex] || select.options[0];
             labelSpan.textContent = selectedOption ? selectedOption.text : (select.getAttribute('placeholder') || 'Select...');
+            if (selectedOption && (selectedOption.value === '' || selectedOption.value === null)) {
+                trigger.classList.add('is-placeholder');
+            } else {
+                trigger.classList.remove('is-placeholder');
+            }
 
             // Only show search bar for dynamic data selects or explicitly searchable selects
-            const isDynamicSelect = 
-                select.dataset.searchable === 'true' || 
-                select.classList.contains('searchable') || 
+            const isDynamicSelect =
+                select.dataset.searchable === 'true' ||
+                select.classList.contains('searchable') ||
                 ['assigned_to', 'user_id', 'staff_id', 'company_id', 'contact_id', 'host_id', 'pipeline_id', 'stage_id', 'role_id', 'department_id', 'department'].includes(select.name) ||
                 (select.options.length >= 6 && !['priority', 'status', 'per_page', 'limit', 'guard_name'].includes(select.name));
 
@@ -574,7 +587,7 @@ function initCustomSelects(targetSelector = 'select:not(.no-custom-select), .for
                 const searchContainer = document.createElement('div');
                 searchContainer.className = 'custom-select-search-wrapper p-2 border-bottom sticky-top bg-body';
                 searchContainer.style.zIndex = '10';
-                
+
                 searchContainer.innerHTML = `
                     <div class="position-relative d-flex align-items-center">
                         <input type="text" class="form-control form-control-sm custom-select-search-input" placeholder="Search..." autocomplete="off" style="font-size: 0.8rem; border-radius: 6px;">
@@ -583,7 +596,7 @@ function initCustomSelects(targetSelector = 'select:not(.no-custom-select), .for
                 `;
 
                 searchInput = searchContainer.querySelector('.custom-select-search-input');
-                
+
                 searchContainer.addEventListener('click', (e) => e.stopPropagation());
                 searchInput.addEventListener('keydown', (e) => {
                     e.stopPropagation();
@@ -646,9 +659,11 @@ function initCustomSelects(targetSelector = 'select:not(.no-custom-select), .for
                     e.stopPropagation();
                     if (opt.disabled) return;
 
-                    select.selectedIndex = idx;
-                    select.dispatchEvent(new Event('change', { bubbles: true }));
-                    select.dispatchEvent(new Event('input', { bubbles: true }));
+                    if (select.selectedIndex !== idx) {
+                        select.selectedIndex = idx;
+                        select.dispatchEvent(new Event('change', { bubbles: true }));
+                        select.dispatchEvent(new Event('input', { bubbles: true }));
+                    }
                     closeMenu();
                 });
 
@@ -658,17 +673,45 @@ function initCustomSelects(targetSelector = 'select:not(.no-custom-select), .for
             menu.appendChild(optionsListContainer);
         };
 
+        const updatePosition = () => {
+            if (!menu.classList.contains('show')) return;
+            const rect = trigger.getBoundingClientRect();
+            const menuHeight = menu.offsetHeight || 250;
+            const spaceBelow = window.innerHeight - rect.bottom;
+            const spaceAbove = rect.top;
+
+            if (spaceBelow < menuHeight && spaceAbove > spaceBelow) {
+                wrapper.classList.add('dropup');
+            } else {
+                wrapper.classList.remove('dropup');
+            }
+        };
+
         const openMenu = () => {
             if (select.disabled || trigger.classList.contains('disabled')) return;
             document.querySelectorAll('.custom-select-menu.show').forEach(m => {
                 if (m !== menu) {
-                    m.classList.remove('show');
-                    m.previousElementSibling?.classList.remove('active');
+                    const wrap = m.closest('.custom-select-wrapper');
+                    if (wrap && wrap._closeCustomMenu) {
+                        wrap._closeCustomMenu();
+                    } else {
+                        m.classList.remove('show');
+                        m.previousElementSibling?.classList.remove('active');
+                        wrap?.classList.remove('dropup');
+                    }
                 }
             });
             renderMenuOptions();
             menu.classList.add('show');
             trigger.classList.add('active');
+
+            // Auto-detect available space below/above on open
+            updatePosition();
+
+            // Re-evaluate positioning dynamically on scroll and resize events
+            window.addEventListener('scroll', updatePosition, true);
+            window.addEventListener('resize', updatePosition);
+
             if (searchInput) {
                 setTimeout(() => searchInput.focus(), 50);
             }
@@ -677,7 +720,14 @@ function initCustomSelects(targetSelector = 'select:not(.no-custom-select), .for
         const closeMenu = () => {
             menu.classList.remove('show');
             trigger.classList.remove('active');
+            wrapper.classList.remove('dropup');
+
+            // Remove scroll and resize listeners on menu close
+            window.removeEventListener('scroll', updatePosition, true);
+            window.removeEventListener('resize', updatePosition);
         };
+
+        wrapper._closeCustomMenu = closeMenu;
 
         trigger.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -707,20 +757,28 @@ function initCustomSelects(targetSelector = 'select:not(.no-custom-select), .for
             const selectedOption = select.options[select.selectedIndex];
             if (selectedOption) {
                 labelSpan.textContent = selectedOption.text;
+                if (selectedOption.value === '' || selectedOption.value === null) {
+                    trigger.classList.add('is-placeholder');
+                } else {
+                    trigger.classList.remove('is-placeholder');
+                }
             }
             if (select.classList.contains('is-invalid')) {
                 trigger.classList.add('is-invalid');
             } else {
                 trigger.classList.remove('is-invalid');
             }
-            renderMenuOptions();
         });
 
         // MutationObserver to update custom menu if <select> options change dynamically
+        let isObserverRendering = false;
         const observer = new MutationObserver(() => {
+            if (isObserverRendering) return;
+            isObserverRendering = true;
             renderMenuOptions();
+            isObserverRendering = false;
         });
-        observer.observe(select, { childList: true, subtree: true, attributes: true });
+        observer.observe(select, { childList: true, subtree: true });
 
         renderMenuOptions();
     });
@@ -730,16 +788,85 @@ function initCustomSelects(targetSelector = 'select:not(.no-custom-select), .for
 document.addEventListener('click', (e) => {
     if (!e.target.closest('.custom-select-wrapper')) {
         document.querySelectorAll('.custom-select-menu.show').forEach(m => {
-            m.classList.remove('show');
-            m.previousElementSibling?.classList.remove('active');
+            const wrap = m.closest('.custom-select-wrapper');
+            if (wrap && wrap._closeCustomMenu) {
+                wrap._closeCustomMenu();
+            } else {
+                m.classList.remove('show');
+                m.previousElementSibling?.classList.remove('active');
+                wrap?.classList.remove('dropup');
+            }
         });
     }
 });
 
-// Auto-initialize custom selects on page load
+// Auto-initialize custom selects and flatpickr instances on page load
 document.addEventListener('DOMContentLoaded', () => {
     initCustomSelects();
+    initFlatpickrs();
 });
+
+/**
+ * 7. initFlatpickrs(container)
+ * Auto-initializes Flatpickr instances on [data-flatpickr] elements
+ */
+function initFlatpickrs(container = document) {
+    if (typeof flatpickr === 'undefined') return;
+
+    const scope = typeof container === 'string' ? document.querySelector(container) : container;
+    if (!scope) return;
+
+    const inputs = scope.querySelectorAll('[data-flatpickr="true"], input.flatpickr, input[type="date"].use-flatpickr, input[type="datetime-local"].use-flatpickr');
+
+    inputs.forEach(input => {
+        if (input.dataset.flatpickrInit === 'true' || input._flatpickr) return;
+        input.dataset.flatpickrInit = 'true';
+
+        const enableTime = input.dataset.enableTime === 'true';
+        const noCalendar = input.dataset.noCalendar === 'true';
+        const mode = input.dataset.mode || 'single';
+        const time24hr = input.dataset.time24hr === 'true' || input.dataset.time_24hr === 'true';
+        const dateFormat = input.dataset.dateFormat || (noCalendar ? (time24hr ? 'H:i' : 'h:i K') : (enableTime ? (time24hr ? 'd-m-Y H:i' : 'd-m-Y h:i K') : 'd-m-Y'));
+        const altFormat = input.dataset.altFormat || null;
+        const altInput = input.dataset.altInput === 'true' || !!altFormat;
+        const minDate = input.dataset.minDate || null;
+        const maxDate = input.dataset.maxDate || null;
+
+        const config = {
+            enableTime: enableTime,
+            noCalendar: noCalendar,
+            mode: mode,
+            dateFormat: dateFormat,
+            time_24hr: time24hr,
+            allowInput: true,
+            disableMobile: true,
+            monthSelectorType: 'dropdown',
+        };
+
+        if (altInput) {
+            config.altInput = true;
+            config.altFormat = altFormat || (noCalendar ? (time24hr ? 'H:i' : 'h:i K') : (enableTime ? (time24hr ? 'M d, Y H:i' : 'M d, Y h:i K') : 'M d, Y'));
+            config.altInputClass = input.className.replace('flatpickr-input-target', '') + ' flatpickr-alt-input';
+        }
+
+        if (minDate) config.minDate = minDate;
+        if (maxDate) config.maxDate = maxDate;
+
+        const fp = flatpickr(input, config);
+
+        // Bind click on icon suffix trigger button to open flatpickr instance
+        const wrapper = input.closest('.flatpickr-wrapper-input') || input.parentElement;
+        if (wrapper) {
+            const toggleBtn = wrapper.querySelector('.flatpickr-toggle-btn');
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    fp.open();
+                });
+            }
+        }
+    });
+}
 
 /**
  * Global helper to export table/API data to CSV
@@ -771,8 +898,8 @@ async function exportTableData(options = {}) {
 
         const data = await apiRequest(`${url}?${queryParams.toString()}`);
         const rawPayload = (data && typeof data === 'object' && data.data) ? data.data : data;
-        const records = Array.isArray(rawPayload) 
-            ? rawPayload 
+        const records = Array.isArray(rawPayload)
+            ? rawPayload
             : (rawPayload && typeof rawPayload === 'object' && Array.isArray(rawPayload.data) ? rawPayload.data : []);
 
         if (!Array.isArray(records) || records.length === 0) {

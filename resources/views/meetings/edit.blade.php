@@ -24,8 +24,8 @@
                         <x-form.textarea class="mb-3" name="description" label="Agenda / Notes" icon="fa-solid fa-paragraph" :value="$meeting->description" />
 
                         <div class="row">
-                            <x-form.input class="col-12 col-md-6 mb-3" type="datetime-local" name="start_at" label="Start Time" icon="fa-regular fa-clock" :required="true" :value="$meeting->start_at ? $meeting->start_at->format('Y-m-d\TH:i') : ''" />
-                            <x-form.input class="col-12 col-md-6 mb-3" type="datetime-local" name="end_at" label="End Time" icon="fa-regular fa-clock" :required="true" :value="$meeting->end_at ? $meeting->end_at->format('Y-m-d\TH:i') : ''" />
+                            <x-form.datetime-picker class="col-12 col-md-6 mb-3" type="datetime" name="start_at" label="Start Time" icon="fa-regular fa-clock" :required="true" :value="$meeting->start_at" />
+                            <x-form.datetime-picker class="col-12 col-md-6 mb-3" type="datetime" name="end_at" label="End Time" icon="fa-regular fa-clock" :required="true" :value="$meeting->end_at" />
 
                             <x-form.input class="col-12 col-md-6 mb-3" name="location" label="Location" icon="fa-solid fa-location-dot" :value="$meeting->location" />
                             <x-form.input class="col-12 col-md-6 mb-3" name="meeting_link" label="Virtual Link" icon="fa-solid fa-link" :value="$meeting->meeting_link" />

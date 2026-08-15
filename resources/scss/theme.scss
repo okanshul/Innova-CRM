@@ -878,6 +878,54 @@ form>div {
     }
 }
 
+/* ==========================================
+   Data Table Modern Row Hover Effects
+   ========================================== */
+.table {
+    tbody {
+        tr {
+            transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s ease;
+            position: relative;
+
+            td {
+                transition: background-color 0.2s ease, color 0.15s ease;
+            }
+
+            &:hover {
+                background-color: rgba(99, 102, 241, 0.05) !important;
+                box-shadow: inset 3px 0 0 #6366f1, 0 4px 14px -2px rgba(99, 102, 241, 0.08);
+
+                td {
+                    background-color: transparent !important;
+                }
+
+                .action-btn {
+                    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+                    transform: translateY(-1px);
+                }
+
+                .form-check-input {
+                    border-color: #6366f1;
+                }
+            }
+        }
+    }
+}
+
+.mobile-card-item {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+        background-color: rgba(99, 102, 241, 0.04) !important;
+        box-shadow: inset 3px 0 0 #6366f1;
+
+        .action-btn {
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
+        }
+    }
+}
+
 /* Role Badges */
 .role-badge {
     font-weight: 500;
@@ -1151,9 +1199,11 @@ select.custom-filter-select:not(.custom-select-hidden) {
 .card-body .custom-select-trigger,
 form .form-control,
 form .form-select,
-form .custom-select-trigger {
+form .custom-select-trigger,
+.flatpickr-input-target,
+.flatpickr-alt-input {
     border-radius: 8px !important;
-    border: 1px solid #e2e8f0 !important;
+    border: 1px solid #e2e8f0;
     font-size: 0.875rem !important;
     padding: 0.55rem 0.85rem !important;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
@@ -1169,6 +1219,24 @@ form .custom-select-trigger {
         border-color: #ef4444 !important;
         box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
     }
+}
+
+/* Global Input & Custom Select Placeholder Styling (Light Mode) */
+input::placeholder,
+textarea::placeholder,
+.form-control::placeholder,
+.flatpickr-input-target::placeholder,
+.flatpickr-alt-input::placeholder {
+    color: #94a3b8 !important;
+    opacity: 1 !important;
+}
+
+.custom-select-trigger.is-placeholder .custom-select-label,
+.custom-select-trigger .custom-select-label.is-placeholder,
+.custom-select-trigger.is-placeholder,
+select:has(option[value=""]:checked),
+select.is-placeholder {
+    color: #94a3b8 !important;
 }
 
 /* Global Select & Option Theme Styling */
@@ -1289,6 +1357,16 @@ select,
         &.show {
             display: block;
             animation: customSelectFadeIn 0.15s cubic-bezier(0, 0, 0.2, 1);
+        }
+    }
+
+    &.dropup {
+        .custom-select-menu {
+            top: auto !important;
+            bottom: 100% !important;
+            margin-top: 0 !important;
+            border-radius: 10px 10px 0 0 !important;
+            box-shadow: 0 -10px 25px -5px rgba(0, 0, 0, 0.12), 0 -4px 6px -2px rgba(0, 0, 0, 0.05) !important;
         }
     }
 
@@ -1732,6 +1810,10 @@ select,
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
+        &.dropup .custom-select-menu {
+            box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5) !important;
+        }
+
         .custom-select-option {
             color: #cbd5e1;
 
@@ -1817,5 +1899,452 @@ select,
 @media (min-width: 576px) {
     .text-sm-nowrap {
         white-space: nowrap !important;
+    }
+}
+
+/* ==========================================
+   Flatpickr Custom Theme - InnovaCRM
+   ========================================== */
+.flatpickr-calendar {
+    font-family: 'Inter', sans-serif !important;
+    border-radius: 0.75rem !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04) !important;
+    background: #ffffff !important;
+    padding: 0.5rem !important;
+    width: 320px !important;
+    box-sizing: border-box !important;
+
+    &.arrowTop:before,
+    &.arrowTop:after {
+        border-bottom-color: #ffffff !important;
+    }
+
+    &.arrowBottom:before,
+    &.arrowBottom:after {
+        border-top-color: #ffffff !important;
+    }
+}
+
+.flatpickr-innerContainer {
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.flatpickr-rContainer {
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.flatpickr-days {
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.dayContainer {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    justify-content: space-around !important;
+}
+
+.flatpickr-weekdays {
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+span.flatpickr-weekday {
+    color: #475569 !important;
+    font-weight: 600 !important;
+    font-size: 0.8rem !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    flex: 1 !important;
+    max-width: 14.28% !important;
+    text-align: center !important;
+}
+
+.flatpickr-day {
+    border-radius: 0.5rem !important;
+    color: #334155 !important;
+    font-weight: 500 !important;
+    font-size: 0.85rem !important;
+    height: 36px !important;
+    line-height: 36px !important;
+    max-width: 38px !important;
+    flex-basis: 14.28% !important;
+    margin: 1px 0 !important;
+    border: 1px solid transparent !important;
+    transition: all 0.15s ease !important;
+
+    &.prevMonthDay,
+    &.nextMonthDay {
+        color: #cbd5e1 !important;
+        font-weight: 400 !important;
+
+        &:hover,
+        &:focus {
+            background: #eef2ff !important;
+            color: #4f46e5 !important;
+        }
+    }
+
+    &:hover,
+    &:focus {
+        background: #eef2ff !important;
+        color: #4f46e5 !important;
+        border-color: transparent !important;
+    }
+
+    &.today {
+        border-color: #6366F1 !important;
+        color: #6366F1 !important;
+        font-weight: 700 !important;
+
+        &:hover {
+            background: #eef2ff !important;
+        }
+    }
+
+    &.selected,
+    &.startRange,
+    &.endRange,
+    &.selected.inRange,
+    &.startRange.inRange,
+    &.endRange.inRange,
+    &.selected:focus,
+    &.startRange:focus,
+    &.endRange:focus,
+    &.selected:hover,
+    &.startRange:hover,
+    &.endRange:hover {
+        background: #6366F1 !important;
+        border-color: #6366F1 !important;
+        color: #ffffff !important;
+        font-weight: 600 !important;
+        box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3) !important;
+    }
+
+    &.inRange {
+        background: #e0e7ff !important;
+        border-color: transparent !important;
+        color: #3730a3 !important;
+        border-radius: 0 !important;
+    }
+
+    &.flatpickr-disabled,
+    &.flatpickr-disabled:hover {
+        color: #cbd5e1 !important;
+        background: transparent !important;
+    }
+}
+
+.flatpickr-time {
+    border-top: 1px solid #f1f5f9 !important;
+    max-height: 44px !important;
+
+    .numInputWrapper {
+
+        span.arrowUp,
+        span.arrowDown {
+            border-left: none !important;
+
+            &:after {
+                border-bottom-color: #64748b !important;
+                border-top-color: #64748b !important;
+            }
+        }
+    }
+
+    input {
+        font-family: 'Inter', sans-serif !important;
+        font-weight: 600 !important;
+        color: #1e293b !important;
+        border-radius: 0.375rem !important;
+
+        &:hover,
+        &:focus {
+            background: #f8fafc !important;
+        }
+    }
+
+    .flatpickr-am-pm {
+        font-weight: 600 !important;
+        color: #6366F1 !important;
+        border-radius: 0.375rem !important;
+
+        &:hover,
+        &:focus {
+            background: #eef2ff !important;
+        }
+    }
+}
+
+/* Input Icon Trigger Wrapper */
+.flatpickr-wrapper-input {
+    .flatpickr-toggle-btn {
+        cursor: pointer;
+        z-index: 4;
+        transition: color 0.15s ease;
+
+        &:hover {
+            color: #6366F1 !important;
+        }
+    }
+}
+
+/* ==========================================
+   Flatpickr Dark Mode Custom Theme
+   ========================================== */
+[data-bs-theme="dark"] {
+    .flatpickr-calendar {
+        background: #1e293b !important;
+        border-color: rgba(255, 255, 255, 0.12) !important;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+
+        &.arrowTop:before,
+        &.arrowTop:after {
+            border-bottom-color: #1e293b !important;
+        }
+
+        &.arrowBottom:before,
+        &.arrowBottom:after {
+            border-top-color: #1e293b !important;
+        }
+    }
+
+    .flatpickr-months {
+        .flatpickr-month {
+            color: #f8fafc !important;
+
+            .flatpickr-current-month {
+                color: #f8fafc !important;
+
+                select.flatpickr-monthDropdown-months {
+                    color: #f8fafc !important;
+                    background: #0f172a !important;
+
+                    &:hover {
+                        background: #334155 !important;
+                    }
+
+                    option {
+                        background-color: #0f172a !important;
+                        color: #f8fafc !important;
+                    }
+                }
+
+                .numInputWrapper input.cur-year {
+                    color: #f8fafc !important;
+                }
+            }
+        }
+
+        .flatpickr-prev-month,
+        .flatpickr-next-month {
+            fill: #94a3b8 !important;
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.1) !important;
+                fill: #818cf8 !important;
+            }
+        }
+    }
+
+    span.flatpickr-weekday {
+        color: #94a3b8 !important;
+    }
+
+    .flatpickr-day {
+        color: #cbd5e1 !important;
+
+        &.prevMonthDay,
+        &.nextMonthDay {
+            color: #475569 !important;
+            font-weight: 400 !important;
+
+            &:hover,
+            &:focus {
+                background: rgba(99, 102, 241, 0.25) !important;
+                color: #818cf8 !important;
+            }
+        }
+
+        &:hover,
+        &:focus {
+            background: rgba(99, 102, 241, 0.25) !important;
+            color: #818cf8 !important;
+        }
+
+        &.today {
+            border-color: #818cf8 !important;
+            color: #818cf8 !important;
+
+            &:hover {
+                background: rgba(99, 102, 241, 0.25) !important;
+            }
+        }
+
+        &.selected,
+        &.startRange,
+        &.endRange,
+        &.selected.inRange,
+        &.startRange.inRange,
+        &.endRange.inRange,
+        &.selected:focus,
+        &.startRange:focus,
+        &.endRange:focus,
+        &.selected:hover,
+        &.startRange:hover,
+        &.endRange:hover {
+            background: #6366F1 !important;
+            border-color: #6366F1 !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4) !important;
+        }
+
+        &.inRange {
+            background: rgba(99, 102, 241, 0.2) !important;
+            color: #c7d2fe !important;
+        }
+
+        &.flatpickr-disabled,
+        &.flatpickr-disabled:hover {
+            color: #475569 !important;
+        }
+    }
+
+    .flatpickr-time {
+        border-top-color: rgba(255, 255, 255, 0.1) !important;
+
+        .numInputWrapper {
+            span.arrowUp:after {
+                border-bottom-color: #94a3b8 !important;
+            }
+
+            span.arrowDown:after {
+                border-top-color: #94a3b8 !important;
+            }
+        }
+
+        input {
+            color: #f8fafc !important;
+
+            &:hover,
+            &:focus {
+                background: rgba(255, 255, 255, 0.08) !important;
+            }
+        }
+
+        .flatpickr-am-pm {
+            color: #818cf8 !important;
+
+            &:hover,
+            &:focus {
+                background: rgba(99, 102, 241, 0.2) !important;
+            }
+        }
+    }
+
+    /* Dark Mode Table Row Hover Effect */
+    .table {
+        tbody {
+            tr {
+                &:hover {
+                    background-color: rgba(99, 102, 241, 0.12) !important;
+                    box-shadow: inset 3px 0 0 #818cf8, 0 4px 18px rgba(0, 0, 0, 0.35);
+
+                    td {
+                        background-color: transparent !important;
+                    }
+                }
+            }
+        }
+    }
+
+    .mobile-card-item:hover {
+        background-color: rgba(99, 102, 241, 0.12) !important;
+        box-shadow: inset 3px 0 0 #818cf8;
+    }
+
+    /* Dark Mode Form Inputs, Textareas, Selects & Flatpickr Fields */
+    .card-body .form-control,
+    .card-body .form-select,
+    .card-body .custom-select-trigger,
+    form .form-control,
+    form .form-select,
+    form .custom-select-trigger,
+    .form-control,
+    .form-select,
+    .custom-select-trigger,
+    textarea.form-control,
+    input.form-control,
+    .flatpickr-input-target,
+    .flatpickr-alt-input,
+    .flatpickr-input,
+    .flatpickr-mobile {
+        background-color: #131728 !important;
+        border-color: rgba(255, 255, 255, 0.12) !important;
+        color: #f1f5f9 !important;
+
+        &::placeholder {
+            color: #64748b !important;
+            opacity: 1 !important;
+        }
+
+        &:hover {
+            border-color: rgba(255, 255, 255, 0.25) !important;
+        }
+
+        &:focus,
+        &.active {
+            background-color: #161c30 !important;
+            border-color: #6366f1 !important;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25) !important;
+            color: #ffffff !important;
+        }
+
+        &:disabled,
+        &[readonly] {
+            background-color: #0d101d !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+            color: #64748b !important;
+        }
+
+        &.is-invalid {
+            border-color: #f87171 !important;
+            box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.2) !important;
+        }
+    }
+
+    /* Dark Mode Input Icon Suffix Triggers */
+    .flatpickr-wrapper-input .flatpickr-toggle-btn,
+    .position-relative .toggle-password-btn,
+    .position-relative i.text-secondary {
+        color: #94a3b8 !important;
+
+        &:hover {
+            color: #818cf8 !important;
+        }
+    }
+
+    /* Dark Mode Labels & Icons */
+    .form-label,
+    label {
+        color: #94a3b8 !important;
+
+        i {
+            color: #94a3b8 !important;
+        }
+    }
+
+    /* Dark Mode Custom Select Placeholder Label */
+    .custom-select-trigger.is-placeholder .custom-select-label,
+    .custom-select-trigger .custom-select-label.is-placeholder,
+    .custom-select-trigger.is-placeholder,
+    select:has(option[value=""]:checked),
+    select.is-placeholder {
+        color: #64748b !important;
     }
 }

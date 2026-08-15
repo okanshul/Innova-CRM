@@ -10,7 +10,7 @@
 
                 <form id="settingsForm" action="{{ route('crm.api.settings.store') }}" method="POST">
                     @csrf
-                    <div class="p-4 position-relative z-2">
+                    <div class="p-3 position-relative z-2">
                         <div id="settingsAlert"></div>
 
                         <div class="mb-4">

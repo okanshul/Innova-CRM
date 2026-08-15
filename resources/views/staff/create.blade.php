@@ -93,7 +93,7 @@
                                     </option>
                                 </x-form.select>
 
-                                <x-form.input class="col-12 col-md-3 mb-3" type="date" name="joined_date" label="Joined Date"
+                                <x-form.datetime-picker class="col-12 col-md-3 mb-3" type="date" name="joined_date" label="Joined Date"
                                     icon="fa-solid fa-calendar-days" :value="date('Y-m-d')" />
                             </div>
                         </div>

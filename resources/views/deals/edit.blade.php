@@ -61,7 +61,7 @@
                                 <option value="lost" {{ $deal->status === 'lost' ? 'selected' : '' }}>Closed Lost</option>
                             </x-form.select>
 
-                            <x-form.input class="col-12 col-md-6 mb-3" type="date" name="expected_close_date" label="Expected Close Date" icon="fa-regular fa-calendar" :value="$deal->expected_close_date ? $deal->expected_close_date->format('Y-m-d') : ''" />
+                            <x-form.datetime-picker class="col-12 col-md-6 mb-3" type="date" name="expected_close_date" label="Expected Close Date" icon="fa-regular fa-calendar" :value="$deal->expected_close_date ? $deal->expected_close_date->format('Y-m-d') : ''" />
                         </div>
                     </div>
 

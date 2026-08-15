@@ -124,9 +124,16 @@
                         <a href="{{ route('tasks.index') }}" class="btn btn-sm btn-link text-primary text-decoration-none rounded-3 py-1 px-1 shadow-none fw-semibold" style="font-size: 0.75rem;">View All</a>
                     </div>
                     <div class="list-group list-group-flush border-0 flex-grow-1">
-                        @foreach ($activities as $activity)
+                        @forelse ($activities as $activity)
                             @include('partials.activity-item', ['activity' => $activity])
-                        @endforeach
+                        @empty
+                            <div class="d-flex flex-column align-items-center justify-content-center py-4 my-auto text-secondary">
+                                <div class="rounded-circle bg-body-tertiary d-flex align-items-center justify-content-center mb-2" style="width: 42px; height: 42px;">
+                                    <i class="fa-solid fa-clock-rotate-left opacity-50 fs-6"></i>
+                                </div>
+                                <span class="fw-medium text-body-secondary" style="font-size: 0.8rem;">No recent activities</span>
+                            </div>
+                        @endforelse
                     </div>
                 </div>
             </div>
@@ -157,7 +164,7 @@
                                 </tr>
                             </thead>
                             <tbody class="border-top-0">
-                                @foreach ($contacts as $contact)
+                                @forelse ($contacts as $contact)
                                     <tr>
                                         <td class="px-3 py-2">
                                             <div class="d-flex align-items-center gap-2">
@@ -192,7 +199,18 @@
                                             </div>
                                         </td>
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="text-center py-4 text-secondary">
+                                            <div class="d-flex flex-column align-items-center justify-content-center py-3">
+                                                <div class="rounded-circle bg-body-tertiary d-flex align-items-center justify-content-center mb-2" style="width: 44px; height: 44px;">
+                                                    <i class="fa-solid fa-address-book text-secondary fs-6 opacity-75"></i>
+                                                </div>
+                                                <span class="fw-medium text-body-secondary" style="font-size: 0.825rem;">No recent contacts found</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>

@@ -58,7 +58,7 @@
                                 <option value="lost">Closed Lost</option>
                             </x-form.select>
 
-                            <x-form.input class="col-12 col-md-6 mb-3" type="date" name="expected_close_date" label="Expected Close Date" icon="fa-regular fa-calendar" />
+                            <x-form.datetime-picker class="col-12 col-md-6 mb-3" type="date" name="expected_close_date" label="Expected Close Date" icon="fa-regular fa-calendar" />
                         </div>
                     </div>
 

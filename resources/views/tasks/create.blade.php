@@ -44,7 +44,7 @@
                                 @endforeach
                             </x-form.select>
 
-                            <x-form.input class="col-12 col-md-6 mb-3" type="date" name="due_date" label="Due Date" icon="fa-regular fa-calendar" />
+                            <x-form.datetime-picker class="col-12 col-md-6 mb-3" type="date" name="due_date" label="Due Date" icon="fa-regular fa-calendar" />
                         </div>
                     </div>
 
