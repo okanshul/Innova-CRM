@@ -35,13 +35,11 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     // Helper: Role Badge Class
-    const getRoleBadgeClass = (pos, role) => {
-        const title = (pos || role || '').toLowerCase();
-        if (title.includes('manager') || title.includes('executive') || title.includes('admin')) return 'role-badge-purple';
-        if (title.includes('lead') || title.includes('writer') || title.includes('market')) return 'role-badge-cyan';
-        if (title.includes('agent') || title.includes('support')) return 'role-badge-orange';
-        if (title.includes('accountant') || title.includes('finan')) return 'role-badge-green';
-        if (title.includes('sys') || title.includes('it') || title.includes('developer')) return 'role-badge-blue';
+    const getRoleBadgeClass = (role, pos) => {
+        const title = (role || pos || '').toLowerCase();
+        if (title.includes('admin')) return 'role-badge-purple';
+        if (title.includes('manager')) return 'role-badge-cyan';
+        if (title.includes('staff')) return 'role-badge-blue';
         return 'role-badge-purple';
     };
 
@@ -59,8 +57,8 @@ document.addEventListener('DOMContentLoaded', function () {
             ? `/storage/${staff.avatar}`
             : `https://ui-avatars.com/api/?name=${encodeURIComponent(staff.name)}&background=6366F1&color=fff`;
 
-        const positionDisplay = staff.position || (staff.role_name ? staff.role_name.charAt(0).toUpperCase() + staff.role_name.slice(1) : 'Staff');
-        const badgeClass = getRoleBadgeClass(staff.position, staff.role_name);
+        const roleDisplay = staff.role_name ? (staff.role_name.charAt(0).toUpperCase() + staff.role_name.slice(1)) : (staff.position || 'Staff');
+        const badgeClass = getRoleBadgeClass(staff.role_name, staff.position);
 
         const statusBadge = staff.status === 'active'
             ? `<span class="status-badge status-badge-active">Active</span>`
@@ -107,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     ${getDeptIcon(staff.department)}
                 </td>
                 <td class="py-3">
-                    <span class="role-badge ${badgeClass}">${positionDisplay}</span>
+                    <span class="role-badge ${badgeClass}">${roleDisplay}</span>
                 </td>
                 <td class="py-3 text-secondary" style="font-size: 0.85rem;">
                     ${staff.email}
@@ -161,8 +159,8 @@ document.addEventListener('DOMContentLoaded', function () {
             ? `<span class="badge rounded-pill fw-semibold px-2 py-1" style="background-color: #dcfce7; color: #16a34a; font-size: 0.75rem;">Active</span>`
             : `<span class="badge rounded-pill fw-semibold px-2 py-1" style="background-color: #fee2e2; color: #dc2626; font-size: 0.75rem;">Inactive</span>`;
 
-        const positionDisplay = staff.position || (staff.role_name ? staff.role_name.charAt(0).toUpperCase() + staff.role_name.slice(1) : 'Staff');
-        const badgeClass = getRoleBadgeClass(staff.position, staff.role_name);
+        const roleDisplay = staff.role_name ? (staff.role_name.charAt(0).toUpperCase() + staff.role_name.slice(1)) : (staff.position || 'Staff');
+        const badgeClass = getRoleBadgeClass(staff.role_name, staff.position);
         const collapseId = `staffCollapse_${staff.id}`;
 
         let actionButtonsHtml = `
@@ -236,7 +234,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <i class="fa-solid fa-user me-1" style="color: #6366f1; width: 16px;"></i> Role :
                             </div>
                             <div class="text-end">
-                                <span class="role-badge ${badgeClass}">${positionDisplay}</span>
+                                <span class="role-badge ${badgeClass}">${roleDisplay}</span>
                             </div>
                         </div>
 
@@ -769,7 +767,11 @@ document.addEventListener('DOMContentLoaded', function () {
         'pipeline': { title: 'Pipeline', icon: 'fa-diagram-project' },
         'reports': { title: 'Reports', icon: 'fa-chart-pie' },
         'tasks': { title: 'Tasks', icon: 'fa-list-check' },
-        'settings': { title: 'Settings', icon: 'fa-gear' }
+        'settings': { title: 'Settings', icon: 'fa-gear' },
+        'calendar': { title: 'Calendar', icon: 'fa-calendar-days' },
+        'meetings': { title: 'Meetings', icon: 'fa-video' },
+        'mail': { title: 'Mail', icon: 'fa-envelope' },
+        'roles': { title: 'Roles & Permissions', icon: 'fa-user-shield' }
     };
 
     const renderPermissionsModalBody = (groupedPermissions, directPermissions, rolePermissions) => {
@@ -986,6 +988,40 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+    // Dynamic Role Permissions Matrix Sync
+    const roleSelect = document.querySelector('select[name="role"]');
+    if (roleSelect) {
+        const syncRolePermissions = () => {
+            if (!roleSelect || !window.rolesPermissionsMap) return;
+            const selectedRole = roleSelect.value;
+            if (!selectedRole) return;
+
+            let perms = window.rolesPermissionsMap[selectedRole];
+            if (!perms) {
+                const key = Object.keys(window.rolesPermissionsMap).find(k => k.toLowerCase() === selectedRole.toLowerCase());
+                if (key) perms = window.rolesPermissionsMap[key];
+            }
+
+            perms = perms || [];
+            const form = roleSelect.closest('form') || document;
+            if (window.PermissionsMatrix && typeof window.PermissionsMatrix.setCheckedPermissions === 'function') {
+                window.PermissionsMatrix.setCheckedPermissions(perms, form);
+            }
+        };
+
+        roleSelect.addEventListener('change', syncRolePermissions);
+        roleSelect.addEventListener('input', syncRolePermissions);
+
+        const permTabBtn = document.getElementById('permissions-tab');
+        if (permTabBtn) {
+            permTabBtn.addEventListener('click', syncRolePermissions);
+            permTabBtn.addEventListener('shown.bs.tab', syncRolePermissions);
+        }
+
+        setTimeout(syncRolePermissions, 50);
+        setTimeout(syncRolePermissions, 300);
+    }
 
     // Initial Load for Staff Table
     if (tableBody) {

@@ -48,8 +48,8 @@
                         </p>
 
                         <div class="d-flex align-items-center justify-content-center gap-2 flex-wrap">
-                            <x-badge.status :value="$staff->position ?? $staff->role_name" type="role" class="shadow-sm">
-                                <i class="fa-solid fa-user-shield me-1"></i>{{ ucfirst($staff->position ?? $staff->role_name) }}
+                            <x-badge.status :value="$staff->role_name" type="role" class="shadow-sm">
+                                <i class="fa-solid fa-user-shield me-1"></i>{{ ucfirst($staff->role_name ?? 'staff') }}
                             </x-badge.status>
 
                             @if($staff->status === 'active')

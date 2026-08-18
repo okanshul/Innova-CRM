@@ -57,6 +57,19 @@ document.addEventListener('DOMContentLoaded', function () {
         return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #e0f2fe; color: #0369a1; font-size: 0.75rem;">Open</span>`;
     }
 
+    function getStageBadge(stage) {
+        if (!stage) return `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #f1f5f9; color: #64748b; font-size: 0.775rem;">N/A</span>`;
+        const color = stage.color || '#6366f1';
+        return `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: ${color}1f; color: ${color}; border: 1px solid ${color}33; font-size: 0.775rem;">${stage.name}</span>`;
+    }
+
+    function formatDate(dateStr) {
+        if (!dateStr) return 'N/A';
+        const d = new Date(dateStr);
+        if (isNaN(d.getTime())) return dateStr;
+        return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
     function syncMobilePagination() {
         const mobileSummary = document.getElementById('mobilePaginationSummary');
         const mobileControls = document.getElementById('mobilePaginationControls');
@@ -131,10 +144,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     <a href="/deals/${item.id}" class="text-body-emphasis fw-semibold text-decoration-none">${item.title}</a>
                 </td>
                 <td class="py-3 fw-bold text-success">$${parseFloat(item.value).toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
-                <td class="py-3"><span class="badge bg-indigo text-white">${item.stage ? item.stage.name : 'N/A'}</span></td>
+                <td class="py-3">${getStageBadge(item.stage)}</td>
                 <td class="py-3 text-secondary" style="font-size: 0.85rem;">${item.company ? item.company.name : (item.contact ? item.contact.first_name : 'N/A')}</td>
                 <td class="py-3">${getDealStatusBadge(item.status)}</td>
-                <td class="py-3 text-secondary" style="font-size: 0.85rem;">${item.expected_close_date || 'N/A'}</td>
+                <td class="py-3 text-secondary" style="font-size: 0.85rem;">${formatDate(item.expected_close_date)}</td>
                 <td class="text-end pe-3 py-3">
                     <div class="d-inline-flex align-items-center justify-content-end">
                         <a href="/deals/${item.id}" class="action-btn action-btn-view me-1" title="View Details">
@@ -158,8 +171,9 @@ document.addEventListener('DOMContentLoaded', function () {
             const clearBtn = mobileList.querySelector('.btn-clear-filters-action');
             if (clearBtn) {
                 clearBtn.addEventListener('click', () => {
-                    const resetTrigger = document.getElementById('btnFilterTrigger') || document.getElementById('btnResetFilters');
-                    if (resetTrigger) resetTrigger.click();
+                    if (searchInput) searchInput.value = '';
+                    if (filterStatus) filterStatus.value = '';
+                    fetchDeals(1);
                 });
             }
             return;
@@ -169,8 +183,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const canDelete = window.userPermissions && window.userPermissions.canDelete;
 
         deals.forEach(item => {
-            const collapseId = `dealCollapse_${item.id}`;
+            const formattedValue = `$${parseFloat(item.value).toLocaleString('en-US', {minimumFractionDigits: 2})}`;
             const statusBadge = getDealStatusBadge(item.status);
+            const collapseId = `dealCollapse_${item.id}`;
+
+            const card = document.createElement('div');
+            card.className = 'card border-0 shadow-sm rounded-3 mb-2 overflow-hidden';
 
             let actionButtonsHtml = `
                 <a href="/deals/${item.id}" class="action-btn action-btn-view me-1" title="View Details">
@@ -192,9 +210,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 `;
             }
 
-            const formattedValue = `$${parseFloat(item.value).toLocaleString('en-US', {minimumFractionDigits: 2})}`;
-
-            const cardHtml = `
+            card.innerHTML = `
                 <div class="border-bottom mobile-card-item bg-body" style="min-width: 0;">
                     <div class="d-flex align-items-center justify-content-between p-3 mobile-card-header" 
                          data-bs-target="#${collapseId}" 
@@ -236,8 +252,8 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <div class="fw-semibold text-body-emphasis d-flex align-items-center me-2" style="font-size: 0.8rem;">
                                     <i class="fa-solid fa-diagram-project me-1" style="color: #6366f1; width: 16px;"></i> Stage :
                                 </div>
-                                <div class="fw-medium text-body-secondary text-end">
-                                    ${item.stage ? item.stage.name : 'N/A'}
+                                <div class="fw-medium text-end">
+                                    ${getStageBadge(item.stage)}
                                 </div>
                             </div>
 
@@ -255,7 +271,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     <i class="fa-solid fa-calendar-days me-1" style="color: #6366f1; width: 16px;"></i> Expected Close :
                                 </div>
                                 <div class="fw-medium text-body-secondary text-end">
-                                    ${item.expected_close_date || 'N/A'}
+                                    ${formatDate(item.expected_close_date)}
                                 </div>
                             </div>
 
@@ -280,7 +296,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
                 </div>
             `;
-            mobileList.insertAdjacentHTML('beforeend', cardHtml);
+            mobileList.appendChild(card);
         });
     }
 
@@ -423,7 +439,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     item.stage ? item.stage.name : 'N/A',
                     item.company ? item.company.name : (item.contact ? `${item.contact.first_name} ${item.contact.last_name || ''}`.trim() : 'N/A'),
                     item.status,
-                    item.expected_close_date || 'N/A'
+                    formatDate(item.expected_close_date)
                 ]
             });
         });

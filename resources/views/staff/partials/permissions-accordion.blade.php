@@ -11,6 +11,10 @@
         'reports' => ['title' => 'Reports', 'icon' => 'fa-chart-pie'],
         'tasks' => ['title' => 'Tasks', 'icon' => 'fa-list-check'],
         'settings' => ['title' => 'Settings', 'icon' => 'fa-gear'],
+        'calendar' => ['title' => 'Calendar', 'icon' => 'fa-calendar-days'],
+        'meetings' => ['title' => 'Meetings', 'icon' => 'fa-video'],
+        'mail' => ['title' => 'Mail', 'icon' => 'fa-envelope'],
+        'roles' => ['title' => 'Roles & Permissions', 'icon' => 'fa-user-shield'],
     ];
 
     $actions = ['view', 'create', 'edit', 'delete'];

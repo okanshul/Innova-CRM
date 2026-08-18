@@ -46,10 +46,21 @@ class StaffController extends Controller
     {
         Gate::authorize('staff.create');
         
-        $roles = Role::all();
+        $roles = Role::with('permissions')->orderBy('name', 'asc')->get();
         $groupedPermissions = $this->getGroupedPermissions();
 
-        return view('staff.create', compact('roles', 'groupedPermissions'));
+        $rolesPermissionsMap = [];
+        foreach ($roles as $role) {
+            $rolesPermissionsMap[$role->name] = $role->permissions->pluck('name')->toArray();
+        }
+
+        $defaultRoleName = old('role', 'staff');
+        if (!isset($rolesPermissionsMap[$defaultRoleName]) && $roles->isNotEmpty()) {
+            $defaultRoleName = $roles->first()->name;
+        }
+        $rolePermissions = $rolesPermissionsMap[$defaultRoleName] ?? [];
+
+        return view('staff.create', compact('roles', 'groupedPermissions', 'rolePermissions', 'rolesPermissionsMap'));
     }
 
     /**
@@ -74,11 +85,16 @@ class StaffController extends Controller
 
         $staff = User::findOrFail($id);
         $staff->role_name = $staff->roles->first()?->name ?? 'staff';
-        $roles = Role::all();
+        $roles = Role::with('permissions')->orderBy('name', 'asc')->get();
         $groupedPermissions = $this->getGroupedPermissions();
         $directPermissions = $staff->getDirectPermissions()->pluck('name')->toArray();
         $rolePermissions = $staff->getPermissionsViaRoles()->pluck('name')->unique()->toArray();
 
-        return view('staff.edit', compact('staff', 'roles', 'groupedPermissions', 'directPermissions', 'rolePermissions'));
+        $rolesPermissionsMap = [];
+        foreach ($roles as $role) {
+            $rolesPermissionsMap[$role->name] = $role->permissions->pluck('name')->toArray();
+        }
+
+        return view('staff.edit', compact('staff', 'roles', 'groupedPermissions', 'directPermissions', 'rolePermissions', 'rolesPermissionsMap'));
     }
 }

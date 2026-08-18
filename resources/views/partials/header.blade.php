@@ -100,7 +100,7 @@
                 </a>
                 <a class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2" href="#">
                     <i class="fa-solid fa-sliders text-secondary transition-colors" style="width: 18px;"></i>
-                    <span class="fw-medium">Account Settings</span>
+                    <span class="fw-medium">Settings</span>
                 </a>
                 <div class="dropdown-divider my-1 opacity-25"></div>
                 

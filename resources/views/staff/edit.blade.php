@@ -61,9 +61,11 @@
 
                                 <x-form.select class="col-12 col-md-6 mb-3" name="role" label="Role"
                                     icon="fa-solid fa-user-shield" :required="true">
-                                    <option value="staff" {{ old('role', $staff->role_name) === 'staff' ? 'selected' : '' }}>Staff</option>
-                                    <option value="manager" {{ old('role', $staff->role_name) === 'manager' ? 'selected' : '' }}>Manager</option>
-                                    <option value="admin" {{ old('role', $staff->role_name) === 'admin' ? 'selected' : '' }}>Admin</option>
+                                    @foreach($roles as $roleItem)
+                                        <option value="{{ $roleItem->name }}" {{ old('role', $staff->role_name) === $roleItem->name ? 'selected' : '' }}>
+                                            {{ ucfirst($roleItem->name) }}
+                                        </option>
+                                    @endforeach
                                 </x-form.select>
 
                                 <x-form.select class="col-12 col-md-6 mb-3" name="department" label="Department"
@@ -118,5 +120,8 @@
 @endsection
 
 @push('scripts')
+    <script>
+        window.rolesPermissionsMap = @json($rolesPermissionsMap ?? []);
+    </script>
     <script src="{{ asset('js/staff.js') }}"></script>
 @endpush
