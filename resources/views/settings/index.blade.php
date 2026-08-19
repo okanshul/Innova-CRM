@@ -21,7 +21,7 @@
 
     <form id="settingsForm" action="{{ route('crm.api.settings.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
-        <div class="row g-3.5">
+        <div class="row g-3">
             <!-- Left Vertical Sidebar Nav -->
             <div class="col-lg-3 col-xl-2">
                 <div class="settings-vnav h-100">
@@ -36,6 +36,11 @@
                             data-bs-target="#v-pills-company" type="button" role="tab" aria-controls="v-pills-company"
                             aria-selected="false">
                             <i class="fa-regular fa-building"></i> Company Profile
+                        </button>
+                        <button class="nav-link" id="v-pills-appearance-tab" data-bs-toggle="pill"
+                            data-bs-target="#v-pills-appearance" type="button" role="tab"
+                            aria-controls="v-pills-appearance" aria-selected="false">
+                            <i class="fa-solid fa-palette"></i> Appearance & Branding
                         </button>
                         <button class="nav-link" id="v-pills-localization-tab" data-bs-toggle="pill"
                             data-bs-target="#v-pills-localization" type="button" role="tab"
@@ -614,6 +619,118 @@
                     </div>
                 </div>
             </div>
+
+                    <!-- Tab: Appearance & Branding Pane (Matching Screenshot) -->
+                    <div class="tab-pane fade" id="v-pills-appearance" role="tabpanel"
+                        aria-labelledby="v-pills-appearance-tab" tabindex="0">
+                        <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-body">
+                            <div class="card-header border-0 bg-body p-3 d-flex align-items-center justify-content-between border-bottom">
+                                <div>
+                                    <h5 class="fw-bold mb-0 text-body-emphasis">Appearance & Branding</h5>
+                                    <p class="text-secondary small mb-0">Configure application colors, logo, favicon, and brand identity.</p>
+                                </div>
+                                <x-button.primary type="submit" icon="fa-solid fa-check" label="Save All Settings" />
+                            </div>
+                            <div class="card-body p-3">
+                                <div class="row g-4 align-items-start">
+                                    <!-- Column 1: Logo -->
+                                    <div class="col-lg-4 col-md-12 pe-lg-4 border-lg-end">
+                                        <label class="form-label fw-bold text-body-emphasis mb-3 fs-7">Logo</label>
+                                        <div class="logo-preview-box border border-light-subtle rounded-4 p-4 text-center bg-body-tertiary d-flex align-items-center justify-content-center mb-3" style="min-height: 140px;" id="appearanceLogoPreviewBox">
+                                            @if(isset($settings['system_logo']) && $settings['system_logo'])
+                                                <img src="{{ asset($settings['system_logo']) }}" alt="Logo" class="img-fluid" style="max-height: 60px;">
+                                            @else
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="brand-icon rounded-3 d-flex align-items-center justify-content-center text-white shadow-sm" style="width: 44px; height: 44px; background: #5030FF;">
+                                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M12 2L2 7V17L12 22L22 17V7L12 2Z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+                                                            <path d="M2 7L12 12L22 7" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+                                                            <path d="M12 12V22" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+                                                        </svg>
+                                                    </div>
+                                                    <span class="fw-bold fs-4 text-body-emphasis tracking-tight">InnovaCRM</span>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <input type="file" id="appearanceLogoInput" name="system_logo_file" class="d-none" accept="image/*">
+                                        <button type="button" class="btn w-100 py-2 rounded-3 fw-semibold mb-2" style="background-color: #EEF2FF; color: #5030FF; border: none;" onclick="document.getElementById('appearanceLogoInput').click()">
+                                            Change Logo
+                                        </button>
+                                        <div class="text-center text-secondary fs-8">
+                                            Recommended size: 300x80px
+                                        </div>
+                                    </div>
+
+                                    <!-- Column 2: Primary Color & Secondary Color -->
+                                    <div class="col-lg-4 col-md-6 px-lg-4 border-lg-end">
+                                        <!-- Primary Color -->
+                                        <div class="mb-4">
+                                            <label class="form-label fw-bold text-body-emphasis mb-2 fs-7">Primary Color</label>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <input type="text" class="form-control form-control-lg rounded-3 fs-6" id="primaryColorText" name="primary_color" value="{{ $settings['primary_color'] ?? '#5030FF' }}" style="text-transform: uppercase;">
+                                                <div class="position-relative flex-shrink-0 rounded-3 overflow-hidden shadow-xs" style="width: 46px; height: 46px;">
+                                                    <div id="primaryColorSwatch" class="w-100 h-100 rounded-3" style="background-color: {{ $settings['primary_color'] ?? '#5030FF' }};"></div>
+                                                    <input type="color" class="position-absolute top-0 start-0 w-100 h-100 opacity-0 cursor-pointer" id="primaryColorPicker" value="{{ $settings['primary_color'] ?? '#5030FF' }}" style="cursor: pointer; border: none; padding: 0;">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Secondary Color -->
+                                        <div>
+                                            <label class="form-label fw-bold text-body-emphasis mb-2 fs-7">Secondary Color</label>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <input type="text" class="form-control form-control-lg rounded-3 fs-6" id="secondaryColorText" name="secondary_color" value="{{ $settings['secondary_color'] ?? '#F2F4F8' }}" style="text-transform: uppercase;">
+                                                <div class="position-relative flex-shrink-0 rounded-3 overflow-hidden shadow-xs" style="width: 46px; height: 46px;">
+                                                    <div id="secondaryColorSwatch" class="w-100 h-100 rounded-3" style="background-color: {{ $settings['secondary_color'] ?? '#5030FF' }};"></div>
+                                                    <input type="color" class="position-absolute top-0 start-0 w-100 h-100 opacity-0 cursor-pointer" id="secondaryColorPicker" value="{{ $settings['secondary_color'] ?? '#F2F4F8' }}" style="cursor: pointer; border: none; padding: 0;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Column 3: Favicon, Application Name, Application URL -->
+                                    <div class="col-lg-4 col-md-6 ps-lg-4">
+                                        <!-- Favicon -->
+                                        <div class="mb-4">
+                                            <label class="form-label fw-bold text-body-emphasis mb-2 fs-7">Favicon</label>
+                                            <div class="border border-light-subtle rounded-3 p-3 bg-body-tertiary d-flex align-items-center gap-3">
+                                                <div class="rounded-3 d-flex align-items-center justify-content-center text-white flex-shrink-0" style="width: 46px; height: 46px; background: #5030FF;" id="appearanceFaviconPreviewBox">
+                                                    @if(isset($settings['favicon']) && $settings['favicon'])
+                                                        <img src="{{ asset($settings['favicon']) }}" alt="Favicon" class="img-fluid rounded" style="max-height: 30px;">
+                                                    @else
+                                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M12 2L2 7V17L12 22L22 17V7L12 2Z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+                                                            <path d="M2 7L12 12L22 7" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+                                                            <path d="M12 12V22" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+                                                        </svg>
+                                                    @endif
+                                                </div>
+                                                <div>
+                                                    <input type="file" id="appearanceFaviconInput" name="favicon_file" class="d-none" accept="image/*">
+                                                    <button type="button" class="btn p-0 border-0 fw-semibold text-primary fs-7 mb-0 text-start" onclick="document.getElementById('appearanceFaviconInput').click()">
+                                                        Change Favicon
+                                                    </button>
+                                                    <div class="text-secondary fs-8">Recommended size: 32x32px</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Application Name -->
+                                        <div class="mb-4">
+                                            <label class="form-label fw-bold text-body-emphasis mb-2 fs-7">Application Name</label>
+                                            <input type="text" class="form-control form-control-lg rounded-3 fs-6" name="app_name" value="{{ $settings['app_name'] ?? 'InnovaCRM' }}">
+                                        </div>
+
+                                        <!-- Application URL -->
+                                        <div>
+                                            <label class="form-label fw-bold text-body-emphasis mb-2 fs-7">Application URL</label>
+                                            <input type="url" class="form-control form-control-lg rounded-3 fs-6" name="app_url" value="{{ $settings['app_url'] ?? 'https://crm.innovacrm.com' }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Tab 2: Company Profile -->
                     <div class="tab-pane fade" id="v-pills-company" role="tabpanel" aria-labelledby="v-pills-company-tab" tabindex="0">

@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = function (e) {
-                        box.innerHTML = `<img src="${e.target.result}" alt="Preview" class="img-fluid rounded" style="max-height: 40px;">`;
+                        box.innerHTML = `<img src="${e.target.result}" alt="Preview" class="img-fluid rounded" style="max-height: 48px;">`;
                     };
                     reader.readAsDataURL(file);
                 }
@@ -84,5 +84,36 @@ document.addEventListener('DOMContentLoaded', function () {
 
     setupImagePreview('systemLogoInput', 'logoPreviewBox');
     setupImagePreview('faviconInput', 'faviconPreviewBox');
+    setupImagePreview('appearanceLogoInput', 'appearanceLogoPreviewBox');
+    setupImagePreview('appearanceFaviconInput', 'appearanceFaviconPreviewBox');
+
+    // Color Picker Sync
+    const setupColorPicker = (textInputId, pickerId, swatchId) => {
+        const textInput = document.getElementById(textInputId);
+        const pickerInput = document.getElementById(pickerId);
+        const swatch = document.getElementById(swatchId);
+
+        if (textInput && pickerInput && swatch) {
+            pickerInput.addEventListener('input', function (e) {
+                const hex = e.target.value.toUpperCase();
+                textInput.value = hex;
+                swatch.style.backgroundColor = hex;
+            });
+
+            textInput.addEventListener('input', function (e) {
+                let hex = e.target.value.trim();
+                if (hex && !hex.startsWith('#')) {
+                    hex = '#' + hex;
+                }
+                if (/^#([0-9A-F]{3}){1,2}$/i.test(hex)) {
+                    pickerInput.value = hex;
+                    swatch.style.backgroundColor = hex;
+                }
+            });
+        }
+    };
+
+    setupColorPicker('primaryColorText', 'primaryColorPicker', 'primaryColorSwatch');
+    setupColorPicker('secondaryColorText', 'secondaryColorPicker', 'secondaryColorSwatch');
 });
 
