@@ -25,10 +25,12 @@ class SettingController extends Controller
     {
         Gate::authorize('settings.edit');
 
-        $settings = $request->except(['_token', '_method']);
+        $settings = $request->except(['_token', '_method', 'system_logo_file', 'favicon_file']);
 
         foreach ($settings as $key => $value) {
-            CrmSetting::set($key, $value);
+            if (is_scalar($value) || is_array($value)) {
+                CrmSetting::set($key, $value);
+            }
         }
 
         return response()->json([
