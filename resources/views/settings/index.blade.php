@@ -35,7 +35,7 @@
                         <button class="nav-link" id="v-pills-company-tab" data-bs-toggle="pill"
                             data-bs-target="#v-pills-company" type="button" role="tab" aria-controls="v-pills-company"
                             aria-selected="false">
-                            <i class="fa-regular fa-building"></i> Company Profile
+                            <i class="fa-solid fa-building"></i> Company Profile
                         </button>
                         <button class="nav-link" id="v-pills-appearance-tab" data-bs-toggle="pill"
                             data-bs-target="#v-pills-appearance" type="button" role="tab"
@@ -50,12 +50,12 @@
                         <button class="nav-link" id="v-pills-email-tab" data-bs-toggle="pill"
                             data-bs-target="#v-pills-email" type="button" role="tab" aria-controls="v-pills-email"
                             aria-selected="false">
-                            <i class="fa-regular fa-envelope"></i> Email Settings
+                            <i class="fa-solid fa-envelope"></i> Email Settings
                         </button>
                         <button class="nav-link" id="v-pills-notifications-tab" data-bs-toggle="pill"
                             data-bs-target="#v-pills-notifications" type="button" role="tab"
                             aria-controls="v-pills-notifications" aria-selected="false">
-                            <i class="fa-regular fa-bell"></i> Notifications
+                            <i class="fa-solid fa-bell"></i> Notifications
                         </button>
                         <button class="nav-link" id="v-pills-security-tab" data-bs-toggle="pill"
                             data-bs-target="#v-pills-security" type="button" role="tab"
@@ -120,7 +120,7 @@
                                     <div>
                                         <div class="settings-card-header">
                                             <div class="settings-icon-badge icon-blue">
-                                                <i class="fa-regular fa-building"></i>
+                                                <i class="fa-solid fa-building"></i>
                                             </div>
                                             <div class="settings-title-wrap">
                                                 <h6 class="settings-card-title">Company Name</h6>
@@ -141,7 +141,7 @@
                                     <div>
                                         <div class="settings-card-header">
                                             <div class="settings-icon-badge icon-blue">
-                                                <i class="fa-regular fa-envelope"></i>
+                                                <i class="fa-solid fa-envelope"></i>
                                             </div>
                                             <div class="settings-title-wrap">
                                                 <h6 class="settings-card-title">System Email</h6>
@@ -197,7 +197,7 @@
                                     <div>
                                         <div class="settings-card-header">
                                             <div class="settings-icon-badge icon-blue">
-                                                <i class="fa-regular fa-calendar-days"></i>
+                                                <i class="fa-solid fa-calendar-days"></i>
                                             </div>
                                             <div class="settings-title-wrap">
                                                 <h6 class="settings-card-title">Date Format</h6>
@@ -230,7 +230,7 @@
                                     <div>
                                         <div class="settings-card-header">
                                             <div class="settings-icon-badge icon-blue">
-                                                <i class="fa-regular fa-clock"></i>
+                                                <i class="fa-solid fa-clock"></i>
                                             </div>
                                             <div class="settings-title-wrap">
                                                 <h6 class="settings-card-title">Time Zone</h6>
@@ -266,7 +266,7 @@
                                     <div>
                                         <div class="settings-card-header">
                                             <div class="settings-icon-badge icon-orange">
-                                                <i class="fa-regular fa-clock"></i>
+                                                <i class="fa-solid fa-clock"></i>
                                             </div>
                                             <div class="settings-title-wrap">
                                                 <h6 class="settings-card-title">Time Format</h6>
@@ -362,7 +362,7 @@
                                     <div>
                                         <div class="settings-card-header">
                                             <div class="settings-icon-badge icon-blue">
-                                                <i class="fa-regular fa-image"></i>
+                                                <i class="fa-solid fa-image"></i>
                                             </div>
                                             <div class="settings-title-wrap">
                                                 <h6 class="settings-card-title">System Logo</h6>
@@ -401,7 +401,7 @@
                                     <div>
                                         <div class="settings-card-header">
                                             <div class="settings-icon-badge icon-yellow">
-                                                <i class="fa-regular fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
                                             </div>
                                             <div class="settings-title-wrap">
                                                 <h6 class="settings-card-title">Favicon</h6>
@@ -745,9 +745,9 @@
                             <div class="card-body p-3">
                                 <div class="row g-4">
                                     <div class="col-md-6">
-                                        <h6 class="fw-bold mb-3 text-body-emphasis"><i class="fa-regular fa-building me-2 text-primary"></i>Company Information</h6>
-                                        <x-form.input class="mb-3" name="company_profile_name" label="Company Name" icon="fa-regular fa-building" :value="$settings['company_name'] ?? 'InnovaCRM Inc.'" />
-                                        <x-form.input class="mb-3" type="email" name="company_profile_email" label="Company Email" icon="fa-regular fa-envelope" :value="$settings['company_email'] ?? 'info@innovacrm.com'" />
+                                        <h6 class="fw-bold mb-3 text-body-emphasis"><i class="fa-solid fa-building me-2 text-primary"></i>Company Information</h6>
+                                        <x-form.input class="mb-3" name="company_profile_name" label="Company Name" icon="fa-solid fa-building" :value="$settings['company_name'] ?? 'InnovaCRM Inc.'" />
+                                        <x-form.input class="mb-3" type="email" name="company_profile_email" label="Company Email" icon="fa-solid fa-envelope" :value="$settings['company_email'] ?? 'info@innovacrm.com'" />
                                         <x-form.input class="mb-3" name="company_profile_phone" label="Phone Number" icon="fa-solid fa-phone" :value="$settings['company_phone'] ?? '+1 (800) 123-4567'" />
                                         <x-form.input class="mb-3" type="url" name="company_profile_website" label="Website" icon="fa-solid fa-globe" :value="$settings['company_website'] ?? 'https://www.innovacrm.com'" />
                                     </div>
@@ -791,59 +791,59 @@
                             <div class="card-body p-3">
                                 <div class="row g-3 gy-4">
                                     <div class="col-md-4">
-                                        <x-form.select name="localization_language" label="Application Language" icon="fa-solid fa-language">
-                                            <option value="en" selected>English</option>
-                                            <option value="es">Spanish</option>
-                                            <option value="fr">French</option>
-                                            <option value="de">German</option>
+                                        <x-form.select name="localization_language" label="Application Language" icon="fa-solid fa-language" :value="$settings['localization_language'] ?? 'en'">
+                                            <option value="en" {{ ($settings['localization_language'] ?? 'en') === 'en' ? 'selected' : '' }}>English</option>
+                                            <option value="es" {{ ($settings['localization_language'] ?? '') === 'es' ? 'selected' : '' }}>Spanish</option>
+                                            <option value="fr" {{ ($settings['localization_language'] ?? '') === 'fr' ? 'selected' : '' }}>French</option>
+                                            <option value="de" {{ ($settings['localization_language'] ?? '') === 'de' ? 'selected' : '' }}>German</option>
                                         </x-form.select>
                                     </div>
                                     <div class="col-md-4">
-                                        <x-form.select name="localization_date_format" label="Date Format" icon="fa-regular fa-calendar">
-                                            <option value="MMM D, YYYY" selected>Nov 5, 2026 (MMM D, YYYY)</option>
-                                            <option value="YYYY-MM-DD">2026-11-05 (YYYY-MM-DD)</option>
-                                            <option value="DD/MM/YYYY">05/11/2026 (DD/MM/YYYY)</option>
+                                        <x-form.select name="localization_date_format" label="Date Format" icon="fa-solid fa-calendar" :value="$settings['localization_date_format'] ?? 'MMM D, YYYY'">
+                                            <option value="MMM D, YYYY" {{ ($settings['localization_date_format'] ?? 'MMM D, YYYY') === 'MMM D, YYYY' ? 'selected' : '' }}>Nov 5, 2026 (MMM D, YYYY)</option>
+                                            <option value="YYYY-MM-DD" {{ ($settings['localization_date_format'] ?? '') === 'YYYY-MM-DD' ? 'selected' : '' }}>2026-11-05 (YYYY-MM-DD)</option>
+                                            <option value="DD/MM/YYYY" {{ ($settings['localization_date_format'] ?? '') === 'DD/MM/YYYY' ? 'selected' : '' }}>05/11/2026 (DD/MM/YYYY)</option>
                                         </x-form.select>
                                     </div>
                                     <div class="col-md-4">
-                                        <x-form.select name="localization_time_format" label="Time Format" icon="fa-regular fa-clock">
-                                            <option value="12" selected>12 Hours (02:30 PM)</option>
-                                            <option value="24">24 Hours (14:30)</option>
+                                        <x-form.select name="localization_time_format" label="Time Format" icon="fa-solid fa-clock" :value="$settings['localization_time_format'] ?? '12'">
+                                            <option value="12" {{ ($settings['localization_time_format'] ?? '12') === '12' ? 'selected' : '' }}>12 Hours (02:30 PM)</option>
+                                            <option value="24" {{ ($settings['localization_time_format'] ?? '') === '24' ? 'selected' : '' }}>24 Hours (14:30)</option>
                                         </x-form.select>
                                     </div>
                                     <div class="col-md-4">
-                                        <x-form.select name="localization_timezone" label="Time Zone" icon="fa-solid fa-earth-americas">
-                                            <option value="Asia/Kolkata" selected>(UTC+05:30) Asia/Kolkata</option>
-                                            <option value="UTC">(UTC+00:00) UTC / London</option>
-                                            <option value="America/New_York">(UTC-05:00) America/New_York</option>
+                                        <x-form.select name="localization_timezone" label="Time Zone" icon="fa-solid fa-earth-americas" :value="$settings['localization_timezone'] ?? 'Asia/Kolkata'">
+                                            <option value="Asia/Kolkata" {{ ($settings['localization_timezone'] ?? 'Asia/Kolkata') === 'Asia/Kolkata' ? 'selected' : '' }}>(UTC+05:30) Asia/Kolkata</option>
+                                            <option value="UTC" {{ ($settings['localization_timezone'] ?? '') === 'UTC' ? 'selected' : '' }}>(UTC+00:00) UTC / London</option>
+                                            <option value="America/New_York" {{ ($settings['localization_timezone'] ?? '') === 'America/New_York' ? 'selected' : '' }}>(UTC-05:00) America/New_York</option>
                                         </x-form.select>
                                     </div>
                                     <div class="col-md-4">
-                                        <x-form.select name="localization_first_day" label="First Day of Week" icon="fa-solid fa-calendar-day">
-                                            <option value="Monday" selected>Monday</option>
-                                            <option value="Sunday">Sunday</option>
-                                            <option value="Saturday">Saturday</option>
+                                        <x-form.select name="localization_first_day" label="First Day of Week" icon="fa-solid fa-calendar-day" :value="$settings['localization_first_day'] ?? 'Monday'">
+                                            <option value="Monday" {{ ($settings['localization_first_day'] ?? 'Monday') === 'Monday' ? 'selected' : '' }}>Monday</option>
+                                            <option value="Sunday" {{ ($settings['localization_first_day'] ?? '') === 'Sunday' ? 'selected' : '' }}>Sunday</option>
+                                            <option value="Saturday" {{ ($settings['localization_first_day'] ?? '') === 'Saturday' ? 'selected' : '' }}>Saturday</option>
                                         </x-form.select>
                                     </div>
                                     <div class="col-md-4">
-                                        <x-form.select name="localization_number_format" label="Number Format" icon="fa-solid fa-arrow-down-1-9">
-                                            <option value="1,234.56" selected>1,234.56</option>
-                                            <option value="1.234,56">1.234,56</option>
-                                            <option value="1 234,56">1 234,56</option>
+                                        <x-form.select name="localization_number_format" label="Number Format" icon="fa-solid fa-arrow-down-1-9" :value="$settings['localization_number_format'] ?? '1,234.56'">
+                                            <option value="1,234.56" {{ ($settings['localization_number_format'] ?? '1,234.56') === '1,234.56' ? 'selected' : '' }}>1,234.56</option>
+                                            <option value="1.234,56" {{ ($settings['localization_number_format'] ?? '') === '1.234,56' ? 'selected' : '' }}>1.234,56</option>
+                                            <option value="1 234,56" {{ ($settings['localization_number_format'] ?? '') === '1 234,56' ? 'selected' : '' }}>1 234,56</option>
                                         </x-form.select>
                                     </div>
                                     <div class="col-md-4">
-                                        <x-form.select name="localization_currency" label="Currency" icon="fa-solid fa-dollar-sign">
-                                            <option value="USD" selected>USD ($)</option>
-                                            <option value="EUR">EUR (€)</option>
-                                            <option value="GBP">GBP (£)</option>
-                                            <option value="INR">INR (₹)</option>
+                                        <x-form.select name="localization_currency" label="Currency" icon="fa-solid fa-dollar-sign" :value="$settings['localization_currency'] ?? 'USD'">
+                                            <option value="USD" {{ ($settings['localization_currency'] ?? 'USD') === 'USD' ? 'selected' : '' }}>USD ($)</option>
+                                            <option value="EUR" {{ ($settings['localization_currency'] ?? '') === 'EUR' ? 'selected' : '' }}>EUR (€)</option>
+                                            <option value="GBP" {{ ($settings['localization_currency'] ?? '') === 'GBP' ? 'selected' : '' }}>GBP (£)</option>
+                                            <option value="INR" {{ ($settings['localization_currency'] ?? '') === 'INR' ? 'selected' : '' }}>INR (₹)</option>
                                         </x-form.select>
                                     </div>
                                     <div class="col-md-4">
-                                        <x-form.select name="localization_measurement" label="Measurement System" icon="fa-solid fa-ruler-combined">
-                                            <option value="Metric" selected>Metric (kg, cm)</option>
-                                            <option value="Imperial">Imperial (lb, in)</option>
+                                        <x-form.select name="localization_measurement" label="Measurement System" icon="fa-solid fa-ruler-combined" :value="$settings['localization_measurement'] ?? 'Metric'">
+                                            <option value="Metric" {{ ($settings['localization_measurement'] ?? 'Metric') === 'Metric' ? 'selected' : '' }}>Metric (kg, cm)</option>
+                                            <option value="Imperial" {{ ($settings['localization_measurement'] ?? '') === 'Imperial' ? 'selected' : '' }}>Imperial (lb, in)</option>
                                         </x-form.select>
                                     </div>
                                 </div>
@@ -867,26 +867,26 @@
                                         <h6 class="fw-bold mb-3 text-body-emphasis"><i class="fa-solid fa-server me-2 text-primary"></i>SMTP Configuration</h6>
                                         <div class="row g-3">
                                             <div class="col-md-6">
-                                                <x-form.input name="smtp_driver" label="Mail Driver" icon="fa-solid fa-gear" value="SMTP" />
+                                                <x-form.input name="smtp_driver" label="Mail Driver" icon="fa-solid fa-gear" :value="$settings['smtp_driver'] ?? 'SMTP'" />
                                             </div>
                                             <div class="col-md-6">
-                                                <x-form.input type="number" name="smtp_port" label="Port" icon="fa-solid fa-network-wired" value="587" />
+                                                <x-form.input type="number" name="smtp_port" label="Port" icon="fa-solid fa-network-wired" :value="$settings['smtp_port'] ?? '587'" />
                                             </div>
                                             <div class="col-12">
-                                                <x-form.input name="smtp_host" label="Mail Host" icon="fa-solid fa-server" value="smtp.innovacrm.com" />
+                                                <x-form.input name="smtp_host" label="Mail Host" icon="fa-solid fa-server" :value="$settings['smtp_host'] ?? 'smtp.innovacrm.com'" />
                                             </div>
                                             <div class="col-md-6">
-                                                <x-form.select name="smtp_encryption" label="Encryption" icon="fa-solid fa-lock">
-                                                    <option value="TLS" selected>TLS</option>
-                                                    <option value="SSL">SSL</option>
-                                                    <option value="None">None</option>
+                                                <x-form.select name="smtp_encryption" label="Encryption" icon="fa-solid fa-lock" :value="$settings['smtp_encryption'] ?? 'TLS'">
+                                                    <option value="TLS" {{ ($settings['smtp_encryption'] ?? 'TLS') === 'TLS' ? 'selected' : '' }}>TLS</option>
+                                                    <option value="SSL" {{ ($settings['smtp_encryption'] ?? '') === 'SSL' ? 'selected' : '' }}>SSL</option>
+                                                    <option value="None" {{ ($settings['smtp_encryption'] ?? '') === 'None' ? 'selected' : '' }}>None</option>
                                                 </x-form.select>
                                             </div>
                                             <div class="col-md-6">
-                                                <x-form.input name="smtp_username" label="Username" icon="fa-solid fa-user" value="no-reply@innovacrm.com" />
+                                                <x-form.input name="smtp_username" label="Username" icon="fa-solid fa-user" :value="$settings['smtp_username'] ?? 'no-reply@innovacrm.com'" />
                                             </div>
                                             <div class="col-12">
-                                                <x-form.input type="password" name="smtp_password" label="Password" icon="fa-solid fa-key" value="••••••••••••" />
+                                                <x-form.input type="password" name="smtp_password" label="Password" icon="fa-solid fa-key" :value="$settings['smtp_password'] ?? '••••••••••••'" />
                                             </div>
                                             <div class="col-12 pt-1">
                                                 <button type="button" class="btn btn-outline-primary btn-sm rounded-3">
@@ -905,7 +905,8 @@
                                                     <p class="text-secondary small mb-0 fs-8">Disables custom default email addresses.</p>
                                                 </div>
                                                 <div class="form-check form-switch mb-0">
-                                                    <input class="form-check-input switch-green" type="checkbox" name="pref_sys_email" checked>
+                                                    <input type="hidden" name="pref_sys_email" value="0">
+                                                    <input class="form-check-input switch-green" type="checkbox" name="pref_sys_email" value="1" {{ ($settings['pref_sys_email'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 </div>
                                             </div>
                                             <div class="p-3 border rounded-3 bg-body-tertiary d-flex align-items-center justify-content-between">
@@ -914,7 +915,8 @@
                                                     <p class="text-secondary small mb-0 fs-8">Enable email notifications for system events.</p>
                                                 </div>
                                                 <div class="form-check form-switch mb-0">
-                                                    <input class="form-check-input switch-green" type="checkbox" name="pref_notifications" checked>
+                                                    <input type="hidden" name="pref_notifications" value="0">
+                                                    <input class="form-check-input switch-green" type="checkbox" name="pref_notifications" value="1" {{ ($settings['pref_notifications'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 </div>
                                             </div>
                                             <div class="p-3 border rounded-3 bg-body-tertiary d-flex align-items-center justify-content-between">
@@ -923,7 +925,8 @@
                                                     <p class="text-secondary small mb-0 fs-8">Require email verification for new users.</p>
                                                 </div>
                                                 <div class="form-check form-switch mb-0">
-                                                    <input class="form-check-input switch-green" type="checkbox" name="pref_verification" checked>
+                                                    <input type="hidden" name="pref_verification" value="0">
+                                                    <input class="form-check-input switch-green" type="checkbox" name="pref_verification" value="1" {{ ($settings['pref_verification'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 </div>
                                             </div>
                                             <div class="p-3 border rounded-3 bg-body-tertiary d-flex align-items-center justify-content-between">
@@ -932,7 +935,8 @@
                                                     <p class="text-secondary small mb-0 fs-8">Allow users to change their email address.</p>
                                                 </div>
                                                 <div class="form-check form-switch mb-0">
-                                                    <input class="form-check-input switch-green" type="checkbox" name="pref_change_email">
+                                                    <input type="hidden" name="pref_change_email" value="0">
+                                                    <input class="form-check-input switch-green" type="checkbox" name="pref_change_email" value="1" {{ ($settings['pref_change_email'] ?? '0') == '1' ? 'checked' : '' }}>
                                                 </div>
                                             </div>
                                         </div>
@@ -955,7 +959,7 @@
                             <div class="card-body p-3">
                                 <div class="row g-4">
                                     <div class="col-md-6 d-flex flex-column">
-                                        <h6 class="fw-bold mb-3 text-body-emphasis"><i class="fa-regular fa-bell me-2 text-primary"></i>Notification Channels</h6>
+                                        <h6 class="fw-bold mb-3 text-body-emphasis"><i class="fa-solid fa-bell me-2 text-primary"></i>Notification Channels</h6>
                                         <div class="d-flex flex-column gap-3 flex-grow-1 justify-content-between">
                                             <div class="p-3 border rounded-3 bg-body-tertiary d-flex align-items-center justify-content-between">
                                                 <div>
@@ -963,7 +967,8 @@
                                                     <p class="text-secondary small mb-0 fs-8">Receive notifications inside the application.</p>
                                                 </div>
                                                 <div class="form-check form-switch mb-0">
-                                                    <input class="form-check-input switch-green" type="checkbox" name="channel_inapp" checked>
+                                                    <input type="hidden" name="channel_inapp" value="0">
+                                                    <input class="form-check-input switch-green" type="checkbox" name="channel_inapp" value="1" {{ ($settings['channel_inapp'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 </div>
                                             </div>
                                             <div class="p-3 border rounded-3 bg-body-tertiary d-flex align-items-center justify-content-between">
@@ -972,7 +977,8 @@
                                                     <p class="text-secondary small mb-0 fs-8">Receive notifications via email.</p>
                                                 </div>
                                                 <div class="form-check form-switch mb-0">
-                                                    <input class="form-check-input switch-green" type="checkbox" name="channel_email" checked>
+                                                    <input type="hidden" name="channel_email" value="0">
+                                                    <input class="form-check-input switch-green" type="checkbox" name="channel_email" value="1" {{ ($settings['channel_email'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 </div>
                                             </div>
                                             <div class="p-3 border rounded-3 bg-body-tertiary d-flex align-items-center justify-content-between">
@@ -981,7 +987,8 @@
                                                     <p class="text-secondary small mb-0 fs-8">Receive notifications via SMS text.</p>
                                                 </div>
                                                 <div class="form-check form-switch mb-0">
-                                                    <input class="form-check-input switch-green" type="checkbox" name="channel_sms">
+                                                    <input type="hidden" name="channel_sms" value="0">
+                                                    <input class="form-check-input switch-green" type="checkbox" name="channel_sms" value="1" {{ ($settings['channel_sms'] ?? '0') == '1' ? 'checked' : '' }}>
                                                 </div>
                                             </div>
                                             <div class="p-3 border rounded-3 bg-body-tertiary d-flex align-items-center justify-content-between">
@@ -990,7 +997,8 @@
                                                     <p class="text-secondary small mb-0 fs-8">Receive push notifications in browser.</p>
                                                 </div>
                                                 <div class="form-check form-switch mb-0">
-                                                    <input class="form-check-input switch-green" type="checkbox" name="channel_browser" checked>
+                                                    <input type="hidden" name="channel_browser" value="0">
+                                                    <input class="form-check-input switch-green" type="checkbox" name="channel_browser" value="1" {{ ($settings['channel_browser'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 </div>
                                             </div>
                                         </div>
@@ -1000,35 +1008,43 @@
                                         <h6 class="fw-bold mb-3 text-body-emphasis"><i class="fa-solid fa-list-check me-2 text-primary"></i>Notification Preferences</h6>
                                         <div class="p-3 border rounded-3 bg-body-tertiary d-flex flex-column justify-content-between flex-grow-1">
                                             <div class="form-check py-1">
-                                                <input class="form-check-input" type="checkbox" name="notify_new_lead" id="notifyLead" checked>
+                                                <input type="hidden" name="notify_new_lead" value="0">
+                                                <input class="form-check-input" type="checkbox" name="notify_new_lead" id="notifyLead" value="1" {{ ($settings['notify_new_lead'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 <label class="form-check-label fs-7 fw-medium text-body-emphasis ms-1" for="notifyLead">New lead assigned</label>
                                             </div>
                                             <div class="form-check py-1">
-                                                <input class="form-check-input" type="checkbox" name="notify_deal_stage" id="notifyDeal" checked>
+                                                <input type="hidden" name="notify_deal_stage" value="0">
+                                                <input class="form-check-input" type="checkbox" name="notify_deal_stage" id="notifyDeal" value="1" {{ ($settings['notify_deal_stage'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 <label class="form-check-label fs-7 fw-medium text-body-emphasis ms-1" for="notifyDeal">Deal stage updated</label>
                                             </div>
                                             <div class="form-check py-1">
-                                                <input class="form-check-input" type="checkbox" name="notify_task_due" id="notifyTask" checked>
+                                                <input type="hidden" name="notify_task_due" value="0">
+                                                <input class="form-check-input" type="checkbox" name="notify_task_due" id="notifyTask" value="1" {{ ($settings['notify_task_due'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 <label class="form-check-label fs-7 fw-medium text-body-emphasis ms-1" for="notifyTask">Task due reminder</label>
                                             </div>
                                             <div class="form-check py-1">
-                                                <input class="form-check-input" type="checkbox" name="notify_new_deal" id="notifyNewDeal" checked>
+                                                <input type="hidden" name="notify_new_deal" value="0">
+                                                <input class="form-check-input" type="checkbox" name="notify_new_deal" id="notifyNewDeal" value="1" {{ ($settings['notify_new_deal'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 <label class="form-check-label fs-7 fw-medium text-body-emphasis ms-1" for="notifyNewDeal">New deal created</label>
                                             </div>
                                             <div class="form-check py-1">
-                                                <input class="form-check-input" type="checkbox" name="notify_new_user" id="notifyUser" checked>
+                                                <input type="hidden" name="notify_new_user" value="0">
+                                                <input class="form-check-input" type="checkbox" name="notify_new_user" id="notifyUser" value="1" {{ ($settings['notify_new_user'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 <label class="form-check-label fs-7 fw-medium text-body-emphasis ms-1" for="notifyUser">New user registered</label>
                                             </div>
                                             <div class="form-check py-1">
-                                                <input class="form-check-input" type="checkbox" name="notify_meeting" id="notifyMeeting" checked>
+                                                <input type="hidden" name="notify_meeting" value="0">
+                                                <input class="form-check-input" type="checkbox" name="notify_meeting" id="notifyMeeting" value="1" {{ ($settings['notify_meeting'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 <label class="form-check-label fs-7 fw-medium text-body-emphasis ms-1" for="notifyMeeting">Meeting scheduled</label>
                                             </div>
                                             <div class="form-check py-1">
-                                                <input class="form-check-input" type="checkbox" name="notify_invoice" id="notifyInvoice">
+                                                <input type="hidden" name="notify_invoice" value="0">
+                                                <input class="form-check-input" type="checkbox" name="notify_invoice" id="notifyInvoice" value="1" {{ ($settings['notify_invoice'] ?? '0') == '1' ? 'checked' : '' }}>
                                                 <label class="form-check-label fs-7 fw-medium text-body-emphasis ms-1" for="notifyInvoice">Invoice created</label>
                                             </div>
                                             <div class="form-check py-1">
-                                                <input class="form-check-input" type="checkbox" name="notify_payment" id="notifyPayment" checked>
+                                                <input type="hidden" name="notify_payment" value="0">
+                                                <input class="form-check-input" type="checkbox" name="notify_payment" id="notifyPayment" value="1" {{ ($settings['notify_payment'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 <label class="form-check-label fs-7 fw-medium text-body-emphasis ms-1" for="notifyPayment">Payment received</label>
                                             </div>
                                         </div>
@@ -1052,10 +1068,10 @@
                                 <div class="row g-4">
                                     <div class="col-md-6">
                                         <h6 class="fw-bold mb-3 text-body-emphasis"><i class="fa-solid fa-lock me-2 text-primary"></i>Password Policy</h6>
-                                        <x-form.select class="mb-3" name="sec_min_password" label="Minimum Password Length" icon="fa-solid fa-text-height">
-                                            <option value="8" selected>8 Characters</option>
-                                            <option value="10">10 Characters</option>
-                                            <option value="12">12 Characters</option>
+                                        <x-form.select class="mb-3" name="sec_min_password" label="Minimum Password Length" icon="fa-solid fa-text-height" :value="$settings['sec_min_password'] ?? '8'">
+                                            <option value="8" {{ ($settings['sec_min_password'] ?? '8') == '8' ? 'selected' : '' }}>8 Characters</option>
+                                            <option value="10" {{ ($settings['sec_min_password'] ?? '') == '10' ? 'selected' : '' }}>10 Characters</option>
+                                            <option value="12" {{ ($settings['sec_min_password'] ?? '') == '12' ? 'selected' : '' }}>12 Characters</option>
                                         </x-form.select>
                                         <div class="p-3 border rounded-3 bg-body-tertiary mb-3 d-flex align-items-center justify-content-between">
                                             <div>
@@ -1063,7 +1079,8 @@
                                                 <p class="text-secondary small mb-0 fs-8">Must contain at least 1 numeric character.</p>
                                             </div>
                                             <div class="form-check form-switch mb-0">
-                                                <input class="form-check-input switch-green" type="checkbox" name="sec_req_number" checked>
+                                                <input type="hidden" name="sec_req_number" value="0">
+                                                <input class="form-check-input switch-green" type="checkbox" name="sec_req_number" value="1" {{ ($settings['sec_req_number'] ?? '1') == '1' ? 'checked' : '' }}>
                                             </div>
                                         </div>
                                         <div class="p-3 border rounded-3 bg-body-tertiary mb-3 d-flex align-items-center justify-content-between">
@@ -1072,14 +1089,15 @@
                                                 <p class="text-secondary small mb-0 fs-8">Must contain at least 1 symbol.</p>
                                             </div>
                                             <div class="form-check form-switch mb-0">
-                                                <input class="form-check-input switch-green" type="checkbox" name="sec_req_special" checked>
+                                                <input type="hidden" name="sec_req_special" value="0">
+                                                <input class="form-check-input switch-green" type="checkbox" name="sec_req_special" value="1" {{ ($settings['sec_req_special'] ?? '1') == '1' ? 'checked' : '' }}>
                                             </div>
                                         </div>
-                                        <x-form.select name="sec_password_expiry" label="Password Expiry" icon="fa-solid fa-calendar-xmark">
-                                            <option value="90" selected>90 Days</option>
-                                            <option value="30">30 Days</option>
-                                            <option value="60">60 Days</option>
-                                            <option value="0">Never</option>
+                                        <x-form.select name="sec_password_expiry" label="Password Expiry" icon="fa-solid fa-calendar-xmark" :value="$settings['sec_password_expiry'] ?? '90'">
+                                            <option value="90" {{ ($settings['sec_password_expiry'] ?? '90') == '90' ? 'selected' : '' }}>90 Days</option>
+                                            <option value="30" {{ ($settings['sec_password_expiry'] ?? '') == '30' ? 'selected' : '' }}>30 Days</option>
+                                            <option value="60" {{ ($settings['sec_password_expiry'] ?? '') == '60' ? 'selected' : '' }}>60 Days</option>
+                                            <option value="0" {{ ($settings['sec_password_expiry'] ?? '') == '0' ? 'selected' : '' }}>Never</option>
                                         </x-form.select>
                                     </div>
 
@@ -1091,7 +1109,8 @@
                                                 <p class="text-secondary small mb-0 fs-8">Mandatory 2FA authentication.</p>
                                             </div>
                                             <div class="form-check form-switch mb-0">
-                                                <input class="form-check-input switch-green" type="checkbox" name="sec_req_2fa">
+                                                <input type="hidden" name="sec_req_2fa" value="0">
+                                                <input class="form-check-input switch-green" type="checkbox" name="sec_req_2fa" value="1" {{ ($settings['sec_req_2fa'] ?? '0') == '1' ? 'checked' : '' }}>
                                             </div>
                                         </div>
                                         <div class="p-3 border rounded-3 bg-body-tertiary mb-4 d-flex align-items-center justify-content-between">
@@ -1100,20 +1119,21 @@
                                                 <p class="text-secondary small mb-0 fs-8">Optional 2FA for user accounts.</p>
                                             </div>
                                             <div class="form-check form-switch mb-0">
-                                                <input class="form-check-input switch-green" type="checkbox" name="sec_allow_2fa" checked>
+                                                <input type="hidden" name="sec_allow_2fa" value="0">
+                                                <input class="form-check-input switch-green" type="checkbox" name="sec_allow_2fa" value="1" {{ ($settings['sec_allow_2fa'] ?? '1') == '1' ? 'checked' : '' }}>
                                             </div>
                                         </div>
 
-                                        <h6 class="fw-bold mb-3 text-body-emphasis"><i class="fa-regular fa-clock me-2 text-primary"></i>Session Settings</h6>
-                                        <x-form.select class="mb-3" name="sec_session_timeout" label="Session Timeout" icon="fa-regular fa-hourglass-half">
-                                            <option value="1h" selected>1 Hour</option>
-                                            <option value="30m">30 Minutes</option>
-                                            <option value="2h">2 Hours</option>
+                                        <h6 class="fw-bold mb-3 text-body-emphasis"><i class="fa-solid fa-clock me-2 text-primary"></i>Session Settings</h6>
+                                        <x-form.select class="mb-3" name="sec_session_timeout" label="Session Timeout" icon="fa-solid fa-hourglass-half" :value="$settings['sec_session_timeout'] ?? '1h'">
+                                            <option value="1h" {{ ($settings['sec_session_timeout'] ?? '1h') === '1h' ? 'selected' : '' }}>1 Hour</option>
+                                            <option value="30m" {{ ($settings['sec_session_timeout'] ?? '') === '30m' ? 'selected' : '' }}>30 Minutes</option>
+                                            <option value="2h" {{ ($settings['sec_session_timeout'] ?? '') === '2h' ? 'selected' : '' }}>2 Hours</option>
                                         </x-form.select>
-                                        <x-form.select name="sec_remember_duration" label="Remember Me Duration" icon="fa-regular fa-clock">
-                                            <option value="7d" selected>7 Days</option>
-                                            <option value="1d">1 Day</option>
-                                            <option value="30d">30 Days</option>
+                                        <x-form.select name="sec_remember_duration" label="Remember Me Duration" icon="fa-solid fa-clock" :value="$settings['sec_remember_duration'] ?? '7d'">
+                                            <option value="7d" {{ ($settings['sec_remember_duration'] ?? '7d') === '7d' ? 'selected' : '' }}>7 Days</option>
+                                            <option value="1d" {{ ($settings['sec_remember_duration'] ?? '') === '1d' ? 'selected' : '' }}>1 Day</option>
+                                            <option value="30d" {{ ($settings['sec_remember_duration'] ?? '') === '30d' ? 'selected' : '' }}>30 Days</option>
                                         </x-form.select>
                                     </div>
                                 </div>
@@ -1163,8 +1183,8 @@
                                                 <td><span class="badge bg-success-subtle text-success rounded-pill px-3 py-1"><i class="fa-solid fa-circle fs-xs me-1"></i>Active</span></td>
                                                 <td class="text-secondary fs-8">May 5, 2026, 10:30 AM</td>
                                                 <td class="pe-4 text-end">
-                                                    <button type="button" class="btn btn-sm btn-icon btn-ghost-secondary rounded-circle"><i class="fa-regular fa-pen-to-square"></i></button>
-                                                    <button type="button" class="btn btn-sm btn-icon btn-ghost-danger rounded-circle"><i class="fa-regular fa-trash-can"></i></button>
+                                                    <button type="button" class="btn btn-sm btn-icon btn-ghost-secondary rounded-circle"><i class="fa-solid fa-pen-to-square"></i></button>
+                                                    <button type="button" class="btn btn-sm btn-icon btn-ghost-danger rounded-circle"><i class="fa-solid fa-trash-can"></i></button>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -1181,8 +1201,8 @@
                                                 <td><span class="badge bg-success-subtle text-success rounded-pill px-3 py-1"><i class="fa-solid fa-circle fs-xs me-1"></i>Active</span></td>
                                                 <td class="text-secondary fs-8">May 5, 2026, 09:15 AM</td>
                                                 <td class="pe-4 text-end">
-                                                    <button type="button" class="btn btn-sm btn-icon btn-ghost-secondary rounded-circle"><i class="fa-regular fa-pen-to-square"></i></button>
-                                                    <button type="button" class="btn btn-sm btn-icon btn-ghost-danger rounded-circle"><i class="fa-regular fa-trash-can"></i></button>
+                                                    <button type="button" class="btn btn-sm btn-icon btn-ghost-secondary rounded-circle"><i class="fa-solid fa-pen-to-square"></i></button>
+                                                    <button type="button" class="btn btn-sm btn-icon btn-ghost-danger rounded-circle"><i class="fa-solid fa-trash-can"></i></button>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -1199,8 +1219,8 @@
                                                 <td><span class="badge bg-success-subtle text-success rounded-pill px-3 py-1"><i class="fa-solid fa-circle fs-xs me-1"></i>Active</span></td>
                                                 <td class="text-secondary fs-8">May 4, 2026, 04:45 PM</td>
                                                 <td class="pe-4 text-end">
-                                                    <button type="button" class="btn btn-sm btn-icon btn-ghost-secondary rounded-circle"><i class="fa-regular fa-pen-to-square"></i></button>
-                                                    <button type="button" class="btn btn-sm btn-icon btn-ghost-danger rounded-circle"><i class="fa-regular fa-trash-can"></i></button>
+                                                    <button type="button" class="btn btn-sm btn-icon btn-ghost-secondary rounded-circle"><i class="fa-solid fa-pen-to-square"></i></button>
+                                                    <button type="button" class="btn btn-sm btn-icon btn-ghost-danger rounded-circle"><i class="fa-solid fa-trash-can"></i></button>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -1217,8 +1237,8 @@
                                                 <td><span class="badge bg-secondary-subtle text-secondary rounded-pill px-3 py-1"><i class="fa-solid fa-circle fs-xs me-1"></i>Inactive</span></td>
                                                 <td class="text-secondary fs-8">Apr 30, 2026, 11:20 AM</td>
                                                 <td class="pe-4 text-end">
-                                                    <button type="button" class="btn btn-sm btn-icon btn-ghost-secondary rounded-circle"><i class="fa-regular fa-pen-to-square"></i></button>
-                                                    <button type="button" class="btn btn-sm btn-icon btn-ghost-danger rounded-circle"><i class="fa-regular fa-trash-can"></i></button>
+                                                    <button type="button" class="btn btn-sm btn-icon btn-ghost-secondary rounded-circle"><i class="fa-solid fa-pen-to-square"></i></button>
+                                                    <button type="button" class="btn btn-sm btn-icon btn-ghost-danger rounded-circle"><i class="fa-solid fa-trash-can"></i></button>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -1241,24 +1261,24 @@
                             <div class="card-body p-3">
                                 <div class="row g-4">
                                     <div class="col-md-6">
-                                        <x-form.select class="mb-3" name="crm_default_lead_status" label="Default Lead Status" icon="fa-solid fa-filter">
-                                            <option value="New" selected>New</option>
-                                            <option value="Contacted">Contacted</option>
-                                            <option value="Qualified">Qualified</option>
+                                        <x-form.select class="mb-3" name="crm_default_lead_status" label="Default Lead Status" icon="fa-solid fa-filter" :value="$settings['crm_default_lead_status'] ?? 'New'">
+                                            <option value="New" {{ ($settings['crm_default_lead_status'] ?? 'New') === 'New' ? 'selected' : '' }}>New</option>
+                                            <option value="Contacted" {{ ($settings['crm_default_lead_status'] ?? '') === 'Contacted' ? 'selected' : '' }}>Contacted</option>
+                                            <option value="Qualified" {{ ($settings['crm_default_lead_status'] ?? '') === 'Qualified' ? 'selected' : '' }}>Qualified</option>
                                         </x-form.select>
-                                        <x-form.select class="mb-3" name="crm_default_deal_stage" label="Default Deal Stage" icon="fa-solid fa-chart-line">
-                                            <option value="Prospecting" selected>Prospecting</option>
-                                            <option value="Qualification">Qualification</option>
-                                            <option value="Proposal">Proposal</option>
+                                        <x-form.select class="mb-3" name="crm_default_deal_stage" label="Default Deal Stage" icon="fa-solid fa-chart-line" :value="$settings['crm_default_deal_stage'] ?? 'Prospecting'">
+                                            <option value="Prospecting" {{ ($settings['crm_default_deal_stage'] ?? 'Prospecting') === 'Prospecting' ? 'selected' : '' }}>Prospecting</option>
+                                            <option value="Qualification" {{ ($settings['crm_default_deal_stage'] ?? '') === 'Qualification' ? 'selected' : '' }}>Qualification</option>
+                                            <option value="Proposal" {{ ($settings['crm_default_deal_stage'] ?? '') === 'Proposal' ? 'selected' : '' }}>Proposal</option>
                                         </x-form.select>
-                                        <x-form.select class="mb-3" name="crm_default_source" label="Default Source" icon="fa-solid fa-globe">
-                                            <option value="Website" selected>Website</option>
-                                            <option value="Referral">Referral</option>
-                                            <option value="Cold Call">Cold Call</option>
+                                        <x-form.select class="mb-3" name="crm_default_source" label="Default Source" icon="fa-solid fa-globe" :value="$settings['crm_default_source'] ?? 'Website'">
+                                            <option value="Website" {{ ($settings['crm_default_source'] ?? 'Website') === 'Website' ? 'selected' : '' }}>Website</option>
+                                            <option value="Referral" {{ ($settings['crm_default_source'] ?? '') === 'Referral' ? 'selected' : '' }}>Referral</option>
+                                            <option value="Cold Call" {{ ($settings['crm_default_source'] ?? '') === 'Cold Call' ? 'selected' : '' }}>Cold Call</option>
                                         </x-form.select>
-                                        <x-form.select name="crm_lead_conversion" label="Lead Conversion" icon="fa-solid fa-arrows-rotate">
-                                            <option value="Create Contact & Deal" selected>Create Contact & Deal</option>
-                                            <option value="Create Contact Only">Create Contact Only</option>
+                                        <x-form.select name="crm_lead_conversion" label="Lead Conversion" icon="fa-solid fa-arrows-rotate" :value="$settings['crm_lead_conversion'] ?? 'Create Contact & Deal'">
+                                            <option value="Create Contact & Deal" {{ ($settings['crm_lead_conversion'] ?? 'Create Contact & Deal') === 'Create Contact & Deal' ? 'selected' : '' }}>Create Contact & Deal</option>
+                                            <option value="Create Contact Only" {{ ($settings['crm_lead_conversion'] ?? '') === 'Create Contact Only' ? 'selected' : '' }}>Create Contact Only</option>
                                         </x-form.select>
                                     </div>
 
@@ -1270,7 +1290,8 @@
                                                     <p class="text-secondary small mb-0 fs-8">Automatically score incoming leads.</p>
                                                 </div>
                                                 <div class="form-check form-switch mb-0">
-                                                    <input class="form-check-input switch-green" type="checkbox" name="crm_enable_scoring" checked>
+                                                    <input type="hidden" name="crm_enable_scoring" value="0">
+                                                    <input class="form-check-input switch-green" type="checkbox" name="crm_enable_scoring" value="1" {{ ($settings['crm_enable_scoring'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 </div>
                                             </div>
                                             <div class="p-3 border rounded-3 bg-body-tertiary d-flex align-items-center justify-content-between">
@@ -1279,7 +1300,8 @@
                                                     <p class="text-secondary small mb-0 fs-8">Forecast revenue based on deal probability.</p>
                                                 </div>
                                                 <div class="form-check form-switch mb-0">
-                                                    <input class="form-check-input switch-green" type="checkbox" name="crm_enable_forecast" checked>
+                                                    <input type="hidden" name="crm_enable_forecast" value="0">
+                                                    <input class="form-check-input switch-green" type="checkbox" name="crm_enable_forecast" value="1" {{ ($settings['crm_enable_forecast'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 </div>
                                             </div>
                                             <div class="p-3 border rounded-3 bg-body-tertiary d-flex align-items-center justify-content-between">
@@ -1288,7 +1310,8 @@
                                                     <p class="text-secondary small mb-0 fs-8">Send reminders for upcoming tasks & meetings.</p>
                                                 </div>
                                                 <div class="form-check form-switch mb-0">
-                                                    <input class="form-check-input switch-green" type="checkbox" name="crm_enable_reminders" checked>
+                                                    <input type="hidden" name="crm_enable_reminders" value="0">
+                                                    <input class="form-check-input switch-green" type="checkbox" name="crm_enable_reminders" value="1" {{ ($settings['crm_enable_reminders'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 </div>
                                             </div>
                                             <div class="p-3 border rounded-3 bg-body-tertiary d-flex align-items-center justify-content-between">
@@ -1297,7 +1320,8 @@
                                                     <p class="text-secondary small mb-0 fs-8">Round-robin lead assignment to sales team.</p>
                                                 </div>
                                                 <div class="form-check form-switch mb-0">
-                                                    <input class="form-check-input switch-green" type="checkbox" name="crm_auto_assign">
+                                                    <input type="hidden" name="crm_auto_assign" value="0">
+                                                    <input class="form-check-input switch-green" type="checkbox" name="crm_auto_assign" value="1" {{ ($settings['crm_auto_assign'] ?? '0') == '1' ? 'checked' : '' }}>
                                                 </div>
                                             </div>
                                         </div>
@@ -1457,12 +1481,12 @@
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td class="ps-3 py-2 fw-semibold fs-7"><i class="fa-regular fa-file-zipper me-2 text-primary"></i>backup_2026_05_04_233000.zip</td>
+                                                    <td class="ps-3 py-2 fw-semibold fs-7"><i class="fa-solid fa-file-zipper me-2 text-primary"></i>backup_2026_05_04_233000.zip</td>
                                                     <td class="py-2 fs-7 text-secondary">48.6 MB</td>
                                                     <td class="py-2 fs-7 text-secondary">May 4, 2026, 11:30 PM</td>
                                                     <td class="pe-3 py-2 text-end">
                                                         <button type="button" class="btn btn-sm btn-icon btn-ghost-primary rounded-circle" title="Download"><i class="fa-solid fa-download"></i></button>
-                                                        <button type="button" class="btn btn-sm btn-icon btn-ghost-danger rounded-circle" title="Delete"><i class="fa-regular fa-trash-can"></i></button>
+                                                        <button type="button" class="btn btn-sm btn-icon btn-ghost-danger rounded-circle" title="Delete"><i class="fa-solid fa-trash-can"></i></button>
                                                     </td>
                                                 </tr>
                                             </tbody>
