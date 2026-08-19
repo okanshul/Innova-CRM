@@ -3212,7 +3212,23 @@ span.flatpickr-weekday {
     }
 }
 
-/* Custom Green Form Switch */
+/* Custom Form Checkbox & Switch Styles */
+.form-check-input {
+    cursor: pointer;
+    border-color: #cbd5e1;
+    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+    &:checked {
+        background-color: #6366f1;
+        border-color: #6366f1;
+    }
+
+    &:focus {
+        border-color: #818cf8;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+}
+
 .form-check-input.switch-green {
     width: 2.5rem;
     height: 1.35rem;
@@ -3221,12 +3237,12 @@ span.flatpickr-weekday {
     border-color: transparent;
 
     &:checked {
-        background-color: #16a34a;
-        border-color: #16a34a;
+        background-color: #6366f1;
+        border-color: #6366f1;
     }
 
     &:focus {
-        box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
     }
 }
 
@@ -3387,6 +3403,20 @@ span.flatpickr-weekday {
                 background-color: #1e293b;
                 border-color: rgba(255, 255, 255, 0.12);
                 color: #94a3b8;
+            }
+        }
+
+        .form-check-input {
+            background-color: #0f172a;
+            border-color: rgba(255, 255, 255, 0.2);
+
+            &:checked {
+                background-color: #6366f1;
+                border-color: #6366f1;
+            }
+
+            &:focus {
+                box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
             }
         }
     }
