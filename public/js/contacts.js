@@ -52,10 +52,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function getContactStatusBadge(status) {
         const s = (status || '').toLowerCase();
-        if (s === 'customer') return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #dcfce7; color: #16a34a; font-size: 0.75rem;">Customer</span>`;
-        if (s === 'prospect') return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #e0e7ff; color: #4338ca; font-size: 0.75rem;">Prospect</span>`;
-        if (s === 'lead') return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #e0f2fe; color: #0369a1; font-size: 0.75rem;">Lead</span>`;
-        return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #fee2e2; color: #dc2626; font-size: 0.75rem;">Inactive</span>`;
+        if (s === 'customer') return `<span class="badge rounded-pill fw-semibold px-3 py-1 badge-status-customer" style="font-size: 0.75rem;">Customer</span>`;
+        if (s === 'prospect') return `<span class="badge rounded-pill fw-semibold px-3 py-1 badge-status-prospect" style="font-size: 0.75rem;">Prospect</span>`;
+        if (s === 'lead') return `<span class="badge rounded-pill fw-semibold px-3 py-1 badge-status-lead" style="font-size: 0.75rem;">Lead</span>`;
+        return `<span class="badge rounded-pill fw-semibold px-3 py-1 badge-status-inactive" style="font-size: 0.75rem;">Inactive</span>`;
     }
 
     function syncMobilePagination() {
@@ -141,6 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <td class="py-3 text-secondary" style="font-size: 0.85rem;">${item.email || 'N/A'}</td>
                 <td class="py-3 text-secondary" style="font-size: 0.85rem;">${item.phone || 'N/A'}</td>
                 <td class="py-3 text-secondary" style="font-size: 0.85rem;">${item.company ? item.company.name : 'N/A'}</td>
+                <td class="py-3 text-secondary" style="font-size: 0.85rem;">${item.job_title || 'N/A'}</td>
                 <td class="py-3">${getContactStatusBadge(item.status)}</td>
                 <td class="text-end pe-3 py-3">
                     <div class="d-inline-flex align-items-center justify-content-end">

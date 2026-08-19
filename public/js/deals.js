@@ -52,9 +52,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function getDealStatusBadge(status) {
         const s = (status || '').toLowerCase();
-        if (s === 'won' || s === 'closed_won') return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #dcfce7; color: #16a34a; font-size: 0.75rem;">Closed Won</span>`;
-        if (s === 'lost' || s === 'closed_lost') return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #fee2e2; color: #dc2626; font-size: 0.75rem;">Closed Lost</span>`;
-        return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #e0f2fe; color: #0369a1; font-size: 0.75rem;">Open</span>`;
+        if (s === 'won' || s === 'closed_won') return `<span class="badge rounded-pill fw-semibold px-3 py-1 badge-status-won" style="font-size: 0.75rem;">Closed Won</span>`;
+        if (s === 'lost' || s === 'closed_lost') return `<span class="badge rounded-pill fw-semibold px-3 py-1 badge-status-lost" style="font-size: 0.75rem;">Closed Lost</span>`;
+        return `<span class="badge rounded-pill fw-semibold px-3 py-1 badge-status-open" style="font-size: 0.75rem;">Open</span>`;
     }
 
     function getStageBadge(stage) {
@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const collapseId = `dealCollapse_${item.id}`;
 
             const card = document.createElement('div');
-            card.className = 'card border-0 shadow-sm rounded-3 mb-2 overflow-hidden';
+            card.className = 'border-bottom mobile-card-item bg-body';
 
             let actionButtonsHtml = `
                 <a href="/deals/${item.id}" class="action-btn action-btn-view me-1" title="View Details">
@@ -211,86 +211,85 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             card.innerHTML = `
-                <div class="border-bottom mobile-card-item bg-body" style="min-width: 0;">
-                    <div class="d-flex align-items-center justify-content-between p-3 mobile-card-header" 
-                         data-bs-target="#${collapseId}" 
-                         aria-expanded="false" 
-                         aria-controls="${collapseId}"
-                         style="cursor: pointer; min-width: 0;">
-                        
-                        <div class="min-w-0 flex-grow-1 me-2" style="min-width: 0;">
-                            <div class="fw-bold text-body-emphasis text-truncate" style="font-size: 0.95rem;">
-                                ${item.title}
+                <div class="d-flex align-items-center justify-content-between p-3 mobile-card-header" 
+                     data-bs-toggle="collapse"
+                     data-bs-target="#${collapseId}" 
+                     aria-expanded="false" 
+                     aria-controls="${collapseId}"
+                     style="cursor: pointer; min-width: 0;">
+                    
+                    <div class="min-w-0 flex-grow-1 me-2" style="min-width: 0;">
+                        <div class="fw-bold text-body-emphasis text-truncate" style="font-size: 0.95rem;">
+                            ${item.title}
+                        </div>
+                        <div class="fw-bold text-success text-truncate mt-0.5" style="font-size: 0.825rem;">
+                            ${formattedValue}
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2 flex-shrink-0 ms-auto">
+                        ${statusBadge}
+                        <button class="btn text-secondary p-0 border-0 shadow-none text-decoration-none lh-1 mobile-action-toggle ms-1" 
+                                type="button" 
+                                aria-label="Toggle Details">
+                            <i class="fa-solid fa-chevron-right chevron-icon" style="color: #6366f1; font-size: 0.85rem;"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="collapse" id="${collapseId}">
+                    <div class="p-3 py-2 bg-body border-top" style="font-size: 0.825rem;">
+                        <div class="d-flex align-items-center justify-content-between py-1">
+                            <div class="fw-semibold text-body-emphasis d-flex align-items-center me-2" style="font-size: 0.8rem;">
+                                <i class="fa-solid fa-dollar-sign me-1" style="color: #6366f1; width: 16px;"></i> Deal Value :
                             </div>
-                            <div class="fw-bold text-success text-truncate" style="font-size: 0.825rem;">
+                            <div class="fw-bold text-success text-end">
                                 ${formattedValue}
                             </div>
                         </div>
 
-                        <div class="d-flex align-items-center gap-2 flex-shrink-0 ms-auto">
-                            ${statusBadge}
-                            <button class="btn text-secondary p-0 border-0 shadow-none text-decoration-none lh-1 mobile-action-toggle ms-1" 
-                                    type="button" 
-                                    aria-label="Toggle Details">
-                                <i class="fa-solid fa-chevron-right chevron-icon" style="color: #6366f1; font-size: 0.85rem;"></i>
-                            </button>
+                        <div class="d-flex align-items-center justify-content-between py-1">
+                            <div class="fw-semibold text-body-emphasis d-flex align-items-center me-2" style="font-size: 0.8rem;">
+                                <i class="fa-solid fa-diagram-project me-1" style="color: #6366f1; width: 16px;"></i> Stage :
+                            </div>
+                            <div class="fw-medium text-end">
+                                ${getStageBadge(item.stage)}
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="collapse" id="${collapseId}">
-                        <div class="p-3 py-2 bg-body border-top" style="font-size: 0.825rem;">
-                            <div class="d-flex align-items-center justify-content-between py-1">
-                                <div class="fw-semibold text-body-emphasis d-flex align-items-center me-2" style="font-size: 0.8rem;">
-                                    <i class="fa-solid fa-dollar-sign me-1" style="color: #6366f1; width: 16px;"></i> Deal Value :
-                                </div>
-                                <div class="fw-bold text-success text-end">
-                                    ${formattedValue}
-                                </div>
+                        <div class="d-flex align-items-center justify-content-between py-1">
+                            <div class="fw-semibold text-body-emphasis d-flex align-items-center me-2" style="font-size: 0.8rem;">
+                                <i class="fa-solid fa-building me-1" style="color: #6366f1; width: 16px;"></i> Company/Contact :
                             </div>
-
-                            <div class="d-flex align-items-center justify-content-between py-1">
-                                <div class="fw-semibold text-body-emphasis d-flex align-items-center me-2" style="font-size: 0.8rem;">
-                                    <i class="fa-solid fa-diagram-project me-1" style="color: #6366f1; width: 16px;"></i> Stage :
-                                </div>
-                                <div class="fw-medium text-end">
-                                    ${getStageBadge(item.stage)}
-                                </div>
+                            <div class="fw-medium text-body-secondary text-end">
+                                ${item.company ? item.company.name : (item.contact ? item.contact.first_name : 'N/A')}
                             </div>
+                        </div>
 
-                            <div class="d-flex align-items-center justify-content-between py-1">
-                                <div class="fw-semibold text-body-emphasis d-flex align-items-center me-2" style="font-size: 0.8rem;">
-                                    <i class="fa-solid fa-building me-1" style="color: #6366f1; width: 16px;"></i> Company/Contact :
-                                </div>
-                                <div class="fw-medium text-body-secondary text-end">
-                                    ${item.company ? item.company.name : (item.contact ? item.contact.first_name : 'N/A')}
-                                </div>
+                        <div class="d-flex align-items-center justify-content-between py-1">
+                            <div class="fw-semibold text-body-emphasis d-flex align-items-center me-2" style="font-size: 0.8rem;">
+                                <i class="fa-solid fa-calendar-days me-1" style="color: #6366f1; width: 16px;"></i> Expected Close :
                             </div>
-
-                            <div class="d-flex align-items-center justify-content-between py-1">
-                                <div class="fw-semibold text-body-emphasis d-flex align-items-center me-2" style="font-size: 0.8rem;">
-                                    <i class="fa-solid fa-calendar-days me-1" style="color: #6366f1; width: 16px;"></i> Expected Close :
-                                </div>
-                                <div class="fw-medium text-body-secondary text-end">
-                                    ${formatDate(item.expected_close_date)}
-                                </div>
+                            <div class="fw-medium text-body-secondary text-end">
+                                ${formatDate(item.expected_close_date)}
                             </div>
+                        </div>
 
-                            <div class="d-flex align-items-center justify-content-between py-1">
-                                <div class="fw-semibold text-body-emphasis d-flex align-items-center me-2" style="font-size: 0.8rem;">
-                                    <i class="fa-solid fa-chart-line me-1" style="color: #6366f1; width: 16px;"></i> Status :
-                                </div>
-                                <div class="text-end">
-                                    ${statusBadge}
-                                </div>
+                        <div class="d-flex align-items-center justify-content-between py-1">
+                            <div class="fw-semibold text-body-emphasis d-flex align-items-center me-2" style="font-size: 0.8rem;">
+                                <i class="fa-solid fa-chart-line me-1" style="color: #6366f1; width: 16px;"></i> Status :
                             </div>
+                            <div class="text-end">
+                                ${statusBadge}
+                            </div>
+                        </div>
 
-                            <div class="d-flex align-items-center justify-content-between py-1">
-                                <div class="fw-semibold text-body-emphasis d-flex align-items-center me-2" style="font-size: 0.8rem;">
-                                    <i class="fa-solid fa-gear me-1" style="color: #6366f1; width: 16px;"></i> Actions :
-                                </div>
-                                <div class="d-inline-flex align-items-center ms-auto">
-                                    ${actionButtonsHtml}
-                                </div>
+                        <div class="d-flex align-items-center justify-content-between py-1">
+                            <div class="fw-semibold text-body-emphasis d-flex align-items-center me-2" style="font-size: 0.8rem;">
+                                <i class="fa-solid fa-gear me-1" style="color: #6366f1; width: 16px;"></i> Actions :
+                            </div>
+                            <div class="d-inline-flex align-items-center ms-auto">
+                                ${actionButtonsHtml}
                             </div>
                         </div>
                     </div>

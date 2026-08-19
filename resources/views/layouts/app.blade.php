@@ -53,6 +53,7 @@
     </div>
 
     @include('partials.mobile-nav')
+    @include('partials.global-search')
 
     <!-- SweetAlert2 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -62,6 +63,7 @@
 
     <!-- Shared App Utilities JS -->
     <script src="{{ asset('js/app-utils.js') }}"></script>
+    <script src="{{ asset('js/global-search.js') }}"></script>
 
     {{ $scripts ?? '' }}
     @stack('scripts')

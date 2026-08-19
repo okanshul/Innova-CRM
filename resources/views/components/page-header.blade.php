@@ -2,8 +2,8 @@
     'icon' => null,
     'title',
     'subtitle' => null,
-    'iconBg' => '#f3e8ff',
-    'iconColor' => '#7e22ce',
+    'iconBg' => null,
+    'iconColor' => null,
     'cardHeader' => true,
     'borderBottom' => true,
 ])
@@ -13,8 +13,8 @@
         {{ $attributes->merge(['class' => 'card-header bg-body p-3 d-flex flex-column flex-lg-row align-items-start align-items-lg-center justify-content-between gap-3 ' . ($borderBottom ? 'border-bottom' : 'border-0')]) }}>
         <div class="d-flex align-items-center gap-3">
             @if ($icon)
-                <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
-                    style="background: {{ $iconBg }}; color: {{ $iconColor }}; width: 44px; height: 44px;">
+                <div class="page-header-icon rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                    style="width: 44px; height: 44px; {{ $iconBg ? 'background: ' . $iconBg . ' !important;' : '' }} {{ $iconColor ? 'color: ' . $iconColor . ' !important;' : '' }}">
                     <i class="{{ $icon }} fs-5"></i>
                 </div>
             @endif
@@ -36,8 +36,8 @@
         {{ $attributes->merge(['class' => 'd-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-3 mb-4']) }}>
         <div class="d-flex align-items-center gap-3">
             @if ($icon)
-                <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
-                    style="background: {{ $iconBg }}; color: {{ $iconColor }}; width: 44px; height: 44px;">
+                <div class="page-header-icon rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                    style="width: 44px; height: 44px; {{ $iconBg ? 'background: ' . $iconBg . ' !important;' : '' }} {{ $iconColor ? 'color: ' . $iconColor . ' !important;' : '' }}">
                     <i class="{{ $icon }} fs-5"></i>
                 </div>
             @endif

@@ -15,11 +15,14 @@
         </a>
 
         <!-- Desktop Search Bar -->
-        <div class="input-group d-none d-md-flex align-items-center bg-body-tertiary rounded-3 px-2 py-1 border ms-2"
-            style="width: 380px;">
+        <div class="input-group d-none d-md-flex align-items-center bg-body-tertiary rounded-3 p-2 border ms-2 cursor-pointer"
+            id="headerSearchTrigger"
+            data-bs-toggle="modal" data-bs-target="#globalSearchModal"
+            style="width: 380px; cursor: pointer;">
             <i class="fa-solid fa-magnifying-glass text-secondary mx-2"></i>
-            <input type="text" class="form-control border-0 bg-transparent shadow-none p-0 flex-grow-1"
-                style="font-size: 0.875rem; border: none !important; background: transparent !important; box-shadow: none !important; padding: 0 !important; outline: none !important;" placeholder="Search contacts, deals, tasks...">
+            <input type="text" class="form-control border-0 bg-transparent shadow-none p-0 flex-grow-1 header-search-input"
+                style="font-size: 0.875rem; border: none !important; background: transparent !important; box-shadow: none !important; padding: 0 !important; outline: none !important; cursor: pointer;" 
+                placeholder="Search contacts, deals, tasks..." readonly>
             <span
                 class="badge text-secondary rounded-2 bg-transparent px-1 py-1 d-flex align-items-center justify-content-center"
                 style="font-size: 0.6rem; min-width:24px;">⌘ <span class="ps-1"
@@ -31,7 +34,7 @@
         <!-- Mobile Search Button -->
         <button class="btn btn-light rounded-circle p-0 d-flex align-items-center justify-content-center d-md-none text-secondary shadow-none border" 
                 style="width: 36px; height: 36px; background-color: var(--bs-tertiary-bg);" 
-                type="button" data-bs-toggle="collapse" data-bs-target="#mobileSearchCollapse" aria-expanded="false">
+                type="button" data-bs-toggle="modal" data-bs-target="#globalSearchModal" aria-label="Search">
             <i class="fa-solid fa-magnifying-glass fs-6"></i>
         </button>
 
@@ -119,10 +122,10 @@
 
 <!-- Mobile Search Bar Collapse -->
 <div class="collapse d-md-none bg-body border-bottom p-2 px-3 sticky-top z-2 shadow-sm" id="mobileSearchCollapse">
-    <div class="input-group align-items-center bg-body-tertiary rounded-3 px-2 py-1 border">
+    <div class="input-group align-items-center bg-body-tertiary rounded-3 px-2 py-1 border cursor-pointer" data-bs-toggle="modal" data-bs-target="#globalSearchModal">
         <i class="fa-solid fa-magnifying-glass text-secondary mx-2"></i>
-        <input type="text" class="form-control border-0 bg-transparent shadow-none p-0 flex-grow-1"
-            style="font-size: 0.85rem;" placeholder="Search contacts, deals, tasks...">
+        <input type="text" class="form-control border-0 bg-transparent shadow-none p-0 flex-grow-1 header-search-input"
+            style="font-size: 0.85rem; cursor: pointer;" placeholder="Search contacts, deals, tasks..." readonly>
     </div>
 </div>
 

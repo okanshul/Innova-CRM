@@ -60,9 +60,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const roleDisplay = staff.role_name ? (staff.role_name.charAt(0).toUpperCase() + staff.role_name.slice(1)) : (staff.position || 'Staff');
         const badgeClass = getRoleBadgeClass(staff.role_name, staff.position);
 
-        const statusBadge = staff.status === 'active'
-            ? `<span class="status-badge status-badge-active">Active</span>`
-            : `<span class="status-badge status-badge-inactive">Inactive</span>`;
+        const statusBadge = (staff.status === 'active' || staff.status === '1')
+            ? `<span class="badge rounded-pill fw-semibold px-3 py-1 badge-status-active" style="font-size: 0.75rem;">Active</span>`
+            : `<span class="badge rounded-pill fw-semibold px-3 py-1 badge-status-inactive" style="font-size: 0.75rem;">Inactive</span>`;
 
         let actionButtons = `
             <a href="/staff/${staff.id}" class="action-btn action-btn-view me-1" title="View Details">
@@ -155,9 +155,9 @@ document.addEventListener('DOMContentLoaded', function () {
             ? `<img src="/storage/${staff.avatar}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0" width="42" height="42" alt="${staff.name}">`
             : `<div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 fw-bold text-white shadow-sm" style="width: 42px; height: 42px; background-color: ${avatarBg}; font-size: 0.9rem; letter-spacing: 0.5px;">${initials}</div>`;
 
-        const statusBadge = staff.status === 'active'
-            ? `<span class="badge rounded-pill fw-semibold px-2 py-1" style="background-color: #dcfce7; color: #16a34a; font-size: 0.75rem;">Active</span>`
-            : `<span class="badge rounded-pill fw-semibold px-2 py-1" style="background-color: #fee2e2; color: #dc2626; font-size: 0.75rem;">Inactive</span>`;
+        const statusBadge = (staff.status === 'active' || staff.status === '1')
+            ? `<span class="badge rounded-pill fw-semibold px-3 py-1 badge-status-active" style="font-size: 0.75rem;">Active</span>`
+            : `<span class="badge rounded-pill fw-semibold px-3 py-1 badge-status-inactive" style="font-size: 0.75rem;">Inactive</span>`;
 
         const roleDisplay = staff.role_name ? (staff.role_name.charAt(0).toUpperCase() + staff.role_name.slice(1)) : (staff.position || 'Staff');
         const badgeClass = getRoleBadgeClass(staff.role_name, staff.position);

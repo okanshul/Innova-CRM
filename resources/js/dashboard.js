@@ -17,7 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
         tooltipInstances = [...tooltipTriggerList].map(el => new bootstrap.Tooltip(el, {
             trigger: 'hover',
             placement: 'right',
-            boundary: 'window'
+            container: 'body',
+            customClass: 'sidebar-tooltip',
+            boundary: 'viewport'
         }));
     }
 

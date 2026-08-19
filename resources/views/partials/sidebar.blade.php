@@ -12,14 +12,14 @@
 
     <ul class="nav nav-pills flex-column mb-auto gap-1">
         <li class="nav-item">
-            <a href="{{ route('dashboard') }}" class="sidebar-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" aria-current="page">
+            <a href="{{ route('dashboard') }}" class="sidebar-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" aria-current="page" data-bs-toggle="tooltip" data-bs-title="Dashboard" data-bs-placement="right">
                 <i class="fa-solid fa-house"></i>
                 <span class="sidebar-text">Dashboard</span>
             </a>
         </li>
         @can('contacts.view')
         <li>
-            <a href="{{ route('contacts.index') }}" class="sidebar-link {{ request()->routeIs('contacts.*') ? 'active' : '' }}">
+            <a href="{{ route('contacts.index') }}" class="sidebar-link {{ request()->routeIs('contacts.*') ? 'active' : '' }}" data-bs-toggle="tooltip" data-bs-title="Contacts" data-bs-placement="right">
                 <i class="fa-regular fa-address-book"></i>
                 <span class="sidebar-text">Contacts</span>
             </a>
@@ -27,7 +27,7 @@
         @endcan
         @can('deals.view')
         <li>
-            <a href="{{ route('deals.index') }}" class="sidebar-link {{ request()->routeIs('deals.*') ? 'active' : '' }}">
+            <a href="{{ route('deals.index') }}" class="sidebar-link {{ request()->routeIs('deals.*') ? 'active' : '' }}" data-bs-toggle="tooltip" data-bs-title="Deals" data-bs-placement="right">
                 <i class="fa-solid fa-gem"></i>
                 <span class="sidebar-text">Deals</span>
             </a>
@@ -35,7 +35,7 @@
         @endcan
         @can('pipeline.view')
         <li>
-            <a href="{{ route('pipelines.index') }}" class="sidebar-link {{ request()->routeIs('pipelines.*') ? 'active' : '' }}">
+            <a href="{{ route('pipelines.index') }}" class="sidebar-link {{ request()->routeIs('pipelines.*') ? 'active' : '' }}" data-bs-toggle="tooltip" data-bs-title="Pipeline" data-bs-placement="right">
                 <i class="fa-solid fa-bars-staggered"></i>
                 <span class="sidebar-text">Pipeline</span>
             </a>
@@ -43,7 +43,7 @@
         @endcan
         @can('reports.view')
         <li>
-            <a href="{{ route('reports.index') }}" class="sidebar-link {{ request()->routeIs('reports.*') ? 'active' : '' }}">
+            <a href="{{ route('reports.index') }}" class="sidebar-link {{ request()->routeIs('reports.*') ? 'active' : '' }}" data-bs-toggle="tooltip" data-bs-title="Reports" data-bs-placement="right">
                 <i class="fa-solid fa-chart-column"></i>
                 <span class="sidebar-text">Reports</span>
             </a>
@@ -51,7 +51,7 @@
         @endcan
         @can('tasks.view')
         <li>
-            <a href="{{ route('tasks.index') }}" class="sidebar-link {{ request()->routeIs('tasks.*') ? 'active' : '' }}">
+            <a href="{{ route('tasks.index') }}" class="sidebar-link {{ request()->routeIs('tasks.*') ? 'active' : '' }}" data-bs-toggle="tooltip" data-bs-title="Tasks" data-bs-placement="right">
                 <i class="fa-regular fa-square-check"></i>
                 <span class="sidebar-text">Tasks</span>
             </a>
@@ -59,7 +59,7 @@
         @endcan
         @can('calendar.view')
         <li>
-            <a href="{{ route('calendar.index') }}" class="sidebar-link {{ request()->routeIs('calendar.*') ? 'active' : '' }}">
+            <a href="{{ route('calendar.index') }}" class="sidebar-link {{ request()->routeIs('calendar.*') ? 'active' : '' }}" data-bs-toggle="tooltip" data-bs-title="Calendar" data-bs-placement="right">
                 <i class="fa-regular fa-calendar"></i>
                 <span class="sidebar-text">Calendar</span>
             </a>
@@ -67,7 +67,7 @@
         @endcan
         @can('meetings.view')
         <li>
-            <a href="{{ route('meetings.index') }}" class="sidebar-link {{ request()->routeIs('meetings.*') ? 'active' : '' }}">
+            <a href="{{ route('meetings.index') }}" class="sidebar-link {{ request()->routeIs('meetings.*') ? 'active' : '' }}" data-bs-toggle="tooltip" data-bs-title="Meetings" data-bs-placement="right">
                 <i class="fa-solid fa-video"></i>
                 <span class="sidebar-text">Meetings</span>
             </a>
@@ -75,7 +75,7 @@
         @endcan
         @can('mail.view')
         <li>
-            <a href="{{ route('mail.index') }}" class="sidebar-link {{ request()->routeIs('mail.*') ? 'active' : '' }}">
+            <a href="{{ route('mail.index') }}" class="sidebar-link {{ request()->routeIs('mail.*') ? 'active' : '' }}" data-bs-toggle="tooltip" data-bs-title="Mail" data-bs-placement="right">
                 <i class="fa-regular fa-envelope"></i>
                 <span class="sidebar-text">Mail</span>
             </a>
@@ -83,7 +83,7 @@
         @endcan
         @can('staff.view')
         <li>
-            <a href="{{ route('staff.index') }}" class="sidebar-link {{ request()->routeIs('staff.*') ? 'active' : '' }}">
+            <a href="{{ route('staff.index') }}" class="sidebar-link {{ request()->routeIs('staff.*') ? 'active' : '' }}" data-bs-toggle="tooltip" data-bs-title="Staff" data-bs-placement="right">
                 <i class="fa-solid fa-user-group"></i>
                 <span class="sidebar-text">Staff</span>
             </a>
@@ -91,7 +91,7 @@
         @endcan
         @can('roles.view')
         <li>
-            <a href="{{ route('roles.index') }}" class="sidebar-link {{ request()->routeIs('roles.*') ? 'active' : '' }}">
+            <a href="{{ route('roles.index') }}" class="sidebar-link {{ request()->routeIs('roles.*') ? 'active' : '' }}" data-bs-toggle="tooltip" data-bs-title="Roles & Permissions" data-bs-placement="right">
                 <i class="fa-solid fa-user-shield"></i>
                 <span class="sidebar-text">Roles & Permissions</span>
             </a>
@@ -99,7 +99,7 @@
         @endcan
         @can('settings.view')
         <li>
-            <a href="{{ route('settings.index') }}" class="sidebar-link {{ request()->routeIs('settings.*') ? 'active' : '' }}">
+            <a href="{{ route('settings.index') }}" class="sidebar-link {{ request()->routeIs('settings.*') ? 'active' : '' }}" data-bs-toggle="tooltip" data-bs-title="Settings" data-bs-placement="right">
                 <i class="fa-solid fa-gear"></i>
                 <span class="sidebar-text">Settings</span>
             </a>

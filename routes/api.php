@@ -47,4 +47,7 @@ Route::middleware(['web', 'auth'])->name('crm.')->group(function () {
     Route::get('profile', [\App\Http\Controllers\Api\ProfileController::class, 'show'])->name('api.profile.show');
     Route::post('profile', [\App\Http\Controllers\Api\ProfileController::class, 'update'])->name('api.profile.update');
     Route::put('profile/password', [\App\Http\Controllers\Api\ProfileController::class, 'updatePassword'])->name('api.profile.password');
+
+    // Global Search API
+    Route::get('search', [\App\Http\Controllers\Api\GlobalSearchController::class, 'search'])->name('api.search');
 });
