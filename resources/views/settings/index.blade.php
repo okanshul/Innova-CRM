@@ -889,7 +889,7 @@
                                                 <x-form.input type="password" name="smtp_password" label="Password" icon="fa-solid fa-key" :value="$settings['smtp_password'] ?? '••••••••••••'" />
                                             </div>
                                             <div class="col-12 pt-1">
-                                                <button type="button" class="btn btn-outline-primary btn-sm rounded-3">
+                                                <button type="button" id="btnTestEmail" class="btn btn-outline-primary btn-sm rounded-3">
                                                     <i class="fa-solid fa-paper-plane me-2"></i> Send Test Email
                                                 </button>
                                             </div>
@@ -959,7 +959,7 @@
                             <div class="card-body p-3">
                                 <div class="row g-4">
                                     <div class="col-md-6 d-flex flex-column">
-                                        <h6 class="fw-bold mb-3 text-body-emphasis"><i class="fa-solid fa-bell me-2 text-primary"></i>Notification Channels</h6>
+                                        <h6 class="fw-bold mb-3 text-body-emphasis"><i class="fa-regular fa-bell me-2 text-primary"></i>Notification Channels</h6>
                                         <div class="d-flex flex-column gap-3 flex-grow-1 justify-content-between">
                                             <div class="p-3 border rounded-3 bg-body-tertiary d-flex align-items-center justify-content-between">
                                                 <div>
@@ -1124,13 +1124,13 @@
                                             </div>
                                         </div>
 
-                                        <h6 class="fw-bold mb-3 text-body-emphasis"><i class="fa-solid fa-clock me-2 text-primary"></i>Session Settings</h6>
-                                        <x-form.select class="mb-3" name="sec_session_timeout" label="Session Timeout" icon="fa-solid fa-hourglass-half" :value="$settings['sec_session_timeout'] ?? '1h'">
+                                        <h6 class="fw-bold mb-3 text-body-emphasis"><i class="fa-regular fa-clock me-2 text-primary"></i>Session Settings</h6>
+                                        <x-form.select class="mb-3" name="sec_session_timeout" label="Session Timeout" icon="fa-regular fa-hourglass-half" :value="$settings['sec_session_timeout'] ?? '1h'">
                                             <option value="1h" {{ ($settings['sec_session_timeout'] ?? '1h') === '1h' ? 'selected' : '' }}>1 Hour</option>
                                             <option value="30m" {{ ($settings['sec_session_timeout'] ?? '') === '30m' ? 'selected' : '' }}>30 Minutes</option>
                                             <option value="2h" {{ ($settings['sec_session_timeout'] ?? '') === '2h' ? 'selected' : '' }}>2 Hours</option>
                                         </x-form.select>
-                                        <x-form.select name="sec_remember_duration" label="Remember Me Duration" icon="fa-solid fa-clock" :value="$settings['sec_remember_duration'] ?? '7d'">
+                                        <x-form.select name="sec_remember_duration" label="Remember Me Duration" icon="fa-regular fa-clock" :value="$settings['sec_remember_duration'] ?? '7d'">
                                             <option value="7d" {{ ($settings['sec_remember_duration'] ?? '7d') === '7d' ? 'selected' : '' }}>7 Days</option>
                                             <option value="1d" {{ ($settings['sec_remember_duration'] ?? '') === '1d' ? 'selected' : '' }}>1 Day</option>
                                             <option value="30d" {{ ($settings['sec_remember_duration'] ?? '') === '30d' ? 'selected' : '' }}>30 Days</option>
@@ -1150,10 +1150,9 @@
                                     <p class="text-secondary small mb-0">Manage users and their roles/permissions.</p>
                                 </div>
                                 <div class="d-flex align-items-center gap-2">
-                                    <button type="button" class="btn btn-outline-primary btn-sm rounded-3 fw-semibold px-3">
+                                    <button type="button" id="btnAddUser" class="btn btn-primary btn-sm rounded-3 fw-semibold px-3" data-bs-toggle="modal" data-bs-target="#userModal">
                                         <i class="fa-solid fa-user-plus me-1"></i> Add User
                                     </button>
-                                    <x-button.primary type="submit" icon="fa-solid fa-check" label="Save Changes" />
                                 </div>
                             </div>
                             <div class="card-body p-0">
@@ -1168,79 +1167,8 @@
                                                 <th class="pe-4 py-3 text-end small fw-bold text-secondary">Actions</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td class="ps-4 py-3">
-                                                    <div class="d-flex align-items-center gap-2">
-                                                        <div class="avatar-circle bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold fs-7" style="width: 36px; height: 36px;">AA</div>
-                                                        <div>
-                                                            <div class="fw-bold fs-7 text-body-emphasis">Anshul Admin</div>
-                                                            <div class="text-secondary fs-8">anshul@innovacrm.com</div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td><span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-1">Administrator</span></td>
-                                                <td><span class="badge bg-success-subtle text-success rounded-pill px-3 py-1"><i class="fa-solid fa-circle fs-xs me-1"></i>Active</span></td>
-                                                <td class="text-secondary fs-8">May 5, 2026, 10:30 AM</td>
-                                                <td class="pe-4 text-end">
-                                                    <button type="button" class="btn btn-sm btn-icon btn-ghost-secondary rounded-circle"><i class="fa-solid fa-pen-to-square"></i></button>
-                                                    <button type="button" class="btn btn-sm btn-icon btn-ghost-danger rounded-circle"><i class="fa-solid fa-trash-can"></i></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="ps-4 py-3">
-                                                    <div class="d-flex align-items-center gap-2">
-                                                        <div class="avatar-circle bg-info-subtle text-info rounded-circle d-flex align-items-center justify-content-center fw-bold fs-7" style="width: 36px; height: 36px;">JD</div>
-                                                        <div>
-                                                            <div class="fw-bold fs-7 text-body-emphasis">John Doe</div>
-                                                            <div class="text-secondary fs-8">john@innovacrm.com</div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td><span class="badge bg-info-subtle text-info rounded-pill px-3 py-1">Manager</span></td>
-                                                <td><span class="badge bg-success-subtle text-success rounded-pill px-3 py-1"><i class="fa-solid fa-circle fs-xs me-1"></i>Active</span></td>
-                                                <td class="text-secondary fs-8">May 5, 2026, 09:15 AM</td>
-                                                <td class="pe-4 text-end">
-                                                    <button type="button" class="btn btn-sm btn-icon btn-ghost-secondary rounded-circle"><i class="fa-solid fa-pen-to-square"></i></button>
-                                                    <button type="button" class="btn btn-sm btn-icon btn-ghost-danger rounded-circle"><i class="fa-solid fa-trash-can"></i></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="ps-4 py-3">
-                                                    <div class="d-flex align-items-center gap-2">
-                                                        <div class="avatar-circle bg-purple-subtle text-purple rounded-circle d-flex align-items-center justify-content-center fw-bold fs-7" style="width: 36px; height: 36px;">JS</div>
-                                                        <div>
-                                                            <div class="fw-bold fs-7 text-body-emphasis">Jane Smith</div>
-                                                            <div class="text-secondary fs-8">jane@innovacrm.com</div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td><span class="badge bg-purple-subtle text-purple rounded-pill px-3 py-1">Sales Executive</span></td>
-                                                <td><span class="badge bg-success-subtle text-success rounded-pill px-3 py-1"><i class="fa-solid fa-circle fs-xs me-1"></i>Active</span></td>
-                                                <td class="text-secondary fs-8">May 4, 2026, 04:45 PM</td>
-                                                <td class="pe-4 text-end">
-                                                    <button type="button" class="btn btn-sm btn-icon btn-ghost-secondary rounded-circle"><i class="fa-solid fa-pen-to-square"></i></button>
-                                                    <button type="button" class="btn btn-sm btn-icon btn-ghost-danger rounded-circle"><i class="fa-solid fa-trash-can"></i></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="ps-4 py-3">
-                                                    <div class="d-flex align-items-center gap-2">
-                                                        <div class="avatar-circle bg-warning-subtle text-warning rounded-circle d-flex align-items-center justify-content-center fw-bold fs-7" style="width: 36px; height: 36px;">MJ</div>
-                                                        <div>
-                                                            <div class="fw-bold fs-7 text-body-emphasis">Mike Johnson</div>
-                                                            <div class="text-secondary fs-8">mike@innovacrm.com</div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td><span class="badge bg-warning-subtle text-warning rounded-pill px-3 py-1">Support</span></td>
-                                                <td><span class="badge bg-secondary-subtle text-secondary rounded-pill px-3 py-1"><i class="fa-solid fa-circle fs-xs me-1"></i>Inactive</span></td>
-                                                <td class="text-secondary fs-8">Apr 30, 2026, 11:20 AM</td>
-                                                <td class="pe-4 text-end">
-                                                    <button type="button" class="btn btn-sm btn-icon btn-ghost-secondary rounded-circle"><i class="fa-solid fa-pen-to-square"></i></button>
-                                                    <button type="button" class="btn btn-sm btn-icon btn-ghost-danger rounded-circle"><i class="fa-solid fa-trash-can"></i></button>
-                                                </td>
-                                            </tr>
+                                        <tbody id="usersTableBody">
+                                            <!-- Dynamic JS Render -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -1439,12 +1367,8 @@
                                             <div>
                                                 <h6 class="fw-bold mb-1 text-body-emphasis">Create Backup</h6>
                                                 <p class="text-secondary small mb-3">Create a manual backup of your database & system assets.</p>
-                                                <div class="p-3 bg-body rounded-3 border mb-3">
-                                                    <span class="text-secondary fs-8 fw-medium">Last Backup:</span>
-                                                    <span class="fw-semibold fs-8 text-body-emphasis">May 4, 2026, 11:30 PM</span>
-                                                </div>
                                             </div>
-                                            <button type="button" class="btn btn-primary btn-sm rounded-3 fw-semibold py-2">
+                                            <button type="button" id="btnCreateBackup" class="btn btn-primary btn-sm rounded-3 fw-semibold py-2">
                                                 <i class="fa-solid fa-plus me-2"></i> Create New Backup
                                             </button>
                                         </div>
@@ -1456,7 +1380,7 @@
                                                 <h6 class="fw-bold mb-1 text-body-emphasis">Restore Backup</h6>
                                                 <p class="text-secondary small mb-3">Restore your application data from a backup zip file.</p>
                                             </div>
-                                            <div class="border border-dashed rounded-3 p-3 bg-body text-center">
+                                            <div id="restoreDropzone" class="border border-dashed rounded-3 p-3 bg-body text-center cursor-pointer">
                                                 <i class="fa-solid fa-cloud-arrow-up fs-2 text-primary mb-2"></i>
                                                 <p class="fs-8 text-secondary mb-2">Drag and drop backup file here or</p>
                                                 <input type="file" id="restoreFileInput" class="d-none" accept=".zip">
@@ -1479,16 +1403,8 @@
                                                     <th class="pe-3 py-2 text-end small fw-bold text-secondary">Actions</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td class="ps-3 py-2 fw-semibold fs-7"><i class="fa-solid fa-file-zipper me-2 text-primary"></i>backup_2026_05_04_233000.zip</td>
-                                                    <td class="py-2 fs-7 text-secondary">48.6 MB</td>
-                                                    <td class="py-2 fs-7 text-secondary">May 4, 2026, 11:30 PM</td>
-                                                    <td class="pe-3 py-2 text-end">
-                                                        <button type="button" class="btn btn-sm btn-icon btn-ghost-primary rounded-circle" title="Download"><i class="fa-solid fa-download"></i></button>
-                                                        <button type="button" class="btn btn-sm btn-icon btn-ghost-danger rounded-circle" title="Delete"><i class="fa-solid fa-trash-can"></i></button>
-                                                    </td>
-                                                </tr>
+                                            <tbody id="backupHistoryTableBody">
+                                                <!-- Dynamic JS Render -->
                                             </tbody>
                                         </table>
                                     </div>
@@ -1511,27 +1427,27 @@
                                         <div class="list-group list-group-flush border rounded-3 overflow-hidden">
                                             <div class="list-group-item d-flex justify-content-between align-items-center py-2">
                                                 <span class="text-secondary fs-7 fw-medium">Version</span>
-                                                <span class="badge bg-primary-subtle text-primary rounded-pill px-3">v2.4.1</span>
+                                                <span id="infoAppVersion" class="badge bg-primary-subtle text-primary rounded-pill px-3">Loading...</span>
                                             </div>
                                             <div class="list-group-item d-flex justify-content-between align-items-center py-2">
                                                 <span class="text-secondary fs-7 fw-medium">PHP Version</span>
-                                                <span class="fw-semibold fs-7">8.2.14</span>
+                                                <span id="infoPhpVersion" class="fw-semibold fs-7">Loading...</span>
                                             </div>
                                             <div class="list-group-item d-flex justify-content-between align-items-center py-2">
                                                 <span class="text-secondary fs-7 fw-medium">Framework</span>
-                                                <span class="fw-semibold fs-7">Laravel 13</span>
+                                                <span id="infoLaravelVersion" class="fw-semibold fs-7">Loading...</span>
                                             </div>
                                             <div class="list-group-item d-flex justify-content-between align-items-center py-2">
                                                 <span class="text-secondary fs-7 fw-medium">Environment</span>
-                                                <span class="badge bg-success-subtle text-success rounded-pill px-3">Production</span>
+                                                <span id="infoEnv" class="badge bg-success-subtle text-success rounded-pill px-3">Loading...</span>
                                             </div>
                                             <div class="list-group-item d-flex justify-content-between align-items-center py-2">
                                                 <span class="text-secondary fs-7 fw-medium">Debug Mode</span>
-                                                <span class="badge bg-secondary-subtle text-secondary rounded-pill px-3">Off</span>
+                                                <span id="infoDebugMode" class="badge bg-secondary-subtle text-secondary rounded-pill px-3">Loading...</span>
                                             </div>
                                             <div class="list-group-item d-flex justify-content-between align-items-center py-2">
                                                 <span class="text-secondary fs-7 fw-medium">Database Driver</span>
-                                                <span class="fw-semibold fs-7">MySQL</span>
+                                                <span id="infoDbDriver" class="fw-semibold fs-7">Loading...</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1541,27 +1457,27 @@
                                         <div class="list-group list-group-flush border rounded-3 overflow-hidden">
                                             <div class="list-group-item d-flex justify-content-between align-items-center py-2">
                                                 <span class="text-secondary fs-7 fw-medium">Server Software</span>
-                                                <span class="fw-semibold fs-7">nginx/1.24.0</span>
+                                                <span id="infoServerSoftware" class="fw-semibold fs-7">Loading...</span>
                                             </div>
                                             <div class="list-group-item d-flex justify-content-between align-items-center py-2">
                                                 <span class="text-secondary fs-7 fw-medium">Operating System</span>
-                                                <span class="fw-semibold fs-7">Linux</span>
+                                                <span id="infoOs" class="fw-semibold fs-7">Loading...</span>
                                             </div>
                                             <div class="list-group-item d-flex justify-content-between align-items-center py-2">
                                                 <span class="text-secondary fs-7 fw-medium">Server Time</span>
-                                                <span class="fw-semibold fs-7">May 5, 2026, 12:10 PM</span>
+                                                <span id="infoServerTime" class="fw-semibold fs-7">Loading...</span>
                                             </div>
                                             <div class="list-group-item d-flex justify-content-between align-items-center py-2">
                                                 <span class="text-secondary fs-7 fw-medium">Timezone</span>
-                                                <span class="fw-semibold fs-7">(UTC+05:30) Asia/Kolkata</span>
+                                                <span id="infoTimezone" class="fw-semibold fs-7">Loading...</span>
                                             </div>
                                             <div class="list-group-item d-flex justify-content-between align-items-center py-2">
                                                 <span class="text-secondary fs-7 fw-medium">Memory Usage</span>
-                                                <span class="fw-semibold fs-7">128.0 MB</span>
+                                                <span id="infoMemoryUsage" class="fw-semibold fs-7">Loading...</span>
                                             </div>
                                             <div class="list-group-item d-flex justify-content-between align-items-center py-2">
                                                 <span class="text-secondary fs-7 fw-medium">Disk Usage</span>
-                                                <span class="fw-semibold fs-7">12.4 GB / 100 GB</span>
+                                                <span id="infoDiskUsage" class="fw-semibold fs-7">Loading...</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1579,8 +1495,8 @@
                                     <p class="text-secondary small mb-0">Track system changes, administrative actions, and user activities.</p>
                                 </div>
                                 <div class="d-flex align-items-center gap-2">
-                                    <select class="form-select form-select-sm" style="width: 140px;">
-                                        <option value="">All Actions</option>
+                                    <select id="auditActionFilter" class="form-select form-select-sm" style="width: 140px;">
+                                        <option value="all">All Actions</option>
                                         <option value="Created">Created</option>
                                         <option value="Updated">Updated</option>
                                         <option value="Deleted">Deleted</option>
@@ -1599,35 +1515,8 @@
                                                 <th class="pe-4 py-3 text-end small fw-bold text-secondary">IP Address</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td class="ps-4 py-3 fs-8 text-secondary">May 5, 2026, 11:45 AM</td>
-                                                <td class="fw-semibold fs-7">Anshul Admin</td>
-                                                <td><span class="badge bg-info-subtle text-info rounded-pill px-3 py-1">Updated</span></td>
-                                                <td class="fs-7">Deal</td>
-                                                <td class="pe-4 text-end fs-8 text-secondary">192.168.1.10</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="ps-4 py-3 fs-8 text-secondary">May 5, 2026, 11:00 AM</td>
-                                                <td class="fw-semibold fs-7">John Doe</td>
-                                                <td><span class="badge bg-success-subtle text-success rounded-pill px-3 py-1">Created</span></td>
-                                                <td class="fs-7">Contact</td>
-                                                <td class="pe-4 text-end fs-8 text-secondary">192.168.1.12</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="ps-4 py-3 fs-8 text-secondary">May 5, 2026, 10:15 AM</td>
-                                                <td class="fw-semibold fs-7">Jane Smith</td>
-                                                <td><span class="badge bg-danger-subtle text-danger rounded-pill px-3 py-1">Deleted</span></td>
-                                                <td class="fs-7">Task</td>
-                                                <td class="pe-4 text-end fs-8 text-secondary">192.168.1.15</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="ps-4 py-3 fs-8 text-secondary">May 5, 2026, 09:30 AM</td>
-                                                <td class="fw-semibold fs-7">Mike Johnson</td>
-                                                <td><span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-1">Login</span></td>
-                                                <td class="fs-7">System</td>
-                                                <td class="pe-4 text-end fs-8 text-secondary">192.168.1.18</td>
-                                            </tr>
+                                        <tbody id="auditLogTableBody">
+                                            <!-- Dynamic JS Render -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -1638,6 +1527,57 @@
             </div>
         </div>
     </form>
+
+    <!-- Modal for Adding / Editing User -->
+    <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow">
+                <div class="modal-header border-bottom">
+                    <h5 class="modal-title fw-bold" id="userModalLabel">Add New User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="userForm">
+                    <input type="hidden" id="userId" name="userId">
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label class="form-label fw-medium text-secondary small">Full Name</label>
+                            <input type="text" id="userNameInput" name="name" class="form-control" placeholder="e.g. Anshul Sharma" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-medium text-secondary small">Email Address</label>
+                            <input type="email" id="userEmailInput" name="email" class="form-control" placeholder="e.g. user@innovacrm.com" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-medium text-secondary small">Password <span class="text-muted fw-normal fs-8">(Leave blank to keep current)</span></label>
+                            <input type="password" id="userPasswordInput" name="password" class="form-control" placeholder="••••••••">
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium text-secondary small">Role</label>
+                                <select id="userRoleSelect" name="role" class="form-select" required>
+                                    <option value="Administrator">Administrator</option>
+                                    <option value="Manager">Manager</option>
+                                    <option value="Sales Executive">Sales Executive</option>
+                                    <option value="Support">Support</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium text-secondary small">Status</label>
+                                <select id="userStatusSelect" name="status" class="form-select" required>
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top bg-body-tertiary">
+                        <button type="button" class="btn btn-light rounded-3 fw-semibold" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" id="btnSaveUser" class="btn btn-primary rounded-3 fw-semibold px-4">Save User</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('scripts')

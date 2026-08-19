@@ -11,7 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
-#[Fillable(['name', 'email', 'password', 'phone', 'position', 'department', 'status', 'avatar', 'joined_date'])]
+#[Fillable(['name', 'email', 'password', 'phone', 'position', 'department', 'status', 'avatar', 'joined_date', 'role', 'last_active_at'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -29,7 +29,13 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'joined_date' => 'date',
+            'last_active_at' => 'datetime',
         ];
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'active');
     }
 
     public function companies(): \Illuminate\Database\Eloquent\Relations\HasMany

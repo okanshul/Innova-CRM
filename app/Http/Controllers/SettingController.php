@@ -11,7 +11,7 @@ class SettingController extends Controller
     {
         Gate::authorize('settings.view');
 
-        $settings = CrmSetting::all()->pluck('value', 'key')->toArray();
+        $settings = CrmSetting::getAllSettings();
 
         return view('settings.index', compact('settings'));
     }

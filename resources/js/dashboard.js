@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let tooltipInstances = [];
 
     function initTooltips() {
+        document.querySelectorAll('.tooltip.sidebar-tooltip').forEach(el => el.remove());
         const tooltipTriggerList = document.querySelectorAll('#sidebar [data-bs-toggle="tooltip"]');
         tooltipInstances = [...tooltipTriggerList].map(el => new bootstrap.Tooltip(el, {
             trigger: 'hover',
@@ -29,10 +30,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isCollapsed && isDesktop) {
                 instance.enable();
             } else {
-                instance.disable();
                 instance.hide();
+                instance.disable();
             }
         });
+        if (!isCollapsed || !isDesktop) {
+            document.querySelectorAll('.tooltip.sidebar-tooltip').forEach(el => el.remove());
+        }
     }
 
     function toggleSidebarState(forceState = null) {
@@ -55,6 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
         updateTooltipsState(shouldBeCollapsed);
     }
 
+    // Initialize tooltips first so instances array is populated
+    initTooltips();
+
     // Check stored state and apply on desktop
     const isStoredCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
     if (window.innerWidth >= 992) {
@@ -62,9 +69,8 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         document.documentElement.classList.remove('sidebar-collapsed');
         document.body.classList.remove('sidebar-collapsed');
+        updateTooltipsState(false);
     }
-
-    initTooltips();
 
     if (sidebarToggle) {
         sidebarToggle.addEventListener('click', (e) => {
@@ -83,10 +89,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Auto-close offcanvas on mobile link clicks
+    // Auto-close offcanvas & hide tooltips on link clicks
     if (sidebar) {
         sidebar.querySelectorAll('.sidebar-link').forEach(link => {
             link.addEventListener('click', () => {
+                tooltipInstances.forEach(instance => {
+                    instance.hide();
+                    instance.disable();
+                });
+                document.querySelectorAll('.tooltip.sidebar-tooltip').forEach(el => el.remove());
+
                 if (window.innerWidth < 992) {
                     const bsOffcanvas = bootstrap.Offcanvas.getInstance(sidebar);
                     if (bsOffcanvas) {

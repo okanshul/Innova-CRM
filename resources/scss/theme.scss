@@ -336,7 +336,11 @@ $transition-speed: 0.3s;
 
 // Custom Tooltip Styling for Mini-Sidebar Icons
 .tooltip.sidebar-tooltip {
-    opacity: 1 !important;
+    pointer-events: none !important;
+
+    &.show {
+        opacity: 1 !important;
+    }
 
     .tooltip-inner {
         background-color: #1e1e38 !important;
@@ -355,6 +359,14 @@ $transition-speed: 0.3s;
     &.bs-tooltip-right .tooltip-arrow::before {
         border-right-color: #1e1e38 !important;
     }
+}
+
+// Hide sidebar tooltips completely when sidebar is expanded (not collapsed)
+html:not(.sidebar-collapsed) .tooltip.sidebar-tooltip,
+body:not(.sidebar-collapsed) .tooltip.sidebar-tooltip {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
 }
 
 // Directional rounded utility classes
