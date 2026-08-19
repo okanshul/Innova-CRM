@@ -23,7 +23,7 @@ class PipelineController extends Controller
             });
         }
 
-        $perPage = $request->get('per_page', 10);
+        $perPage = $request->get('per_page', setting('items_per_page', 10));
         $pipelines = $query->orderBy('order')->paginate($perPage);
 
         return response()->json([

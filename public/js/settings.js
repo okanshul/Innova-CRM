@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
     const settingsForm = document.getElementById('settingsForm');
-    const settingsAlert = document.getElementById('settingsAlert');
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
     // Clear Validation Errors Helper
@@ -78,16 +77,6 @@ document.addEventListener('DOMContentLoaded', function () {
                             toast: true,
                             position: 'top-end'
                         });
-                    }
-
-                    if (settingsAlert) {
-                        settingsAlert.innerHTML = `
-                            <div class="alert alert-success alert-dismissible fade show rounded-3 mb-4 shadow-sm" role="alert">
-                                <i class="fa-solid fa-circle-check me-2"></i> ${data.message || 'Settings saved successfully.'}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        `;
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
                     }
                 }
             })

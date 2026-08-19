@@ -386,7 +386,7 @@
                                     <div class="d-flex align-items-center gap-3 text-secondary fs-xs mb-2">
                                         <span>
                                             <i class="fa-regular fa-clock me-1 text-primary"></i>
-                                            {{ $meeting->start_at ? $meeting->start_at->format('M d, h:i A') : 'TBD' }}
+                                            {{ $meeting->start_at ? format_datetime($meeting->start_at) : 'TBD' }}
                                         </span>
                                         @if ($meeting->location)
                                             <span class="text-truncate" style="max-width: 130px;">

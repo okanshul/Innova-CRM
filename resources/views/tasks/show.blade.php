@@ -44,7 +44,7 @@
                         </div>
                         <div class="col-12 col-md-6">
                             <label class="text-secondary small fw-semibold">Due Date</label>
-                            <p class="mb-0 text-body-emphasis">{{ $task->due_date ? $task->due_date->format('M d, Y') : 'No Due Date' }}</p>
+                            <p class="mb-0 text-body-emphasis">{{ $task->due_date ? format_date($task->due_date) : 'No Due Date' }}</p>
                         </div>
                     </div>
                 </div>

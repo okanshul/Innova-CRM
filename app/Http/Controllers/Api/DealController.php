@@ -28,7 +28,7 @@ class DealController extends Controller
             $query->where('pipeline_id', $request->get('pipeline_id'));
         }
 
-        $perPage = $request->get('per_page', 10);
+        $perPage = $request->get('per_page', setting('items_per_page', 10));
         $deals = $query->orderBy('id', 'desc')->paginate($perPage);
 
         return response()->json([
@@ -55,9 +55,18 @@ class DealController extends Controller
             'lost_reason' => 'nullable|string',
         ]);
 
+        if (empty($validated['expected_close_date'])) {
+            $validated['expected_close_date'] = now()->addDays((int) setting('deal_close_days', 30))->toDateString();
+        }
+
         $validated['created_by'] = auth()->id();
 
         $deal = Deal::create($validated);
+
+        \App\Services\NotificationDispatcher::dispatch('new_deal', auth()->user(), [
+            'subject' => 'New Deal Created',
+            'message' => "New deal '{$deal->title}' created with value " . format_currency($deal->value)
+        ]);
 
         return response()->json([
             'success' => true,

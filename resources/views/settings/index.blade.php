@@ -16,9 +16,7 @@
         </div>
     </div>
 
-    <!-- Alert Container -->
-    <div id="settingsAlert"></div>
-
+    <!-- Settings Form -->
     <form id="settingsForm" action="{{ route('crm.api.settings.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="row g-3">

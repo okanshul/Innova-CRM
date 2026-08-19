@@ -98,6 +98,8 @@ class SettingController extends Controller
                 AuditLog::record('Updated', 'Settings');
             });
 
+            event(new \App\Events\SettingsChanged($request->all()));
+
             return response()->json([
                 'success' => true,
                 'message' => 'System settings saved successfully.'

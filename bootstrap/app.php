@@ -13,6 +13,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->web(append: [
+            \App\Http\Middleware\CheckMaintenanceMode::class,
+            \App\Http\Middleware\UpdateLastActive::class,
+            \App\Http\Middleware\ForcePasswordReset::class,
+            \App\Http\Middleware\Force2FASetup::class,
+        ]);
         $middleware->alias([
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,

@@ -20,7 +20,7 @@ class RoleController extends Controller
             $query->where('name', 'like', "%{$search}%");
         }
 
-        $perPage = $request->get('per_page', 10);
+        $perPage = $request->get('per_page', setting('items_per_page', 10));
         $roles = $query->orderBy('id', 'asc')->paginate($perPage);
 
         return response()->json([

@@ -89,6 +89,7 @@ class CrmSetting extends Model
         );
 
         Cache::forget('crm_settings');
+        \App\Support\SettingsManager::flushCache();
 
         return $setting;
     }

@@ -1,11 +1,15 @@
 <aside id="sidebar" class="offcanvas-lg offcanvas-start d-flex flex-column p-3">
     <div class="d-flex align-items-center justify-content-between mb-4 px-2 pt-1">
         <a href="{{ route('dashboard') }}" class="d-flex align-items-center text-white text-decoration-none sidebar-brand gap-2">
-            <div class="bg-primary text-white p-2 rounded-3 d-flex align-items-center justify-content-center logo-icon shadow-sm"
-                style="width: 38px; height: 38px; min-width: 38px; background: linear-gradient(135deg, #6366f1, #a855f7) !important;">
-                <i class="fa-solid fa-layer-group fs-5"></i>
-            </div>
-            <span class="fs-4 fw-bold sidebar-text ms-2" style="letter-spacing: -0.02em;">InnovaCRM</span>
+            @if(setting('system_logo'))
+                <img src="{{ asset(setting('system_logo')) }}" alt="Logo" class="logo-icon rounded-3" style="max-height: 38px; max-width: 38px; object-fit: contain;">
+            @else
+                <div class="bg-primary text-white p-2 rounded-3 d-flex align-items-center justify-content-center logo-icon shadow-sm"
+                    style="width: 38px; height: 38px; min-width: 38px; background: linear-gradient(135deg, #6366f1, #a855f7) !important;">
+                    <i class="fa-solid fa-layer-group fs-5"></i>
+                </div>
+            @endif
+            <span class="fs-4 fw-bold sidebar-text ms-2" style="letter-spacing: -0.02em;">{{ setting('app_name', 'InnovaCRM') }}</span>
         </a>
         <button type="button" class="btn-close btn-close-white d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" aria-label="Close"></button>
     </div>

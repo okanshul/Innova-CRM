@@ -138,7 +138,7 @@
                                 <div class="overflow-hidden">
                                     <div class="text-secondary text-uppercase fw-semibold mb-1" style="font-size: 0.7rem; letter-spacing: 0.5px;">Joined Date</div>
                                     <div class="fw-bold text-body-emphasis text-truncate" style="font-size: 0.925rem;">
-                                        {{ $staff->joined_date ? \Carbon\Carbon::parse($staff->joined_date)->format('F d, Y') : $staff->created_at->format('F d, Y') }}
+                                        {{ $staff->joined_date ? format_date($staff->joined_date) : format_date($staff->created_at) }}
                                     </div>
                                 </div>
                             </div>

@@ -5,7 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $title ?? 'InnovaCRM' }}</title>
+    <title>{{ $title ?? setting('app_name', setting('company_name', 'InnovaCRM')) }}</title>
+
+    @if(setting('favicon'))
+        <link rel="icon" href="{{ asset(setting('favicon')) }}">
+    @endif
+
+    <style>
+        :root {
+            @if(setting('primary_color'))
+                --bs-primary: {{ setting('primary_color') }} !important;
+                --bs-primary-rgb: {{ implode(',', sscanf(setting('primary_color'), "#%02x%02x%02x")) }} !important;
+            @endif
+            @if(setting('secondary_color'))
+                --bs-secondary: {{ setting('secondary_color') }} !important;
+            @endif
+        }
+    </style>
 
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

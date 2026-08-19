@@ -43,7 +43,7 @@ class StaffController extends Controller
             $query->where('status', $request->get('status'));
         }
 
-        $perPage = $request->get('per_page', 10);
+        $perPage = $request->get('per_page', setting('items_per_page', 10));
         $staff = $query->orderBy('id', 'asc')->paginate($perPage);
 
         // Map roles for the frontend

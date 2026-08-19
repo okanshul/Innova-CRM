@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col-12">
             <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-body mb-4">
-                <x-page-header :title="$deal->title" :subtitle="'Value: $' . number_format($deal->value, 2)" icon="fa-solid fa-gem">
+                <x-page-header :title="$deal->title" :subtitle="'Value: ' . format_currency($deal->value)" icon="fa-solid fa-gem">
                     <x-slot:actions>
                         @can('deals.edit')
                             <x-button.primary href="{{ route('deals.edit', $deal->id) }}" icon="fa-regular fa-pen-to-square me-1" label="Edit" />
@@ -43,7 +43,7 @@
                         </div>
                         <div class="col-12 col-md-6">
                             <label class="text-secondary small fw-semibold">Expected Close</label>
-                            <p class="mb-0 text-body-emphasis">{{ $deal->expected_close_date ? $deal->expected_close_date->format('M d, Y') : 'N/A' }}</p>
+                            <p class="mb-0 text-body-emphasis">{{ $deal->expected_close_date ? format_date($deal->expected_close_date) : 'N/A' }}</p>
                         </div>
                     </div>
                 </div>

@@ -91,7 +91,7 @@
                             <canvas id="leadsChart"></canvas>
                             <!-- Center Text overlay for donut -->
                             <div class="position-absolute text-center d-flex flex-column align-items-center justify-content-center pointer-events-none w-100" style="pointer-events: none;">
-                                <h6 class="mb-0 fw-bold fs-5">{{ number_format($totalLeadsCount) }}</h6>
+                                <h6 class="mb-0 fw-bold fs-5">{{ format_number($totalLeadsCount, 0) }}</h6>
                                 <span class="text-secondary" style="font-size:0.6rem">Total Leads</span>
                             </div>
                         </div>

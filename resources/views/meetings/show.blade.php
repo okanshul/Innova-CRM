@@ -36,11 +36,11 @@
                         </div>
                         <div class="col-12 col-md-6">
                             <label class="text-secondary small fw-semibold">Start Time</label>
-                            <p class="mb-0 text-body-emphasis">{{ $meeting->start_at ? $meeting->start_at->format('M d, Y g:i A') : 'N/A' }}</p>
+                            <p class="mb-0 text-body-emphasis">{{ $meeting->start_at ? format_datetime($meeting->start_at) : 'N/A' }}</p>
                         </div>
                         <div class="col-12 col-md-6">
                             <label class="text-secondary small fw-semibold">End Time</label>
-                            <p class="mb-0 text-body-emphasis">{{ $meeting->end_at ? $meeting->end_at->format('M d, Y g:i A') : 'N/A' }}</p>
+                            <p class="mb-0 text-body-emphasis">{{ $meeting->end_at ? format_datetime($meeting->end_at) : 'N/A' }}</p>
                         </div>
                         @if($meeting->meeting_link)
                             <div class="col-12">

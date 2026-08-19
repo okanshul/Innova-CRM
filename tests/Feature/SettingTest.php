@@ -6,9 +6,9 @@ use App\Models\AuditLog;
 use App\Models\Backup;
 use App\Models\CrmSetting;
 use App\Models\User;
+use App\Services\NotificationDispatcher;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Gate;
-
 use Tests\TestCase;
 
 class SettingTest extends TestCase
@@ -65,6 +65,53 @@ class SettingTest extends TestCase
 
         $response->assertStatus(422);
         $response->assertJsonStructure(['success', 'message', 'errors']);
+    }
+
+    public function test_maintenance_mode_blocks_non_admin_users(): void
+    {
+        CrmSetting::set('maintenance_mode', '1');
+
+        $regularUser = User::factory()->create(['role' => 'Sales Executive']);
+
+        $this->actingAs($regularUser);
+        $response = $this->get('/settings');
+        $response->assertStatus(503);
+
+        // Admin still has access
+        $this->actingAs($this->user);
+        $adminResponse = $this->get('/settings');
+        $adminResponse->assertStatus(200);
+    }
+
+    public function test_items_per_page_setting_applies_to_pagination(): void
+    {
+        CrmSetting::set('items_per_page', 5);
+
+        User::factory()->count(10)->create();
+
+        $response = $this->getJson(route('crm.api.contacts.index'));
+        $response->assertStatus(200);
+        $this->assertEquals(5, $response->json('data.per_page'));
+    }
+
+    public function test_formatters_apply_settings_formatting(): void
+    {
+        CrmSetting::set('currency_symbol', 'INR');
+        CrmSetting::set('localization_number_format', '1,234.56');
+
+        $this->assertEquals('₹1,500.50', format_currency(1500.5));
+    }
+
+    public function test_notification_dispatcher_gates_sending(): void
+    {
+        CrmSetting::set('pref_notifications', '0');
+
+        $sent = NotificationDispatcher::dispatch('new_deal', $this->user, ['message' => 'Test']);
+        $this->assertFalse($sent);
+
+        CrmSetting::set('pref_notifications', '1');
+        $sentActive = NotificationDispatcher::dispatch('new_deal', $this->user, ['message' => 'Test']);
+        $this->assertTrue($sentActive);
     }
 
     public function test_test_email_endpoint_validates_smtp_credentials(): void

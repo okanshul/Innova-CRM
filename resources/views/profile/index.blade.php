@@ -51,7 +51,7 @@
                                 <i class="fa-solid fa-circle-check me-1"></i>Active Account
                             </span>
                             <span class="badge bg-body-tertiary text-secondary border px-3 py-2 rounded-pill fw-medium" style="font-size: 0.8rem;">
-                                <i class="fa-regular fa-calendar-days me-1"></i>Joined {{ $user->created_at ? $user->created_at->format('M Y') : 'Recently' }}
+                                <i class="fa-regular fa-calendar-days me-1"></i>Joined {{ $user->created_at ? format_date($user->created_at) : 'Recently' }}
                             </span>
                         </div>
                     </div>
@@ -187,7 +187,7 @@
                                     <div class="col-6 col-md-4"><strong>Status:</strong> <span class="text-success fw-medium">Active</span></div>
                                     <div class="col-6 col-md-4"><strong>Primary Role:</strong> {{ ucfirst($user->getRoleNames()->first() ?? 'Staff') }}</div>
                                     <div class="col-6 col-md-4"><strong>Guard:</strong> web</div>
-                                    <div class="col-6 col-md-4"><strong>Joined:</strong> {{ $user->created_at ? $user->created_at->format('M d, Y') : 'N/A' }}</div>
+                                    <div class="col-6 col-md-4"><strong>Joined:</strong> {{ $user->created_at ? format_date($user->created_at) : 'N/A' }}</div>
                                 </div>
                             </div>
                         </div>

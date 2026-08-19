@@ -34,7 +34,7 @@ class ContactController extends Controller
             $query->where('status', $request->get('status'));
         }
 
-        $perPage = $request->get('per_page', 10);
+        $perPage = $request->get('per_page', setting('items_per_page', 10));
         $contacts = $query->orderBy('id', 'desc')->paginate($perPage);
 
         return response()->json([
