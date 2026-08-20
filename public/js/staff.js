@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // State
     let currentPage = 1;
-    let perPage = 10;
+    let perPage = parseInt(perPageSelect?.value || window.crmSettings?.itemsPerPage || 10);
     let currentSearch = '';
     let currentDepartment = '';
     let currentStatus = '';

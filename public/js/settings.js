@@ -47,59 +47,59 @@ document.addEventListener('DOMContentLoaded', function () {
                     'Accept': 'application/json'
                 }
             })
-            .then(async res => {
-                const data = await res.json();
-                if (!res.ok) {
-                    if (res.status === 422 && data.errors) {
-                        renderValidationErrors(settingsForm, data.errors);
-                        if (typeof Swal !== 'undefined') {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Validation Error',
-                                text: data.message || 'Please check the highlighted fields.',
-                                toast: true,
-                                position: 'top-end',
-                                timer: 3000,
-                                showConfirmButton: false
-                            });
+                .then(async res => {
+                    const data = await res.json();
+                    if (!res.ok) {
+                        if (res.status === 422 && data.errors) {
+                            renderValidationErrors(settingsForm, data.errors);
+                            if (typeof Swal !== 'undefined') {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Validation Error',
+                                    text: data.message || 'Please check the highlighted fields.',
+                                    toast: true,
+                                    position: 'top-end',
+                                    timer: 3000,
+                                    showConfirmButton: false
+                                });
+                            }
+                        } else {
+                            throw new Error(data.message || 'Server error occurred.');
                         }
                     } else {
-                        throw new Error(data.message || 'Server error occurred.');
+                        if (typeof Swal !== 'undefined') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Settings Saved',
+                                text: data.message || 'System settings updated successfully.',
+                                timer: 2500,
+                                showConfirmButton: false,
+                                toast: true,
+                                position: 'top-end'
+                            });
+                        }
                     }
-                } else {
+                })
+                .catch(err => {
+                    console.error('Error saving settings:', err);
                     if (typeof Swal !== 'undefined') {
                         Swal.fire({
-                            icon: 'success',
-                            title: 'Settings Saved',
-                            text: data.message || 'System settings updated successfully.',
-                            timer: 2500,
-                            showConfirmButton: false,
+                            icon: 'error',
+                            title: 'Save Failed',
+                            text: err.message || 'An unexpected error occurred while saving.',
                             toast: true,
-                            position: 'top-end'
+                            position: 'top-end',
+                            timer: 3000,
+                            showConfirmButton: false
                         });
                     }
-                }
-            })
-            .catch(err => {
-                console.error('Error saving settings:', err);
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Save Failed',
-                        text: err.message || 'An unexpected error occurred while saving.',
-                        toast: true,
-                        position: 'top-end',
-                        timer: 3000,
-                        showConfirmButton: false
-                    });
-                }
-            })
-            .finally(() => {
-                if (submitBtn) {
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = originalBtnHtml;
-                }
-            });
+                })
+                .finally(() => {
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalBtnHtml;
+                    }
+                });
         });
     }
 
@@ -129,34 +129,34 @@ document.addEventListener('DOMContentLoaded', function () {
                     'Accept': 'application/json'
                 }
             })
-            .then(async res => {
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.message || 'Test email failed.');
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Test Email Sent',
-                    text: data.message,
-                    toast: true,
-                    position: 'top-end',
-                    timer: 3000,
-                    showConfirmButton: false
+                .then(async res => {
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.message || 'Test email failed.');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Test Email Sent',
+                        text: data.message,
+                        toast: true,
+                        position: 'top-end',
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
+                })
+                .catch(err => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Email Failed',
+                        text: err.message,
+                        toast: true,
+                        position: 'top-end',
+                        timer: 4000,
+                        showConfirmButton: false
+                    });
+                })
+                .finally(() => {
+                    btnTestEmail.disabled = false;
+                    btnTestEmail.innerHTML = originalHtml;
                 });
-            })
-            .catch(err => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Email Failed',
-                    text: err.message,
-                    toast: true,
-                    position: 'top-end',
-                    timer: 4000,
-                    showConfirmButton: false
-                });
-            })
-            .finally(() => {
-                btnTestEmail.disabled = false;
-                btnTestEmail.innerHTML = originalHtml;
-            });
         });
     }
 
@@ -212,150 +212,6 @@ document.addEventListener('DOMContentLoaded', function () {
     setupColorPicker('primaryColorText', 'primaryColorPicker', 'primaryColorSwatch');
     setupColorPicker('secondaryColorText', 'secondaryColorPicker', 'secondaryColorSwatch');
 
-    // 5. Users & Permissions Table Handler
-    const usersTableBody = document.getElementById('usersTableBody');
-    const userForm = document.getElementById('userForm');
-
-    const loadUsers = () => {
-        if (!usersTableBody) return;
-        usersTableBody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-secondary"><i class="fa-solid fa-spinner fa-spin me-2"></i> Loading users...</td></tr>`;
-
-        fetch('/api/users', { headers: { 'Accept': 'application/json' } })
-            .then(res => res.json())
-            .then(res => {
-                if (res.success && res.data) {
-                    if (res.data.length === 0) {
-                        usersTableBody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted">No users found.</td></tr>`;
-                        return;
-                    }
-                    usersTableBody.innerHTML = res.data.map(user => {
-                        const initials = user.name ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'US';
-                        const statusBadge = user.status === 'active'
-                            ? `<span class="badge bg-success-subtle text-success rounded-pill px-3 py-1"><i class="fa-solid fa-circle fs-xs me-1"></i>Active</span>`
-                            : `<span class="badge bg-secondary-subtle text-secondary rounded-pill px-3 py-1"><i class="fa-solid fa-circle fs-xs me-1"></i>Inactive</span>`;
-                        const roleBadge = `<span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-1">${user.role || 'Sales Executive'}</span>`;
-                        const lastActive = user.last_active_at ? new Date(user.last_active_at).toLocaleString() : 'Never';
-
-                        return `
-                            <tr>
-                                <td class="ps-4 py-3">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <div class="avatar-circle bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold fs-7" style="width: 36px; height: 36px;">${initials}</div>
-                                        <div>
-                                            <div class="fw-bold fs-7 text-body-emphasis">${user.name}</div>
-                                            <div class="text-secondary fs-8">${user.email}</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>${roleBadge}</td>
-                                <td>${statusBadge}</td>
-                                <td class="text-secondary fs-8">${lastActive}</td>
-                                <td class="pe-4 text-end">
-                                    <button type="button" class="btn btn-sm btn-icon btn-ghost-secondary rounded-circle btn-edit-user" data-user='${JSON.stringify(user)}'><i class="fa-regular fa-pen-to-square"></i></button>
-                                    <button type="button" class="btn btn-sm btn-icon btn-ghost-danger rounded-circle btn-delete-user" data-id="${user.id}"><i class="fa-regular fa-trash-can"></i></button>
-                                </td>
-                            </tr>
-                        `;
-                    }).join('');
-
-                    // Wire edit/delete buttons
-                    usersTableBody.querySelectorAll('.btn-edit-user').forEach(btn => {
-                        btn.addEventListener('click', function () {
-                            const u = JSON.parse(this.dataset.user);
-                            document.getElementById('userId').value = u.id;
-                            document.getElementById('userNameInput').value = u.name;
-                            document.getElementById('userEmailInput').value = u.email;
-                            document.getElementById('userRoleSelect').value = u.role || 'Sales Executive';
-                            document.getElementById('userStatusSelect').value = u.status || 'active';
-                            document.getElementById('userPasswordInput').value = '';
-                            document.getElementById('userModalLabel').textContent = 'Edit User';
-                            const modal = new bootstrap.Modal(document.getElementById('userModal'));
-                            modal.show();
-                        });
-                    });
-
-                    usersTableBody.querySelectorAll('.btn-delete-user').forEach(btn => {
-                        btn.addEventListener('click', function () {
-                            const id = this.dataset.id;
-                            Swal.fire({
-                                title: 'Delete User?',
-                                text: "Are you sure you want to remove this user?",
-                                icon: 'warning',
-                                showCancelButton: true,
-                                confirmButtonColor: '#dc3545',
-                                confirmButtonText: 'Yes, Delete'
-                            }).then(result => {
-                                if (result.isConfirmed) {
-                                    fetch(`/api/users/${id}`, {
-                                        method: 'DELETE',
-                                        headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' }
-                                    })
-                                    .then(res => res.json())
-                                    .then(res => {
-                                        if (res.success) {
-                                            Swal.fire({ icon: 'success', title: 'Deleted', text: res.message, toast: true, position: 'top-end', timer: 2000, showConfirmButton: false });
-                                            loadUsers();
-                                        } else {
-                                            Swal.fire({ icon: 'error', title: 'Error', text: res.message });
-                                        }
-                                    });
-                                }
-                            });
-                        });
-                    });
-                }
-            });
-    };
-
-    const btnAddUser = document.getElementById('btnAddUser');
-    if (btnAddUser) {
-        btnAddUser.addEventListener('click', function () {
-            if (userForm) {
-                userForm.reset();
-                document.getElementById('userId').value = '';
-                document.getElementById('userModalLabel').textContent = 'Add New User';
-            }
-        });
-    }
-
-    if (userForm) {
-        userForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            const userId = document.getElementById('userId').value;
-            const url = userId ? `/api/users/${userId}` : '/api/users';
-            const method = userId ? 'PUT' : 'POST';
-
-            const payload = {
-                name: document.getElementById('userNameInput').value,
-                email: document.getElementById('userEmailInput').value,
-                password: document.getElementById('userPasswordInput').value,
-                role: document.getElementById('userRoleSelect').value,
-                status: document.getElementById('userStatusSelect').value,
-            };
-
-            fetch(url, {
-                method: method,
-                body: JSON.stringify(payload),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                    'Accept': 'application/json'
-                }
-            })
-            .then(async res => {
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.message || 'Failed to save user.');
-                const modalEl = document.getElementById('userModal');
-                const modal = bootstrap.Modal.getInstance(modalEl);
-                if (modal) modal.hide();
-                Swal.fire({ icon: 'success', title: 'Saved', text: data.message, toast: true, position: 'top-end', timer: 2000, showConfirmButton: false });
-                loadUsers();
-            })
-            .catch(err => {
-                Swal.fire({ icon: 'error', title: 'Error', text: err.message });
-            });
-        });
-    }
 
     // 6. Backup & Restore Handler
     const backupHistoryTableBody = document.getElementById('backupHistoryTableBody');
@@ -406,13 +262,13 @@ document.addEventListener('DOMContentLoaded', function () {
                                         method: 'DELETE',
                                         headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' }
                                     })
-                                    .then(res => res.json())
-                                    .then(res => {
-                                        if (res.success) {
-                                            Swal.fire({ icon: 'success', title: 'Deleted', text: res.message, toast: true, position: 'top-end', timer: 2000, showConfirmButton: false });
-                                            loadBackups();
-                                        }
-                                    });
+                                        .then(res => res.json())
+                                        .then(res => {
+                                            if (res.success) {
+                                                Swal.fire({ icon: 'success', title: 'Deleted', text: res.message, toast: true, position: 'top-end', timer: 2000, showConfirmButton: false });
+                                                loadBackups();
+                                            }
+                                        });
                                 }
                             });
                         });
@@ -431,19 +287,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 method: 'POST',
                 headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' }
             })
-            .then(res => res.json())
-            .then(res => {
-                if (res.success) {
-                    Swal.fire({ icon: 'success', title: 'Backup Created', text: res.message, toast: true, position: 'top-end', timer: 2500, showConfirmButton: false });
-                    loadBackups();
-                } else {
-                    Swal.fire({ icon: 'error', title: 'Backup Failed', text: res.message });
-                }
-            })
-            .finally(() => {
-                btnCreateBackup.disabled = false;
-                btnCreateBackup.innerHTML = orig;
-            });
+                .then(res => res.json())
+                .then(res => {
+                    if (res.success) {
+                        Swal.fire({ icon: 'success', title: 'Backup Created', text: res.message, toast: true, position: 'top-end', timer: 2500, showConfirmButton: false });
+                        loadBackups();
+                    } else {
+                        Swal.fire({ icon: 'error', title: 'Backup Failed', text: res.message });
+                    }
+                })
+                .finally(() => {
+                    btnCreateBackup.disabled = false;
+                    btnCreateBackup.innerHTML = orig;
+                });
         });
     }
 
@@ -474,14 +330,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     body: formData,
                     headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' }
                 })
-                .then(res => res.json())
-                .then(res => {
-                    if (res.success) {
-                        Swal.fire({ icon: 'success', title: 'Restored', text: res.message }).then(() => window.location.reload());
-                    } else {
-                        Swal.fire({ icon: 'error', title: 'Restore Failed', text: res.message });
-                    }
-                });
+                    .then(res => res.json())
+                    .then(res => {
+                        if (res.success) {
+                            Swal.fire({ icon: 'success', title: 'Restored', text: res.message }).then(() => window.location.reload());
+                        } else {
+                            Swal.fire({ icon: 'error', title: 'Restore Failed', text: res.message });
+                        }
+                    });
             }
         });
     };
@@ -569,25 +425,49 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 9. Lazy Load Tabs on Bootstrap shown.bs.tab
-    const tabNavButtons = document.querySelectorAll('#v-pills-tab button');
-    tabNavButtons.forEach(btn => {
-        btn.addEventListener('shown.bs.tab', function (e) {
-            const targetId = e.target.getAttribute('data-bs-target');
-            if (targetId === '#v-pills-users') loadUsers();
-            if (targetId === '#v-pills-backup') loadBackups();
-            if (targetId === '#v-pills-system') loadSystemInfo();
-            if (targetId === '#v-pills-audit') loadAuditLogs();
-        });
-    });
+    // 9. Lazy Load Tabs & Tab Persistence on Reload (localStorage & URL hash)
+    const tabNavButtons = document.querySelectorAll('.settings-vnav .nav-link, #settings-tab button, [data-bs-toggle="pill"]');
 
-    // Initial check if active tab requires loading
-    const activeTab = document.querySelector('#v-pills-tab button.active');
-    if (activeTab) {
-        const targetId = activeTab.getAttribute('data-bs-target');
-        if (targetId === '#v-pills-users') loadUsers();
+    const triggerTabLoad = (targetId) => {
         if (targetId === '#v-pills-backup') loadBackups();
         if (targetId === '#v-pills-system') loadSystemInfo();
         if (targetId === '#v-pills-audit') loadAuditLogs();
+    };
+
+    tabNavButtons.forEach(btn => {
+        const handler = () => {
+            const targetId = btn.getAttribute('data-bs-target') || btn.getAttribute('href');
+            if (targetId) {
+                localStorage.setItem('settingsActiveTab', targetId);
+                if (window.history && window.history.replaceState) {
+                    window.history.replaceState(null, null, targetId);
+                }
+                triggerTabLoad(targetId);
+            }
+        };
+        btn.addEventListener('shown.bs.tab', handler);
+        btn.addEventListener('click', handler);
+    });
+
+    // Check URL hash first, then localStorage for active tab on page reload
+    const savedTab = window.location.hash || localStorage.getItem('settingsActiveTab');
+    let tabActivated = false;
+
+    if (savedTab && savedTab.startsWith('#v-pills-')) {
+        const targetBtn = document.querySelector(`.settings-vnav [data-bs-target="${savedTab}"], #settings-tab [data-bs-target="${savedTab}"]`);
+        if (targetBtn) {
+            const tabInstance = bootstrap.Tab.getOrCreateInstance(targetBtn);
+            tabInstance.show();
+            triggerTabLoad(savedTab);
+            tabActivated = true;
+        }
+    }
+
+    if (!tabActivated) {
+        const activeTab = document.querySelector('.settings-vnav .nav-link.active, #settings-tab button.active, [data-bs-toggle="pill"].active');
+        if (activeTab) {
+            const targetId = activeTab.getAttribute('data-bs-target') || activeTab.getAttribute('href');
+            if (targetId) triggerTabLoad(targetId);
+        }
     }
 });

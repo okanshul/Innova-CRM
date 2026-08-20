@@ -34,8 +34,15 @@
     <!-- Flatpickr CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
-    <!-- Inline script to apply collapsed state before initial paint -->
+    <!-- Inline script to apply collapsed state & crmSettings before initial paint -->
     <script>
+        window.crmSettings = {
+            itemsPerPage: parseInt("{{ setting('items_per_page', 10) }}", 10) || 10,
+            currencySymbol: "{{ setting('currency_symbol', 'USD') }}",
+            dateFormat: "{{ setting('date_format', 'MMM D, YYYY') }}",
+            timeFormat: "{{ setting('time_format', '12') }}",
+            timezone: "{{ setting('timezone', 'Asia/Kolkata') }}"
+        };
         (function() {
             if (localStorage.getItem('sidebarCollapsed') === 'true') {
                 document.documentElement.classList.add('sidebar-collapsed');

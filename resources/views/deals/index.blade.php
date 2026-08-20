@@ -33,12 +33,13 @@
                     </div>
 
                     <div class="filter-item-half">
+                        @php $defaultPerPage = (string) setting('items_per_page', 10); @endphp
                         <x-form.select name="perPage" id="perPage" class="custom-filter-select w-100 shadow-none">
-                            <option value="5">5 per page</option>
-                            <option value="10" selected>10 per page</option>
-                            <option value="25">25 per page</option>
-                            <option value="50">50 per page</option>
-                            <option value="100">100 per page</option>
+                            <option value="5" {{ $defaultPerPage == '5' ? 'selected' : '' }}>5 per page</option>
+                            <option value="10" {{ $defaultPerPage == '10' ? 'selected' : '' }}>10 per page</option>
+                            <option value="25" {{ $defaultPerPage == '25' ? 'selected' : '' }}>25 per page</option>
+                            <option value="50" {{ $defaultPerPage == '50' ? 'selected' : '' }}>50 per page</option>
+                            <option value="100" {{ $defaultPerPage == '100' ? 'selected' : '' }}>100 per page</option>
                         </x-form.select>
                     </div>
 

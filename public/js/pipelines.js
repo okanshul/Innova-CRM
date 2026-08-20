@@ -293,7 +293,7 @@ document.addEventListener('DOMContentLoaded', function () {
         btnFilterReset.addEventListener('click', function () {
             if (searchInput) searchInput.value = '';
             if (perPageSelect) {
-                perPageSelect.value = '10';
+                perPageSelect.value = (window.crmSettings?.itemsPerPage || 10).toString();
                 perPageSelect.dispatchEvent(new Event('change', { bubbles: true }));
             }
             fetchPipelines(1);
