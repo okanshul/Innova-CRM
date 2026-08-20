@@ -19,21 +19,26 @@ Route::middleware(['web', 'auth'])->name('crm.')->group(function () {
     // Staff API
     Route::get('staff/{id}/permissions', [StaffController::class, 'getPermissions'])->name('staff.permissions.get');
     Route::put('staff/{id}/permissions', [StaffController::class, 'updatePermissions'])->name('staff.permissions.update');
+    Route::post('staff/bulk-delete', [StaffController::class, 'bulkDestroy'])->name('api.staff.bulk_delete');
     Route::apiResource('staff', StaffController::class)->names('api.staff');
 
     // Contacts API
+    Route::post('contacts/bulk-delete', [ContactController::class, 'bulkDestroy'])->name('api.contacts.bulk_delete');
     Route::apiResource('contacts', ContactController::class)->names('api.contacts');
 
     // Deals API
+    Route::post('deals/bulk-delete', [DealController::class, 'bulkDestroy'])->name('api.deals.bulk_delete');
     Route::apiResource('deals', DealController::class)->names('api.deals');
 
     // Pipelines API
     Route::apiResource('pipelines', PipelineController::class)->names('api.pipelines');
 
     // Tasks API
+    Route::post('tasks/bulk-delete', [TaskController::class, 'bulkDestroy'])->name('api.tasks.bulk_delete');
     Route::apiResource('tasks', TaskController::class)->names('api.tasks');
 
     // Meetings API
+    Route::post('meetings/bulk-delete', [MeetingController::class, 'bulkDestroy'])->name('api.meetings.bulk_delete');
     Route::apiResource('meetings', MeetingController::class)->names('api.meetings');
 
     // Roles API

@@ -115,4 +115,22 @@ class TaskController extends Controller
             'message' => 'Task deleted successfully.'
         ]);
     }
+
+    public function bulkDestroy(Request $request)
+    {
+        Gate::authorize('tasks.delete');
+
+        $validated = $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:tasks,id'
+        ]);
+
+        Task::whereIn('id', $validated['ids'])->update(['deleted_by' => auth()->id()]);
+        Task::whereIn('id', $validated['ids'])->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => count($validated['ids']) . ' tasks deleted successfully.'
+        ]);
+    }
 }

@@ -222,4 +222,27 @@ class StaffController extends Controller
             'message' => 'Staff deleted successfully.'
         ]);
     }
+
+    public function bulkDestroy(Request $request)
+    {
+        Gate::authorize('staff.delete');
+
+        $validated = $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:users,id'
+        ]);
+
+        $users = User::whereIn('id', $validated['ids'])->get();
+        foreach ($users as $user) {
+            if ($user->avatar) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+            $user->delete();
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => count($validated['ids']) . ' staff members deleted successfully.'
+        ]);
+    }
 }

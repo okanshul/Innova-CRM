@@ -42,7 +42,7 @@ class LoginController extends Controller
             $landingPage = setting('default_landing_page', 'dashboard');
             $route = \Illuminate\Support\Facades\Route::has($landingPage) ? $landingPage : 'dashboard';
 
-            return redirect()->intended(route($route));
+            return redirect()->intended(route($route))->with('welcome', 'Welcome back, ' . Auth::user()->name . '!');
         }
 
         return back()->withErrors([

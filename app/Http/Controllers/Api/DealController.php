@@ -134,4 +134,22 @@ class DealController extends Controller
             'message' => 'Deal deleted successfully.'
         ]);
     }
+
+    public function bulkDestroy(Request $request)
+    {
+        Gate::authorize('deals.delete');
+
+        $validated = $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:deals,id'
+        ]);
+
+        Deal::whereIn('id', $validated['ids'])->update(['deleted_by' => auth()->id()]);
+        Deal::whereIn('id', $validated['ids'])->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => count($validated['ids']) . ' deals deleted successfully.'
+        ]);
+    }
 }

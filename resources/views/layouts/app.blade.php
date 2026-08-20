@@ -88,6 +88,34 @@
     <script src="{{ asset('js/app-utils.js') }}"></script>
     <script src="{{ asset('js/global-search.js') }}"></script>
 
+    @if (session('welcome'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                if (typeof showSuccessToast === 'function') {
+                    showSuccessToast("{{ session('welcome') }}");
+                } else if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: "{{ session('welcome') }}",
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3500,
+                        timerProgressBar: true
+                    });
+                }
+            });
+        </script>
+    @elseif (session('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                if (typeof showSuccessToast === 'function') {
+                    showSuccessToast("{{ session('success') }}");
+                }
+            });
+        </script>
+    @endif
+
     {{ $scripts ?? '' }}
     @stack('scripts')
 </body>

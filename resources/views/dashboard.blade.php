@@ -11,6 +11,21 @@
 @endpush
 
 @section('content')
+    @if (session('welcome'))
+        <div class="alert alert-success alert-dismissible fade show rounded-4 border-0 shadow-sm mb-3 d-flex align-items-center justify-content-between p-3" role="alert" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(168, 85, 247, 0.12)); border-left: 4px solid #6366F1 !important;">
+            <div class="d-flex align-items-center gap-3">
+                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 36px; height: 36px; background: linear-gradient(135deg, #6366F1, #A855F7) !important;">
+                    <i class="fa-solid fa-hand-wave fs-6"></i>
+                </div>
+                <div>
+                    <h6 class="fw-bold mb-0 text-body-emphasis">{{ session('welcome') }}</h6>
+                    <small class="text-body-secondary">Here is an overview of your CRM activity for today.</small>
+                </div>
+            </div>
+            <button type="button" class="btn-close shadow-none" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <!-- Stats Row (2x2 Grid on Mobile) -->
     <div class="row g-2 g-sm-3 mb-3">
         @foreach ($stats as $stat)

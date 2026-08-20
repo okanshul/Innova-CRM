@@ -118,4 +118,22 @@ class MeetingController extends Controller
             'message' => 'Meeting deleted successfully.'
         ]);
     }
+
+    public function bulkDestroy(Request $request)
+    {
+        Gate::authorize('meetings.delete');
+
+        $validated = $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:meetings,id'
+        ]);
+
+        Meeting::whereIn('id', $validated['ids'])->update(['deleted_by' => auth()->id()]);
+        Meeting::whereIn('id', $validated['ids'])->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => count($validated['ids']) . ' meetings deleted successfully.'
+        ]);
+    }
 }

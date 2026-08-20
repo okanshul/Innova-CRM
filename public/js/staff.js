@@ -472,10 +472,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 btnBulkDelete.disabled = true;
                 btnBulkDelete.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i> Deleting...';
 
-                const deletePromises = selectedIds.map(id => apiRequest(`/api/staff/${id}`, { method: 'DELETE' }));
-                await Promise.all(deletePromises);
+                const res = await apiRequest('/api/staff/bulk-delete', {
+                    method: 'POST',
+                    body: JSON.stringify({ ids: selectedIds })
+                });
 
-                showSuccessToast(`${count} staff member${count > 1 ? 's' : ''} deleted successfully`);
+                showSuccessToast(res.message || `${count} staff member${count > 1 ? 's' : ''} deleted successfully`);
                 if (selectAllCheckbox) selectAllCheckbox.checked = false;
                 fetchStaffTable(currentPage);
             } catch (error) {

@@ -343,12 +343,15 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!confirmed) return;
 
             try {
-                await Promise.all(ids.map(id =>
-                    apiRequest(`/api/contacts/${id}`, { method: 'DELETE' })
-                ));
+                const res = await apiRequest('/api/contacts/bulk-delete', {
+                    method: 'POST',
+                    body: JSON.stringify({ ids: ids })
+                });
                 if (typeof showSuccessToast === 'function') {
-                    showSuccessToast(`${ids.length} contacts deleted successfully.`);
+                    showSuccessToast(res.message || `${ids.length} contacts deleted successfully.`);
                 }
+                const selectAllCheckbox = document.getElementById('selectAll');
+                if (selectAllCheckbox) selectAllCheckbox.checked = false;
                 fetchContacts(currentPage);
             } catch (err) {
                 if (typeof showErrorToast === 'function') {

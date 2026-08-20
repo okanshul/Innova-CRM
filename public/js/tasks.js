@@ -347,12 +347,15 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!confirmed) return;
 
             try {
-                await Promise.all(ids.map(id =>
-                    apiRequest(`/api/tasks/${id}`, { method: 'DELETE' })
-                ));
+                const res = await apiRequest('/api/tasks/bulk-delete', {
+                    method: 'POST',
+                    body: JSON.stringify({ ids: ids })
+                });
                 if (typeof showSuccessToast === 'function') {
-                    showSuccessToast(`${ids.length} tasks deleted successfully.`);
+                    showSuccessToast(res.message || `${ids.length} tasks deleted successfully.`);
                 }
+                const selectAllCheckbox = document.getElementById('selectAll');
+                if (selectAllCheckbox) selectAllCheckbox.checked = false;
                 fetchTasks(currentPage);
             } catch (err) {
                 if (typeof showErrorToast === 'function') {

@@ -139,4 +139,22 @@ class ContactController extends Controller
             'message' => 'Contact deleted successfully.'
         ]);
     }
+
+    public function bulkDestroy(Request $request)
+    {
+        Gate::authorize('contacts.delete');
+
+        $validated = $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:contacts,id'
+        ]);
+
+        Contact::whereIn('id', $validated['ids'])->update(['deleted_by' => auth()->id()]);
+        Contact::whereIn('id', $validated['ids'])->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => count($validated['ids']) . ' contacts deleted successfully.'
+        ]);
+    }
 }
