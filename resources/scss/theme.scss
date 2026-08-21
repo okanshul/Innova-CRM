@@ -271,8 +271,12 @@ $transition-speed: 0.3s;
             padding-left: 0 !important;
             padding-right: 0 !important;
 
-            .logo-icon {
+            .logo-icon,
+            .sidebar-logo-img {
                 margin: 0 auto;
+                max-width: 38px !important;
+                max-height: 38px !important;
+                object-fit: contain;
             }
         }
 

@@ -8,10 +8,14 @@
         
         <!-- Mobile Logo (Visible on mobile screens) -->
         <a href="{{ route('dashboard') }}" class="d-flex align-items-center gap-2 text-decoration-none d-md-none">
-            <div class="logo-icon bg-primary text-white rounded-3 d-flex align-items-center justify-content-center shadow-sm" style="width: 32px; height: 32px; background: linear-gradient(135deg, #6366f1, #a855f7) !important;">
-                <i class="fa-solid fa-layer-group fs-6"></i>
-            </div>
-            <span class="fw-bold fs-5 text-body-emphasis tracking-tight" style="letter-spacing: -0.03em;">InnovaCRM</span>
+            @if(setting('system_logo'))
+                <img src="{{ asset(setting('system_logo')) }}" alt="{{ setting('app_name', 'InnovaCRM') }}" style="max-height: 32px; max-width: 120px; object-fit: contain;">
+            @else
+                <div class="logo-icon bg-primary text-white rounded-3 d-flex align-items-center justify-content-center shadow-sm" style="width: 32px; height: 32px; background: linear-gradient(135deg, #6366f1, #a855f7) !important;">
+                    <i class="fa-solid fa-layer-group fs-6"></i>
+                </div>
+                <span class="fw-bold fs-5 text-body-emphasis tracking-tight" style="letter-spacing: -0.03em;">{{ setting('app_name', 'InnovaCRM') }}</span>
+            @endif
         </a>
 
         <!-- Desktop Search Bar -->

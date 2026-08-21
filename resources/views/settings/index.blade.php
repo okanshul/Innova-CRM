@@ -379,31 +379,15 @@
                                                     </div>
                                                     <div class="settings-title-wrap">
                                                         <h6 class="settings-card-title">System Logo</h6>
-                                                        <p class="settings-card-desc">Upload your company logo.</p>
+                                                        <p class="settings-card-desc">Manage logo in Appearance tab.</p>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="settings-card-body">
-                                                <div class="logo-preview-box" id="logoPreviewBox">
-                                                    <div class="d-flex align-items-center gap-2">
-                                                        <div class="bg-primary rounded-3 d-flex align-items-center justify-content-center text-white fw-bold px-2 py-1"
-                                                            style="font-size: 1.1rem; width: 32px; height: 32px;">
-                                                            <i class="fa-solid fa-layer-group"></i>
-                                                        </div>
-                                                        <span class="fw-bold fs-5 text-body-emphasis">InnovaCRM</span>
-                                                    </div>
-                                                </div>
-                                                <input type="file" id="systemLogoInput" name="system_logo_file"
-                                                    class="d-none" accept="image/*">
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <button type="button" class="btn btn-soft-primary flex-fill"
-                                                        onclick="document.getElementById('systemLogoInput').click()">
-                                                        <i class="fa-solid fa-rotate me-1"></i> Change
-                                                    </button>
-                                                    <button type="button" class="btn btn-soft-danger flex-fill">
-                                                        Remove
-                                                    </button>
-                                                </div>
+                                                <button type="button" class="btn btn-soft-primary w-100 btn-sm"
+                                                    onclick="document.getElementById('v-pills-appearance-tab').click()">
+                                                    <i class="fa-solid fa-palette me-1"></i> Branding Settings
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -418,28 +402,15 @@
                                                     </div>
                                                     <div class="settings-title-wrap">
                                                         <h6 class="settings-card-title">Favicon</h6>
-                                                        <p class="settings-card-desc">Upload favicon for browser tab.</p>
+                                                        <p class="settings-card-desc">Manage favicon in Appearance tab.</p>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="settings-card-body">
-                                                <div class="logo-preview-box" id="faviconPreviewBox">
-                                                    <div class="bg-primary rounded-3 d-flex align-items-center justify-content-center text-white fw-bold"
-                                                        style="width: 32px; height: 32px;">
-                                                        <i class="fa-solid fa-layer-group fs-6"></i>
-                                                    </div>
-                                                </div>
-                                                <input type="file" id="faviconInput" name="favicon_file"
-                                                    class="d-none" accept="image/*">
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <button type="button" class="btn btn-soft-primary flex-fill"
-                                                        onclick="document.getElementById('faviconInput').click()">
-                                                        <i class="fa-solid fa-rotate me-1"></i> Change
-                                                    </button>
-                                                    <button type="button" class="btn btn-soft-danger flex-fill">
-                                                        Remove
-                                                    </button>
-                                                </div>
+                                                <button type="button" class="btn btn-soft-primary w-100 btn-sm"
+                                                    onclick="document.getElementById('v-pills-appearance-tab').click()">
+                                                    <i class="fa-solid fa-palette me-1"></i> Branding Settings
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -663,7 +634,7 @@
                                             style="min-height: 140px;" id="appearanceLogoPreviewBox">
                                             @if (isset($settings['system_logo']) && $settings['system_logo'])
                                                 <img src="{{ asset($settings['system_logo']) }}" alt="Logo"
-                                                    class="img-fluid" style="max-height: 60px;">
+                                                    class="img-fluid" style="max-height: 60px; max-width: 220px; object-fit: contain;">
                                             @else
                                                 <div class="d-flex align-items-center gap-2">
                                                     <div class="brand-icon rounded-3 d-flex align-items-center justify-content-center text-white shadow-sm"
@@ -679,17 +650,26 @@
                                                         </svg>
                                                     </div>
                                                     <span
-                                                        class="fw-bold fs-4 text-body-emphasis tracking-tight">InnovaCRM</span>
+                                                        class="fw-bold fs-4 text-body-emphasis tracking-tight">{{ $settings['app_name'] ?? 'InnovaCRM' }}</span>
                                                 </div>
                                             @endif
                                         </div>
                                         <input type="file" id="appearanceLogoInput" name="system_logo_file"
                                             class="d-none" accept="image/*">
-                                        <button type="button" class="btn w-100 py-2 rounded-3 fw-semibold mb-2"
-                                            style="background-color: #EEF2FF; color: #5030FF; border: none;"
-                                            onclick="document.getElementById('appearanceLogoInput').click()">
-                                            Change Logo
-                                        </button>
+                                        <input type="hidden" name="remove_system_logo" id="removeSystemLogoInput" value="0">
+                                        <div class="d-flex gap-2 mb-2">
+                                            <button type="button" class="btn flex-fill py-2 rounded-3 fw-semibold"
+                                                style="background-color: #EEF2FF; color: #5030FF; border: none;"
+                                                onclick="document.getElementById('appearanceLogoInput').click()">
+                                                <i class="fa-solid fa-upload me-1"></i> Change Logo
+                                            </button>
+                                            @if (isset($settings['system_logo']) && $settings['system_logo'])
+                                                <button type="button" class="btn btn-soft-danger py-2 rounded-3 fw-semibold"
+                                                    id="btnRemoveLogo">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
+                                            @endif
+                                        </div>
                                         <div class="text-center text-secondary fs-8">
                                             Recommended size: 300x80px
                                         </div>
@@ -772,11 +752,19 @@
                                                 <div>
                                                     <input type="file" id="appearanceFaviconInput" name="favicon_file"
                                                         class="d-none" accept="image/*">
-                                                    <button type="button"
-                                                        class="btn p-0 border-0 fw-semibold text-primary fs-7 mb-0 text-start"
-                                                        onclick="document.getElementById('appearanceFaviconInput').click()">
-                                                        Change Favicon
-                                                    </button>
+                                                    <input type="hidden" name="remove_favicon" id="removeFaviconInput" value="0">
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <button type="button"
+                                                            class="btn p-0 border-0 fw-semibold text-primary fs-7 mb-0 text-start"
+                                                            onclick="document.getElementById('appearanceFaviconInput').click()">
+                                                            Change Favicon
+                                                        </button>
+                                                        @if (isset($settings['favicon']) && $settings['favicon'])
+                                                            <button type="button" class="btn p-0 border-0 fw-semibold text-danger fs-8 mb-0 ms-2" id="btnRemoveFavicon">
+                                                                Remove
+                                                            </button>
+                                                        @endif
+                                                    </div>
                                                     <div class="text-secondary fs-8">Recommended size: 32x32px</div>
                                                 </div>
                                             </div>

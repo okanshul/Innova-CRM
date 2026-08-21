@@ -72,12 +72,15 @@ document.addEventListener('DOMContentLoaded', function () {
                                 icon: 'success',
                                 title: 'Settings Saved',
                                 text: data.message || 'System settings updated successfully.',
-                                timer: 2500,
+                                timer: 1500,
                                 showConfirmButton: false,
                                 toast: true,
                                 position: 'top-end'
                             });
                         }
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1200);
                     }
                 })
                 .catch(err => {
@@ -170,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = function (e) {
-                        box.innerHTML = `<img src="${e.target.result}" alt="Preview" class="img-fluid rounded" style="max-height: 48px;">`;
+                        box.innerHTML = `<img src="${e.target.result}" alt="Preview" class="img-fluid" style="max-height: 60px; max-width: 220px; object-fit: contain;">`;
                     };
                     reader.readAsDataURL(file);
                 }
@@ -178,10 +181,38 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
-    setupImagePreview('systemLogoInput', 'logoPreviewBox');
-    setupImagePreview('faviconInput', 'faviconPreviewBox');
     setupImagePreview('appearanceLogoInput', 'appearanceLogoPreviewBox');
     setupImagePreview('appearanceFaviconInput', 'appearanceFaviconPreviewBox');
+
+    // Remove Logo Handler
+    const btnRemoveLogo = document.getElementById('btnRemoveLogo');
+    if (btnRemoveLogo) {
+        btnRemoveLogo.addEventListener('click', function () {
+            const removeInput = document.getElementById('removeSystemLogoInput');
+            if (removeInput) removeInput.value = '1';
+            const box = document.getElementById('appearanceLogoPreviewBox');
+            const appName = document.querySelector('input[name="app_name"]')?.value || 'InnovaCRM';
+            if (box) {
+                box.innerHTML = `<div class="d-flex align-items-center gap-2">
+                    <div class="brand-icon rounded-3 d-flex align-items-center justify-content-center text-white shadow-sm" style="width: 44px; height: 44px; background: #5030FF;">
+                        <i class="fa-solid fa-layer-group fs-5"></i>
+                    </div>
+                    <span class="fw-bold fs-4 text-body-emphasis tracking-tight">${appName}</span>
+                </div>`;
+            }
+            btnRemoveLogo.style.display = 'none';
+        });
+    }
+
+    // Remove Favicon Handler
+    const btnRemoveFavicon = document.getElementById('btnRemoveFavicon');
+    if (btnRemoveFavicon) {
+        btnRemoveFavicon.addEventListener('click', function () {
+            const removeInput = document.getElementById('removeFaviconInput');
+            if (removeInput) removeInput.value = '1';
+            btnRemoveFavicon.style.display = 'none';
+        });
+    }
 
     // 4. Color Picker Sync
     const setupColorPicker = (textInputId, pickerId, swatchId) => {
@@ -230,13 +261,13 @@ document.addEventListener('DOMContentLoaded', function () {
                         return;
                     }
                     backupHistoryTableBody.innerHTML = res.data.map(b => {
-                        const sizeMb = (b.size / 1024 / 1024).toFixed(1) + ' MB';
+                        const sizeFormatted = formatFileSize(b.size);
                         const createdAt = new Date(b.created_at).toLocaleString();
 
                         return `
                             <tr>
                                 <td class="ps-3 py-2 fw-semibold fs-7"><i class="fa-solid fa-file-zipper me-2 text-primary"></i>${b.filename}</td>
-                                <td class="py-2 fs-7 text-secondary">${sizeMb}</td>
+                                <td class="py-2 fs-7 text-secondary">${sizeFormatted}</td>
                                 <td class="py-2 fs-7 text-secondary">${createdAt}</td>
                                 <td class="pe-3 py-2 text-end">
                                     <a href="/api/backups/${b.id}/download" class="btn btn-sm btn-icon btn-ghost-primary rounded-circle" title="Download"><i class="fa-solid fa-download"></i></a>
@@ -425,7 +456,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 9. Lazy Load Tabs & Tab Persistence on Reload (localStorage & URL hash)
+    // 9. Lazy Load Tabs & URL Hash Handling (localStorage persistence removed)
+    localStorage.removeItem('settingsActiveTab');
+
     const tabNavButtons = document.querySelectorAll('.settings-vnav .nav-link, #settings-tab button, [data-bs-toggle="pill"]');
 
     const triggerTabLoad = (targetId) => {
@@ -438,7 +471,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const handler = () => {
             const targetId = btn.getAttribute('data-bs-target') || btn.getAttribute('href');
             if (targetId) {
-                localStorage.setItem('settingsActiveTab', targetId);
                 if (window.history && window.history.replaceState) {
                     window.history.replaceState(null, null, targetId);
                 }
@@ -449,8 +481,8 @@ document.addEventListener('DOMContentLoaded', function () {
         btn.addEventListener('click', handler);
     });
 
-    // Check URL hash first, then localStorage for active tab on page reload
-    const savedTab = window.location.hash || localStorage.getItem('settingsActiveTab');
+    // Check URL hash for active tab on page load
+    const savedTab = window.location.hash;
     let tabActivated = false;
 
     if (savedTab && savedTab.startsWith('#v-pills-')) {

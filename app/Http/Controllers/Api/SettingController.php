@@ -53,7 +53,13 @@ class SettingController extends Controller
         try {
             DB::transaction(function () use ($request) {
                 // File Upload 1: System Logo
-                if ($request->hasFile('system_logo_file') && $request->file('system_logo_file')->isValid()) {
+                if ($request->input('remove_system_logo') == '1') {
+                    $oldLogo = CrmSetting::get('system_logo');
+                    if ($oldLogo && file_exists(public_path($oldLogo))) {
+                        @unlink(public_path($oldLogo));
+                    }
+                    CrmSetting::set('system_logo', '');
+                } else if ($request->hasFile('system_logo_file') && $request->file('system_logo_file')->isValid()) {
                     $oldLogo = CrmSetting::get('system_logo');
                     if ($oldLogo && file_exists(public_path($oldLogo))) {
                         @unlink(public_path($oldLogo));
@@ -70,7 +76,13 @@ class SettingController extends Controller
                 }
 
                 // File Upload 2: Favicon
-                if ($request->hasFile('favicon_file') && $request->file('favicon_file')->isValid()) {
+                if ($request->input('remove_favicon') == '1') {
+                    $oldFavicon = CrmSetting::get('favicon');
+                    if ($oldFavicon && file_exists(public_path($oldFavicon))) {
+                        @unlink(public_path($oldFavicon));
+                    }
+                    CrmSetting::set('favicon', '');
+                } else if ($request->hasFile('favicon_file') && $request->file('favicon_file')->isValid()) {
                     $oldFavicon = CrmSetting::get('favicon');
                     if ($oldFavicon && file_exists(public_path($oldFavicon))) {
                         @unlink(public_path($oldFavicon));
@@ -87,7 +99,7 @@ class SettingController extends Controller
                 }
 
                 // Process regular settings fields
-                $settings = $request->except(['_token', '_method', 'system_logo_file', 'favicon_file']);
+                $settings = $request->except(['_token', '_method', 'system_logo_file', 'favicon_file', 'remove_system_logo', 'remove_favicon']);
 
                 foreach ($settings as $key => $value) {
                     if (is_scalar($value) || is_array($value)) {

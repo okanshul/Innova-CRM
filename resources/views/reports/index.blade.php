@@ -7,12 +7,85 @@
         <x-page-header title="Reports & Analytics" subtitle="Comprehensive performance metrics and sales overview." icon="fa-solid fa-chart-column" />
 
         <div class="p-3 p-md-4">
+            <!-- Filter Bar -->
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-body-tertiary mb-4">
+                <form method="GET" action="{{ route('reports.index') }}" id="reportsFilterForm">
+                    <div class="row g-2 align-items-end">
+                        <!-- Period Selector -->
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <label class="form-label small fw-semibold text-secondary mb-1">
+                                <i class="fa-solid fa-calendar-days text-primary me-1"></i> Time Period
+                            </label>
+                            <select name="period" id="periodSelect" class="form-select form-select-sm rounded-3 shadow-none">
+                                <option value="all" {{ ($period ?? 'all') === 'all' ? 'selected' : '' }}>All Time</option>
+                                <option value="today" {{ ($period ?? '') === 'today' ? 'selected' : '' }}>Today</option>
+                                <option value="this_week" {{ ($period ?? '') === 'this_week' ? 'selected' : '' }}>This Week</option>
+                                <option value="this_month" {{ ($period ?? '') === 'this_month' ? 'selected' : '' }}>This Month</option>
+                                <option value="this_quarter" {{ ($period ?? '') === 'this_quarter' ? 'selected' : '' }}>This Quarter</option>
+                                <option value="this_year" {{ ($period ?? '') === 'this_year' ? 'selected' : '' }}>This Year</option>
+                                <option value="custom" {{ ($period ?? '') === 'custom' ? 'selected' : '' }}>Custom Date Range</option>
+                            </select>
+                        </div>
+
+                        <!-- Custom Date Range -->
+                        <div class="col-6 col-sm-3 col-md-2 custom-date-field {{ ($period ?? '') !== 'custom' ? 'd-none' : '' }}">
+                            <label class="form-label small fw-semibold text-secondary mb-1">Start Date</label>
+                            <input type="date" name="start_date" class="form-control form-control-sm rounded-3 shadow-none" value="{{ $startDateInput ?? '' }}">
+                        </div>
+                        <div class="col-6 col-sm-3 col-md-2 custom-date-field {{ ($period ?? '') !== 'custom' ? 'd-none' : '' }}">
+                            <label class="form-label small fw-semibold text-secondary mb-1">End Date</label>
+                            <input type="date" name="end_date" class="form-control form-control-sm rounded-3 shadow-none" value="{{ $endDateInput ?? '' }}">
+                        </div>
+
+                        <!-- Owner / Staff Filter -->
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <label class="form-label small fw-semibold text-secondary mb-1">
+                                <i class="fa-solid fa-user-gear text-primary me-1"></i> Owner / Staff
+                            </label>
+                            <select name="owner_id" class="form-select form-select-sm rounded-3 shadow-none">
+                                <option value="">All Owners</option>
+                                @foreach ($owners as $owner)
+                                    <option value="{{ $owner->id }}" {{ (string)($ownerId ?? '') === (string)$owner->id ? 'selected' : '' }}>
+                                        {{ $owner->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Pipeline Filter -->
+                        <div class="col-12 col-sm-6 col-md-2">
+                            <label class="form-label small fw-semibold text-secondary mb-1">
+                                <i class="fa-solid fa-diagram-project text-primary me-1"></i> Pipeline
+                            </label>
+                            <select name="pipeline_id" class="form-select form-select-sm rounded-3 shadow-none">
+                                <option value="">All Pipelines</option>
+                                @foreach ($pipelines as $pipeline)
+                                    <option value="{{ $pipeline->id }}" {{ (string)($pipelineId ?? '') === (string)$pipeline->id ? 'selected' : '' }}>
+                                        {{ $pipeline->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Filter Actions -->
+                        <div class="col-12 col-md-2 d-flex gap-2 ms-auto">
+                            <button type="submit" class="btn btn-sm btn-primary rounded-3 w-100 fw-semibold d-flex align-items-center justify-content-center gap-1 shadow-none">
+                                <i class="fa-solid fa-filter fs-xs"></i> Filter
+                            </button>
+                            <a href="{{ route('reports.index') }}" class="btn btn-sm btn-outline-secondary rounded-3 w-100 fw-semibold d-flex align-items-center justify-content-center gap-1 shadow-none">
+                                <i class="fa-solid fa-rotate-left fs-xs"></i> Reset
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
             <!-- Stat Cards Row -->
             <div class="row g-3 mb-4">
                 <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="card border-0 shadow-sm rounded-4 p-3 bg-body-tertiary">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 p-3 bg-body-tertiary">
                         <div class="d-flex align-items-center gap-3">
-                            <div class="p-3 bg-primary bg-opacity-10 text-primary rounded-3">
+                            <div class="d-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary rounded-3 flex-shrink-0" style="width: 48px; height: 48px;">
                                 <i class="fa-solid fa-dollar-sign fs-4"></i>
                             </div>
                             <div>
@@ -24,9 +97,9 @@
                 </div>
 
                 <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="card border-0 shadow-sm rounded-4 p-3 bg-body-tertiary">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 p-3 bg-body-tertiary">
                         <div class="d-flex align-items-center gap-3">
-                            <div class="p-3 bg-success bg-opacity-10 text-success rounded-3">
+                            <div class="d-flex align-items-center justify-content-center bg-success bg-opacity-10 text-success rounded-3 flex-shrink-0" style="width: 48px; height: 48px;">
                                 <i class="fa-solid fa-gem fs-4"></i>
                             </div>
                             <div>
@@ -38,9 +111,9 @@
                 </div>
 
                 <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="card border-0 shadow-sm rounded-4 p-3 bg-body-tertiary">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 p-3 bg-body-tertiary">
                         <div class="d-flex align-items-center gap-3">
-                            <div class="p-3 bg-info bg-opacity-10 text-info rounded-3">
+                            <div class="d-flex align-items-center justify-content-center bg-info bg-opacity-10 text-info rounded-3 flex-shrink-0" style="width: 48px; height: 48px;">
                                 <i class="fa-regular fa-address-book fs-4"></i>
                             </div>
                             <div>
@@ -52,9 +125,9 @@
                 </div>
 
                 <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="card border-0 shadow-sm rounded-4 p-3 bg-body-tertiary">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 p-3 bg-body-tertiary">
                         <div class="d-flex align-items-center gap-3">
-                            <div class="p-3 bg-warning bg-opacity-10 text-warning rounded-3">
+                            <div class="d-flex align-items-center justify-content-center bg-warning bg-opacity-10 text-warning rounded-3 flex-shrink-0" style="width: 48px; height: 48px;">
                                 <i class="fa-solid fa-building fs-4"></i>
                             </div>
                             <div>
@@ -242,8 +315,8 @@
                         datasets: [{
                             data: @json($statusChartData['data']),
                             backgroundColor: ['#10b981', '#ef4444', '#3b82f6'],
-                            borderWidth: 2,
-                            borderColor: '#ffffff'
+                            borderWidth: 0,
+                            borderColor: 'transparent'
                         }]
                     },
                     options: {
@@ -300,8 +373,8 @@
                         datasets: [{
                             data: sourceCounts.length ? sourceCounts : [10, 25, 15, 8],
                             backgroundColor: ['#6366f1', '#10b981', '#f59e0b', '#06b6d4', '#ec4899', '#8b5cf6'],
-                            borderWidth: 2,
-                            borderColor: '#ffffff'
+                            borderWidth: 0,
+                            borderColor: 'transparent'
                         }]
                     },
                     options: {
@@ -311,6 +384,20 @@
                             legend: { position: 'right' }
                         }
                     }
+                });
+            }
+            // Filter Period Toggle Listener
+            const periodSelect = document.getElementById('periodSelect');
+            if (periodSelect) {
+                periodSelect.addEventListener('change', function() {
+                    const isCustom = this.value === 'custom';
+                    document.querySelectorAll('.custom-date-field').forEach(el => {
+                        if (isCustom) {
+                            el.classList.remove('d-none');
+                        } else {
+                            el.classList.add('d-none');
+                        }
+                    });
                 });
             }
         });

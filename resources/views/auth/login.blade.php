@@ -451,10 +451,14 @@
             
             <div class="left-content">
                 <div class="brand-logo">
-                    <div class="brand-icon">
-                        <i class="fa-solid fa-layer-group fs-5"></i>
-                    </div>
-                    <span class="fs-4 fw-bold text-white">InnovaCRM</span>
+                    @if(setting('system_logo'))
+                        <img src="{{ asset(setting('system_logo')) }}" alt="{{ setting('app_name', 'InnovaCRM') }}" style="max-height: 48px; max-width: 200px; object-fit: contain;">
+                    @else
+                        <div class="brand-icon">
+                            <i class="fa-solid fa-layer-group fs-5"></i>
+                        </div>
+                        <span class="fs-4 fw-bold text-white">{{ setting('app_name', 'InnovaCRM') }}</span>
+                    @endif
                 </div>
 
                 <h1 class="hero-title">

@@ -63,6 +63,7 @@ class BackupController extends Controller
                 $zip->close();
             }
 
+            clearstatcache(true, $zipPath);
             $size = file_exists($zipPath) ? filesize($zipPath) : 0;
 
             $backup = Backup::create([

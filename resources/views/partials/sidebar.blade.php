@@ -2,14 +2,14 @@
     <div class="d-flex align-items-center justify-content-between mb-4 px-2 pt-1">
         <a href="{{ route('dashboard') }}" class="d-flex align-items-center text-white text-decoration-none sidebar-brand gap-2">
             @if(setting('system_logo'))
-                <img src="{{ asset(setting('system_logo')) }}" alt="Logo" class="logo-icon rounded-3" style="max-height: 38px; max-width: 38px; object-fit: contain;">
+                <img src="{{ asset(setting('system_logo')) }}" alt="{{ setting('app_name', 'InnovaCRM') }}" class="sidebar-logo-img rounded-2" style="max-height: 38px; max-width: 160px; object-fit: contain;">
             @else
-                <div class="bg-primary text-white p-2 rounded-3 d-flex align-items-center justify-content-center logo-icon shadow-sm"
+                <div class="bg-primary text-white p-2 rounded-3 d-flex align-items-center justify-content-center logo-icon shadow-sm flex-shrink-0"
                     style="width: 38px; height: 38px; min-width: 38px; background: linear-gradient(135deg, #6366f1, #a855f7) !important;">
                     <i class="fa-solid fa-layer-group fs-5"></i>
                 </div>
+                <span class="fs-4 fw-bold sidebar-text ms-2" style="letter-spacing: -0.02em;">{{ setting('app_name', 'InnovaCRM') }}</span>
             @endif
-            <span class="fs-4 fw-bold sidebar-text ms-2" style="letter-spacing: -0.02em;">{{ setting('app_name', 'InnovaCRM') }}</span>
         </a>
         <button type="button" class="btn-close btn-close-white d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" aria-label="Close"></button>
     </div>
