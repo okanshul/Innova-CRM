@@ -33,6 +33,7 @@ class SettingTest extends TestCase
             'system_email' => 'admin@acme.test',
             'deal_close_days' => 45,
             'primary_color' => '#123456',
+            'sidebar_bg_color' => '#1A1E2E',
         ]);
 
         $response->assertStatus(200);
@@ -42,6 +43,23 @@ class SettingTest extends TestCase
         $this->assertEquals('admin@acme.test', CrmSetting::get('system_email'));
         $this->assertEquals(45, CrmSetting::get('deal_close_days'));
         $this->assertEquals('#123456', CrmSetting::get('primary_color'));
+        $this->assertEquals('#1A1E2E', CrmSetting::get('sidebar_bg_color'));
+    }
+
+    public function test_settings_can_be_reset_to_default_values(): void
+    {
+        CrmSetting::set('company_name', 'Custom Changed Name');
+        CrmSetting::set('primary_color', '#990000');
+        CrmSetting::set('sidebar_bg_color', '#009900');
+
+        $response = $this->postJson(route('crm.api.settings.reset'));
+
+        $response->assertStatus(200);
+        $response->assertJson(['success' => true]);
+
+        $this->assertEquals('InnovaCRM Inc.', CrmSetting::get('company_name'));
+        $this->assertEquals('#5030FF', CrmSetting::get('primary_color'));
+        $this->assertEquals('#0B0F19', CrmSetting::get('sidebar_bg_color'));
     }
 
     public function test_unchecked_checkboxes_are_saved_as_zero(): void

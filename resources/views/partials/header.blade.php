@@ -11,10 +11,14 @@
             @if(setting('system_logo'))
                 <img src="{{ asset(setting('system_logo')) }}" alt="{{ setting('app_name', 'InnovaCRM') }}" style="max-height: 32px; max-width: 120px; object-fit: contain;">
             @else
-                <div class="logo-icon bg-primary text-white rounded-3 d-flex align-items-center justify-content-center shadow-sm" style="width: 32px; height: 32px; background: linear-gradient(135deg, #6366f1, #a855f7) !important;">
-                    <i class="fa-solid fa-layer-group fs-6"></i>
+                <div class="logo-icon text-white rounded-3 d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 32px; height: 32px; background: linear-gradient(135deg, #6366f1, #a855f7) !important;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7V17L12 22L22 17V7L12 Z" stroke="white" stroke-width="2" stroke-linejoin="round" />
+                        <path d="M2 7L12 12L22 7" stroke="white" stroke-width="2" stroke-linejoin="round" />
+                        <path d="M12 12V22" stroke="white" stroke-width="2" stroke-linejoin="round" />
+                    </svg>
                 </div>
-                <span class="fw-bold fs-5 text-body-emphasis tracking-tight" style="letter-spacing: -0.03em;">{{ setting('app_name', 'InnovaCRM') }}</span>
+                <span class="fw-bold fs-5 text-body-emphasis tracking-tight ms-1" style="letter-spacing: -0.03em;">{{ setting('app_name', 'InnovaCRM') }}</span>
             @endif
         </a>
 

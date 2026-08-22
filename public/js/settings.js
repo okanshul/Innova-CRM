@@ -242,6 +242,84 @@ document.addEventListener('DOMContentLoaded', function () {
 
     setupColorPicker('primaryColorText', 'primaryColorPicker', 'primaryColorSwatch');
     setupColorPicker('secondaryColorText', 'secondaryColorPicker', 'secondaryColorSwatch');
+    setupColorPicker('sidebarBgColorText', 'sidebarBgColorPicker', 'sidebarBgColorSwatch');
+
+    // Reset Settings Handler
+    const btnResetSettings = document.getElementById('btnResetSettings');
+    if (btnResetSettings) {
+        btnResetSettings.addEventListener('click', function () {
+            const doReset = () => {
+                btnResetSettings.disabled = true;
+                btnResetSettings.innerHTML = `<i class="fa-solid fa-spinner fa-spin me-1"></i> Resetting...`;
+
+                fetch('/api/settings/reset', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(async res => {
+                        const data = await res.json();
+                        if (!res.ok) {
+                            throw new Error(data.message || 'Failed to reset settings.');
+                        }
+                        if (typeof Swal !== 'undefined') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Settings Reset',
+                                text: data.message || 'System settings have been reset to default values.',
+                                timer: 1500,
+                                showConfirmButton: false,
+                                toast: true,
+                                position: 'top-end'
+                            });
+                        }
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1200);
+                    })
+                    .catch(err => {
+                        console.error('Error resetting settings:', err);
+                        btnResetSettings.disabled = false;
+                        btnResetSettings.innerHTML = `<i class="fa-solid fa-rotate-left me-1"></i> Reset Settings`;
+                        if (typeof Swal !== 'undefined') {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Reset Failed',
+                                text: err.message || 'An error occurred while resetting settings.',
+                                toast: true,
+                                position: 'top-end',
+                                timer: 3000,
+                                showConfirmButton: false
+                            });
+                        } else {
+                            alert('Reset Failed: ' + err.message);
+                        }
+                    });
+            };
+
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'Reset All Settings?',
+                    text: 'Are you sure you want to reset all system settings to default values? This action cannot be undone.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc3545',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, Reset Settings',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        doReset();
+                    }
+                });
+            } else if (confirm('Are you sure you want to reset all system settings to default values?')) {
+                doReset();
+            }
+        });
+    }
 
 
     // 6. Backup & Restore Handler

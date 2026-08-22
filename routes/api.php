@@ -47,6 +47,7 @@ Route::middleware(['web', 'auth'])->name('crm.')->group(function () {
     // Settings API
     Route::get('settings', [SettingController::class, 'index'])->name('api.settings.index');
     Route::post('settings', [SettingController::class, 'store'])->name('api.settings.store');
+    Route::post('settings/reset', [SettingController::class, 'reset'])->name('api.settings.reset');
     Route::post('settings/test-email', [SettingController::class, 'testEmail'])->name('api.settings.test_email');
 
     // Users API

@@ -450,14 +450,20 @@
             <div class="constellation"></div>
             
             <div class="left-content">
-                <div class="brand-logo">
+                <div class="brand-logo mb-4">
                     @if(setting('system_logo'))
-                        <img src="{{ asset(setting('system_logo')) }}" alt="{{ setting('app_name', 'InnovaCRM') }}" style="max-height: 48px; max-width: 200px; object-fit: contain;">
+                        <img src="{{ asset(setting('system_logo')) }}" alt="{{ setting('app_name', 'InnovaCRM') }}" style="max-height: 48px; max-width: 220px; object-fit: contain;">
                     @else
-                        <div class="brand-icon">
-                            <i class="fa-solid fa-layer-group fs-5"></i>
+                        <div class="d-inline-flex align-items-center gap-2">
+                            <div class="brand-icon rounded-3 d-flex align-items-center justify-content-center text-white shadow-sm flex-shrink-0" style="width: 44px; height: 44px; background: linear-gradient(135deg, #6366f1, #a855f7);">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2L2 7V17L12 22L22 17V7L12 Z" stroke="white" stroke-width="2" stroke-linejoin="round" />
+                                    <path d="M2 7L12 12L22 7" stroke="white" stroke-width="2" stroke-linejoin="round" />
+                                    <path d="M12 12V22" stroke="white" stroke-width="2" stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                            <span class="fs-3 fw-bold text-white tracking-tight ms-1">{{ setting('app_name', 'InnovaCRM') }}</span>
                         </div>
-                        <span class="fs-4 fw-bold text-white">{{ setting('app_name', 'InnovaCRM') }}</span>
                     @endif
                 </div>
 
@@ -507,14 +513,22 @@
         <!-- RIGHT PANEL -->
         <div class="right-panel">
             <div class="login-card">
-                <!-- Mobile Brand Header (visible only on mobile/tablet screens <992px) -->
-                <div class="d-lg-none text-center mb-3">
-                    <div class="d-inline-flex align-items-center gap-2">
-                        <div class="brand-icon">
-                            <i class="fa-solid fa-layer-group fs-5"></i>
+                <!-- Brand Header -->
+                <div class="text-center mb-3">
+                    @if(setting('system_logo'))
+                        <img src="{{ asset(setting('system_logo')) }}" alt="{{ setting('app_name', 'InnovaCRM') }}" style="max-height: 48px; max-width: 220px; object-fit: contain;">
+                    @else
+                        <div class="d-inline-flex align-items-center gap-2">
+                            <div class="brand-icon rounded-3 d-flex align-items-center justify-content-center text-white shadow-sm flex-shrink-0" style="width: 44px; height: 44px; background: linear-gradient(135deg, #6366f1, #a855f7);">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2L2 7V17L12 22L22 17V7L12 Z" stroke="white" stroke-width="2" stroke-linejoin="round" />
+                                    <path d="M2 7L12 12L22 7" stroke="white" stroke-width="2" stroke-linejoin="round" />
+                                    <path d="M12 12V22" stroke="white" stroke-width="2" stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                            <span class="fs-3 fw-bold text-body-emphasis tracking-tight ms-1">{{ setting('app_name', 'InnovaCRM') }}</span>
                         </div>
-                        <span class="fs-4 fw-bold text-dark">InnovaCRM</span>
-                    </div>
+                    @endif
                 </div>
 
                 <div class="text-center">

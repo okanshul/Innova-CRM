@@ -20,7 +20,16 @@
             @if(setting('secondary_color'))
                 --bs-secondary: {{ setting('secondary_color') }} !important;
             @endif
+            @if(setting('sidebar_bg_color'))
+                --sidebar-bg-color: {{ setting('sidebar_bg_color') }} !important;
+            @endif
         }
+        @if(setting('sidebar_bg_color'))
+            #sidebar {
+                background-color: {{ setting('sidebar_bg_color') }} !important;
+                --bs-offcanvas-bg: {{ setting('sidebar_bg_color') }} !important;
+            }
+        @endif
     </style>
 
     <!-- Google Fonts: Inter -->

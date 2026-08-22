@@ -4,11 +4,17 @@
             @if(setting('system_logo'))
                 <img src="{{ asset(setting('system_logo')) }}" alt="{{ setting('app_name', 'InnovaCRM') }}" class="sidebar-logo-img rounded-2" style="max-height: 38px; max-width: 160px; object-fit: contain;">
             @else
-                <div class="bg-primary text-white p-2 rounded-3 d-flex align-items-center justify-content-center logo-icon shadow-sm flex-shrink-0"
-                    style="width: 38px; height: 38px; min-width: 38px; background: linear-gradient(135deg, #6366f1, #a855f7) !important;">
-                    <i class="fa-solid fa-layer-group fs-5"></i>
+                <div class="d-flex align-items-center gap-2">
+                    <div class="brand-icon rounded-3 d-flex align-items-center justify-content-center text-white shadow-sm flex-shrink-0"
+                        style="width: 38px; height: 38px; min-width: 38px; background: linear-gradient(135deg, #6366f1, #a855f7) !important;">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L2 7V17L12 22L22 17V7L12 Z" stroke="white" stroke-width="2" stroke-linejoin="round" />
+                            <path d="M2 7L12 12L22 7" stroke="white" stroke-width="2" stroke-linejoin="round" />
+                            <path d="M12 12V22" stroke="white" stroke-width="2" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <span class="fs-4 fw-bold sidebar-text ms-1" style="letter-spacing: -0.02em;">{{ setting('app_name', 'InnovaCRM') }}</span>
                 </div>
-                <span class="fs-4 fw-bold sidebar-text ms-2" style="letter-spacing: -0.02em;">{{ setting('app_name', 'InnovaCRM') }}</span>
             @endif
         </a>
         <button type="button" class="btn-close btn-close-white d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" aria-label="Close"></button>

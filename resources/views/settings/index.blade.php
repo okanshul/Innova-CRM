@@ -3,22 +3,28 @@
 @section('content')
     <x-breadcrumb :items="[['label' => 'Dashboard', 'url' => route('dashboard')], ['label' => 'Settings']]" />
 
-    <!-- Top Banner Card -->
-    <div class="settings-header-banner mb-3">
-        <div class="d-flex align-items-center gap-3">
-            <div class="settings-header-icon">
-                <i class="fa-solid fa-gear"></i>
-            </div>
-            <div>
-                <h4 class="fw-bold mb-1 text-body-emphasis">System Settings</h4>
-                <p class="text-secondary small mb-0">Configure application preferences and system settings.</p>
-            </div>
-        </div>
-    </div>
-
     <!-- Settings Form -->
     <form id="settingsForm" action="{{ route('crm.api.settings.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
+
+        <!-- Top Banner Card -->
+        <div class="settings-header-banner mb-3 d-flex align-items-center justify-content-between flex-wrap gap-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="settings-header-icon">
+                    <i class="fa-solid fa-gear"></i>
+                </div>
+                <div>
+                    <h4 class="fw-bold mb-1 text-body-emphasis">System Settings</h4>
+                    <p class="text-secondary small mb-0">Configure application preferences and system settings.</p>
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <button type="button" class="btn btn-outline-danger px-3 py-2 rounded-3 fw-semibold fs-7" id="btnResetSettings">
+                    <i class="fa-solid fa-rotate-left me-1"></i> Reset Settings
+                </button>
+                <x-button.primary type="submit" icon="fa-solid fa-check" label="Save All Settings" />
+            </div>
+        </div>
         <div class="row g-3">
             <!-- Left Vertical Sidebar Nav -->
             <div class="col-lg-3 col-xl-2">
@@ -102,7 +108,6 @@
                                     <h5 class="fw-bold mb-0 text-body-emphasis">General Settings</h5>
                                     <p class="text-secondary small mb-0">Configure basic application settings.</p>
                                 </div>
-                                <x-button.primary type="submit" icon="fa-solid fa-check" label="Save All Settings" />
                             </div>
                             <div class="card-body p-3">
 
@@ -623,14 +628,13 @@
                                     <p class="text-secondary small mb-0">Configure application colors, logo, favicon, and
                                         brand identity.</p>
                                 </div>
-                                <x-button.primary type="submit" icon="fa-solid fa-check" label="Save All Settings" />
                             </div>
                             <div class="card-body p-3">
                                 <div class="row g-4 align-items-start">
                                     <!-- Column 1: Logo -->
                                     <div class="col-lg-4 col-md-12 pe-lg-4 border-lg-end">
-                                        <label class="form-label fw-bold text-body-emphasis mb-3 fs-7">Logo</label>
-                                        <div class="logo-preview-box border border-light-subtle rounded-4 p-4 text-center bg-body-tertiary d-flex align-items-center justify-content-center mb-3"
+                                        <label class="form-label fw-medium small text-secondary ps-2 mb-2"><i class="fa-solid fa-image text-secondary me-1"></i> Logo</label>
+                                        <div class="logo-preview-box border border-light-subtles p-3 text-center bg-body-tertiary d-flex align-items-center justify-content-center mb-3"
                                             style="min-height: 140px;" id="appearanceLogoPreviewBox">
                                             @if (isset($settings['system_logo']) && $settings['system_logo'])
                                                 <img src="{{ asset($settings['system_logo']) }}" alt="Logo"
@@ -678,47 +682,34 @@
                                     <!-- Column 2: Primary Color & Secondary Color -->
                                     <div class="col-lg-4 col-md-6 px-lg-4 border-lg-end">
                                         <!-- Primary Color -->
-                                        <div class="mb-4">
-                                            <label class="form-label fw-bold text-body-emphasis mb-2 fs-7">Primary
-                                                Color</label>
-                                            <div class="d-flex align-items-center gap-2">
-                                                <input type="text" class="form-control form-control-lg rounded-3 fs-6"
-                                                    id="primaryColorText" name="primary_color"
-                                                    value="{{ $settings['primary_color'] ?? '#5030FF' }}"
-                                                    style="text-transform: uppercase;">
-                                                <div class="position-relative flex-shrink-0 rounded-3 overflow-hidden shadow-xs"
-                                                    style="width: 46px; height: 46px;">
-                                                    <div id="primaryColorSwatch" class="w-100 h-100 rounded-3"
-                                                        style="background-color: {{ $settings['primary_color'] ?? '#5030FF' }};">
-                                                    </div>
-                                                    <input type="color"
-                                                        class="position-absolute top-0 start-0 w-100 h-100 opacity-0 cursor-pointer"
-                                                        id="primaryColorPicker"
-                                                        value="{{ $settings['primary_color'] ?? '#5030FF' }}"
-                                                        style="cursor: pointer; border: none; padding: 0;">
+                                        <div class="mb-3">
+                                            <div class="d-flex align-items-end gap-2">
+                                                <x-form.input id="primaryColorText" name="primary_color" label="Primary Color" icon="fa-solid fa-palette" class="form-control-lg rounded-3 fs-6 flex-grow-1 mb-0" :value="$settings['primary_color'] ?? '#5030FF'" style="text-transform: uppercase;" containerClass="flex-grow-1" />
+                                                <div class="position-relative flex-shrink-0 rounded-3 overflow-hidden shadow-xs" style="width: 42px; height: 42px;">
+                                                    <div id="primaryColorSwatch" class="w-100 h-100 rounded-3" style="background-color: {{ $settings['primary_color'] ?? '#5030FF' }};"></div>
+                                                    <input type="color" class="position-absolute top-0 start-0 w-100 h-100 opacity-0 cursor-pointer" id="primaryColorPicker" value="{{ $settings['primary_color'] ?? '#5030FF' }}" style="cursor: pointer; border: none; padding: 0;">
                                                 </div>
                                             </div>
                                         </div>
 
                                         <!-- Secondary Color -->
-                                        <div>
-                                            <label class="form-label fw-bold text-body-emphasis mb-2 fs-7">Secondary
-                                                Color</label>
-                                            <div class="d-flex align-items-center gap-2">
-                                                <input type="text" class="form-control form-control-lg rounded-3 fs-6"
-                                                    id="secondaryColorText" name="secondary_color"
-                                                    value="{{ $settings['secondary_color'] ?? '#F2F4F8' }}"
-                                                    style="text-transform: uppercase;">
-                                                <div class="position-relative flex-shrink-0 rounded-3 overflow-hidden shadow-xs"
-                                                    style="width: 46px; height: 46px;">
-                                                    <div id="secondaryColorSwatch" class="w-100 h-100 rounded-3"
-                                                        style="background-color: {{ $settings['secondary_color'] ?? '#5030FF' }};">
-                                                    </div>
-                                                    <input type="color"
-                                                        class="position-absolute top-0 start-0 w-100 h-100 opacity-0 cursor-pointer"
-                                                        id="secondaryColorPicker"
-                                                        value="{{ $settings['secondary_color'] ?? '#F2F4F8' }}"
-                                                        style="cursor: pointer; border: none; padding: 0;">
+                                        <div class="mb-3">
+                                            <div class="d-flex align-items-end gap-2">
+                                                <x-form.input id="secondaryColorText" name="secondary_color" label="Secondary Color" icon="fa-solid fa-fill-drip" class="form-control-lg rounded-3 fs-6 flex-grow-1 mb-0" :value="$settings['secondary_color'] ?? '#F2F4F8'" style="text-transform: uppercase;" containerClass="flex-grow-1" />
+                                                <div class="position-relative flex-shrink-0 rounded-3 overflow-hidden shadow-xs" style="width: 42px; height: 42px;">
+                                                    <div id="secondaryColorSwatch" class="w-100 h-100 rounded-3" style="background-color: {{ $settings['secondary_color'] ?? '#F2F4F8' }};"></div>
+                                                    <input type="color" class="position-absolute top-0 start-0 w-100 h-100 opacity-0 cursor-pointer" id="secondaryColorPicker" value="{{ $settings['secondary_color'] ?? '#F2F4F8' }}" style="cursor: pointer; border: none; padding: 0;">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Sidebar Background Color -->
+                                        <div class="mb-3">
+                                            <div class="d-flex align-items-end gap-2">
+                                                <x-form.input id="sidebarBgColorText" name="sidebar_bg_color" label="Sidebar Background Color" icon="fa-solid fa-table-columns" class="form-control-lg rounded-3 fs-6 flex-grow-1 mb-0" :value="$settings['sidebar_bg_color'] ?? '#0B0F19'" style="text-transform: uppercase;" containerClass="flex-grow-1" />
+                                                <div class="position-relative flex-shrink-0 rounded-3 overflow-hidden shadow-xs" style="width: 42px; height: 42px;">
+                                                    <div id="sidebarBgColorSwatch" class="w-100 h-100 rounded-3" style="background-color: {{ $settings['sidebar_bg_color'] ?? '#0B0F19' }};"></div>
+                                                    <input type="color" class="position-absolute top-0 start-0 w-100 h-100 opacity-0 cursor-pointer" id="sidebarBgColorPicker" value="{{ $settings['sidebar_bg_color'] ?? '#0B0F19' }}" style="cursor: pointer; border: none; padding: 0;">
                                                 </div>
                                             </div>
                                         </div>
@@ -727,12 +718,12 @@
                                     <!-- Column 3: Favicon, Application Name, Application URL -->
                                     <div class="col-lg-4 col-md-6 ps-lg-4">
                                         <!-- Favicon -->
-                                        <div class="mb-4">
-                                            <label class="form-label fw-bold text-body-emphasis mb-2 fs-7">Favicon</label>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-medium small text-secondary ps-2 mb-2"><i class="fa-solid fa-icons text-secondary me-1"></i> Favicon</label>
                                             <div
                                                 class="border border-light-subtle rounded-3 p-3 bg-body-tertiary d-flex align-items-center gap-3">
-                                                <div class="rounded-3 d-flex align-items-center justify-content-center text-white flex-shrink-0"
-                                                    style="width: 46px; height: 46px; background: #5030FF;"
+                                                <div class="rounded-3 d-flex align-items-center justify-content-center border text-white flex-shrink-0"
+                                                    style="width: 46px; height: 46px;"
                                                     id="appearanceFaviconPreviewBox">
                                                     @if (isset($settings['favicon']) && $settings['favicon'])
                                                         <img src="{{ asset($settings['favicon']) }}" alt="Favicon"
@@ -771,21 +762,10 @@
                                         </div>
 
                                         <!-- Application Name -->
-                                        <div class="mb-4">
-                                            <label class="form-label fw-bold text-body-emphasis mb-2 fs-7">Application
-                                                Name</label>
-                                            <input type="text" class="form-control form-control-lg rounded-3 fs-6"
-                                                name="app_name" value="{{ $settings['app_name'] ?? 'InnovaCRM' }}">
-                                        </div>
+                                        <x-form.input class="form-control-lg rounded-3 fs-6 mb-3" name="app_name" label="Application Name" icon="fa-solid fa-cube" :value="$settings['app_name'] ?? 'InnovaCRM'" />
 
                                         <!-- Application URL -->
-                                        <div>
-                                            <label class="form-label fw-bold text-body-emphasis mb-2 fs-7">Application
-                                                URL</label>
-                                            <input type="url" class="form-control form-control-lg rounded-3 fs-6"
-                                                name="app_url"
-                                                value="{{ $settings['app_url'] ?? 'https://crm.innovacrm.com' }}">
-                                        </div>
+                                        <x-form.input class="form-control-lg rounded-3 fs-6" type="url" name="app_url" label="Application URL" icon="fa-solid fa-globe" :value="$settings['app_url'] ?? 'https://crm.innovacrm.com'" />
                                     </div>
                                 </div>
                             </div>
@@ -802,7 +782,6 @@
                                     <h5 class="fw-bold mb-0 text-body-emphasis">Company Profile</h5>
                                     <p class="text-secondary small mb-0">Update your company information and details.</p>
                                 </div>
-                                <x-button.primary type="submit" icon="fa-solid fa-check" label="Save Changes" />
                             </div>
                             <div class="card-body p-3">
                                 <div class="row g-4">
@@ -863,7 +842,6 @@
                                     <p class="text-secondary small mb-0">Manage language, region and locale preferences.
                                     </p>
                                 </div>
-                                <x-button.primary type="submit" icon="fa-solid fa-check" label="Save Changes" />
                             </div>
                             <div class="card-body p-3">
                                 <div class="row g-3 gy-4">
@@ -994,7 +972,6 @@
                                     <h5 class="fw-bold mb-0 text-body-emphasis">Email Settings</h5>
                                     <p class="text-secondary small mb-0">Configure system email settings and SMTP.</p>
                                 </div>
-                                <x-button.primary type="submit" icon="fa-solid fa-check" label="Save Changes" />
                             </div>
                             <div class="card-body p-3">
                                 <div class="row g-4">
@@ -1122,7 +1099,6 @@
                                     <h5 class="fw-bold mb-0 text-body-emphasis">Notifications</h5>
                                     <p class="text-secondary small mb-0">Manage system notifications and alerts.</p>
                                 </div>
-                                <x-button.primary type="submit" icon="fa-solid fa-check" label="Save Changes" />
                             </div>
                             <div class="card-body p-3">
                                 <div class="row g-4">
@@ -1276,7 +1252,6 @@
                                     <h5 class="fw-bold mb-0 text-body-emphasis">Security</h5>
                                     <p class="text-secondary small mb-0">Manage security settings and authentication.</p>
                                 </div>
-                                <x-button.primary type="submit" icon="fa-solid fa-check" label="Save Changes" />
                             </div>
                             <div class="card-body p-3">
                                 <div class="row g-4">
@@ -1417,7 +1392,6 @@
                                     <h5 class="fw-bold mb-0 text-body-emphasis">CRM Preferences</h5>
                                     <p class="text-secondary small mb-0">Configure CRM behavior and default values.</p>
                                 </div>
-                                <x-button.primary type="submit" icon="fa-solid fa-check" label="Save Changes" />
                             </div>
                             <div class="card-body p-3">
                                 <div class="row g-4">

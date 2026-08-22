@@ -28,6 +28,7 @@ class CrmSettingSeeder extends Seeder
             'email_verification' => '1',
             'primary_color' => '#5030FF',
             'secondary_color' => '#F2F4F8',
+            'sidebar_bg_color' => '#0B0F19',
             'app_name' => 'InnovaCRM',
             'app_url' => 'https://crm.innovacrm.com',
             'company_profile_name' => 'InnovaCRM Inc.',
