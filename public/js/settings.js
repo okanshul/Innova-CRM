@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = function (e) {
-                        box.innerHTML = `<img src="${e.target.result}" alt="Preview" class="img-fluid" style="max-height: 60px; max-width: 220px; object-fit: contain;">`;
+                        box.innerHTML = `<img src="${e.target.result}" alt="Preview" class="img-fluid" style="max-height: 30px;">`;
                     };
                     reader.readAsDataURL(file);
                 }
