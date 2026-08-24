@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = function (e) {
-                        box.innerHTML = `<img src="${e.target.result}" alt="Preview" class="img-fluid" style="max-height: 30px;">`;
+                        box.innerHTML = `<img src="${e.target.result}" alt="Preview" class="img-fluid" style="max-height: 40px; max-width: 100%; object-fit: contain;">`;
                     };
                     reader.readAsDataURL(file);
                 }
@@ -183,36 +183,62 @@ document.addEventListener('DOMContentLoaded', function () {
 
     setupImagePreview('appearanceLogoInput', 'appearanceLogoPreviewBox');
     setupImagePreview('appearanceFaviconInput', 'appearanceFaviconPreviewBox');
+    setupImagePreview('sysLogoInput', 'sysLogoPreviewBox');
+    setupImagePreview('sysFaviconInput', 'sysFaviconPreviewBox');
 
-    // Remove Logo Handler
-    const btnRemoveLogo = document.getElementById('btnRemoveLogo');
-    if (btnRemoveLogo) {
-        btnRemoveLogo.addEventListener('click', function () {
-            const removeInput = document.getElementById('removeSystemLogoInput');
-            if (removeInput) removeInput.value = '1';
-            const box = document.getElementById('appearanceLogoPreviewBox');
-            const appName = document.querySelector('input[name="app_name"]')?.value || 'InnovaCRM';
-            if (box) {
-                box.innerHTML = `<div class="d-flex align-items-center gap-2">
-                    <div class="brand-icon rounded-3 d-flex align-items-center justify-content-center text-white shadow-sm" style="width: 44px; height: 44px; background: #5030FF;">
-                        <i class="fa-solid fa-layer-group fs-5"></i>
-                    </div>
-                    <span class="fw-bold fs-4 text-body-emphasis tracking-tight">${appName}</span>
-                </div>`;
-            }
-            btnRemoveLogo.style.display = 'none';
-        });
-    }
+    // Remove Logo Handlers
+    const setupRemoveLogo = (btnId, removeInputId, previewBoxId) => {
+        const btn = document.getElementById(btnId);
+        if (btn) {
+            btn.addEventListener('click', function () {
+                const removeInput = document.getElementById(removeInputId);
+                if (removeInput) removeInput.value = '1';
+                const box = document.getElementById(previewBoxId);
+                const appName = document.querySelector('input[name="app_name"]')?.value || 'InnovaCRM';
+                if (box) {
+                    box.innerHTML = `<div class="d-flex align-items-center gap-2">
+                        <div class="brand-icon rounded-3 d-flex align-items-center justify-content-center text-white shadow-sm flex-shrink-0" style="width: 40px; height: 40px; background: linear-gradient(135deg, #6366f1, #4f46e5);">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="white" fill-opacity="0.9"/>
+                                <path d="M2 12L12 17L22 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 17L12 22L22 17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <span class="fw-bold fs-5 text-body-emphasis tracking-tight">${appName}</span>
+                    </div>`;
+                }
+                btn.style.display = 'none';
+            });
+        }
+    };
 
-    // Remove Favicon Handler
-    const btnRemoveFavicon = document.getElementById('btnRemoveFavicon');
-    if (btnRemoveFavicon) {
-        btnRemoveFavicon.addEventListener('click', function () {
-            const removeInput = document.getElementById('removeFaviconInput');
-            if (removeInput) removeInput.value = '1';
-            btnRemoveFavicon.style.display = 'none';
-        });
-    }
+    setupRemoveLogo('btnRemoveLogo', 'removeSystemLogoInput', 'appearanceLogoPreviewBox');
+    setupRemoveLogo('btnRemoveSysLogo', 'removeSystemLogoInput', 'sysLogoPreviewBox');
+
+    // Remove Favicon Handlers
+    const setupRemoveFavicon = (btnId, removeInputId, previewBoxId) => {
+        const btn = document.getElementById(btnId);
+        if (btn) {
+            btn.addEventListener('click', function () {
+                const removeInput = document.getElementById(removeInputId);
+                if (removeInput) removeInput.value = '1';
+                const box = document.getElementById(previewBoxId);
+                if (box) {
+                    box.innerHTML = `<div class="brand-icon rounded-3 d-flex align-items-center justify-content-center text-white shadow-sm flex-shrink-0" style="width: 40px; height: 40px; background: linear-gradient(135deg, #6366f1, #4f46e5);">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="white" fill-opacity="0.9"/>
+                            <path d="M2 12L12 17L22 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 17L12 22L22 17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>`;
+                }
+                btn.style.display = 'none';
+            });
+        }
+    };
+
+    setupRemoveFavicon('btnRemoveFavicon', 'removeFaviconInput', 'appearanceFaviconPreviewBox');
+    setupRemoveFavicon('btnRemoveSysFavicon', 'removeFaviconInput', 'sysFaviconPreviewBox');
 
     // 4. Color Picker Sync
     const setupColorPicker = (textInputId, pickerId, swatchId) => {
@@ -494,43 +520,43 @@ document.addEventListener('DOMContentLoaded', function () {
     const auditLogTableBody = document.getElementById('auditLogTableBody');
     const auditActionFilter = document.getElementById('auditActionFilter');
 
-    const loadAuditLogs = (action = 'all') => {
+    const loadAuditLogs = (page = 1) => {
         if (!auditLogTableBody) return;
-        auditLogTableBody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-secondary"><i class="fa-solid fa-spinner fa-spin me-2"></i> Loading audit log...</td></tr>`;
+        const action = auditActionFilter ? auditActionFilter.value : 'all';
 
-        fetch(`/api/audit-logs?action=${action}`, { headers: { 'Accept': 'application/json' } })
-            .then(res => res.json())
-            .then(res => {
-                if (res.success && res.data) {
-                    if (res.data.length === 0) {
-                        auditLogTableBody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted">No audit logs recorded.</td></tr>`;
-                        return;
-                    }
-                    auditLogTableBody.innerHTML = res.data.map(log => {
-                        const timeStr = new Date(log.created_at).toLocaleString();
-                        const userName = log.user ? log.user.name : 'System / Guest';
-                        let badgeClass = 'bg-info-subtle text-info';
-                        if (log.action === 'Created') badgeClass = 'bg-success-subtle text-success';
-                        if (log.action === 'Deleted') badgeClass = 'bg-danger-subtle text-danger';
-                        if (log.action === 'Login') badgeClass = 'bg-primary-subtle text-primary';
+        loadDataTable({
+            url: '/api/audit-logs',
+            tableBodyId: 'auditLogTableBody',
+            summaryId: 'auditPaginationSummary',
+            controlsId: 'auditPaginationControls',
+            page: page,
+            perPage: 10,
+            params: { action: action },
+            emptyMessage: 'No audit logs recorded.',
+            rowRenderer: (log) => {
+                const timeStr = new Date(log.created_at).toLocaleString();
+                const userName = log.user ? log.user.name : 'System / Guest';
+                let badgeClass = 'bg-info-subtle text-info';
+                if (log.action === 'Created') badgeClass = 'bg-success-subtle text-success';
+                if (log.action === 'Deleted') badgeClass = 'bg-danger-subtle text-danger';
+                if (log.action === 'Login') badgeClass = 'bg-primary-subtle text-primary';
 
-                        return `
-                            <tr>
-                                <td class="ps-4 py-3 fs-8 text-secondary">${timeStr}</td>
-                                <td class="fw-semibold fs-7">${userName}</td>
-                                <td><span class="badge ${badgeClass} rounded-pill px-3 py-1">${log.action}</span></td>
-                                <td class="fs-7">${log.module}</td>
-                                <td class="pe-4 text-end fs-8 text-secondary">${log.ip_address || '127.0.0.1'}</td>
-                            </tr>
-                        `;
-                    }).join('');
-                }
-            });
+                return `
+                    <tr>
+                        <td class="ps-3 py-3 fs-8 text-secondary">${timeStr}</td>
+                        <td class="fw-semibold fs-7">${userName}</td>
+                        <td><span class="badge ${badgeClass} rounded-pill px-3 py-1">${log.action}</span></td>
+                        <td class="fs-7">${log.module}</td>
+                        <td class="pe-3 text-end fs-8 text-secondary">${log.ip_address || '127.0.0.1'}</td>
+                    </tr>
+                `;
+            }
+        });
     };
 
     if (auditActionFilter) {
         auditActionFilter.addEventListener('change', function () {
-            loadAuditLogs(this.value);
+            loadAuditLogs(1);
         });
     }
 

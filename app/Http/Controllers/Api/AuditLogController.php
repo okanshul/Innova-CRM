@@ -19,7 +19,8 @@ class AuditLogController extends Controller
             $query->where('action', $request->action);
         }
 
-        $logs = $query->limit(50)->get();
+        $perPage = $request->get('per_page', setting('items_per_page', 10));
+        $logs = $query->paginate($perPage);
 
         return response()->json([
             'success' => true,

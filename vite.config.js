@@ -7,7 +7,6 @@ export default defineConfig({
             input: [
                 'resources/scss/theme.scss',
                 'resources/js/dashboard.js',
-                'resources/css/app.css', // Keeping just in case
                 'resources/js/app.js',
             ],
             refresh: true,

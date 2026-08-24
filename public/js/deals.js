@@ -58,9 +58,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function getStageBadge(stage) {
-        if (!stage) return `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: #f1f5f9; color: #64748b; font-size: 0.775rem;">N/A</span>`;
+        if (!stage) return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: #f1f5f9; color: #64748b; font-size: 0.775rem;">N/A</span>`;
         const color = stage.color || '#6366f1';
-        return `<span class="badge rounded-pill fw-semibold px-2.5 py-1" style="background-color: ${color}1f; color: ${color}; border: 1px solid ${color}33; font-size: 0.775rem;">${stage.name}</span>`;
+        return `<span class="badge rounded-pill fw-semibold px-3 py-1" style="background-color: ${color}1f; color: ${color}; border: 1px solid ${color}33; font-size: 0.775rem;">${stage.name}</span>`;
     }
 
     function formatDate(dateStr) {
@@ -222,7 +222,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <div class="fw-bold text-body-emphasis text-truncate" style="font-size: 0.95rem;">
                             ${item.title}
                         </div>
-                        <div class="fw-bold text-success text-truncate mt-0.5" style="font-size: 0.825rem;">
+                        <div class="fw-bold text-success text-truncate mt-1" style="font-size: 0.825rem;">
                             ${formattedValue}
                         </div>
                     </div>

@@ -1,0 +1,371 @@
+// ==========================================================================
+// Settings Page Custom Theme & Layout Overrides
+// ==========================================================================
+
+/* Top Banner Header */
+.settings-header-banner {
+    background-color: var(--bs-body-bg);
+    border: none;
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.05);
+
+    .settings-header-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background-color: $primary-lightest;
+        color: $primary-hover;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        flex-shrink: 0;
+    }
+}
+
+/* Left Sidebar Vertical Navigation */
+.settings-vnav {
+    background-color: var(--bs-body-bg);
+    border: none;
+    border-radius: 1rem;
+    padding: 0.6rem;
+    box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.05);
+    height: 100%;
+
+    .nav-link {
+        color: var(--bs-body-color);
+        font-weight: 500;
+        font-size: 0.825rem;
+        padding: 0.6rem 0.85rem;
+        border-radius: 0.6rem;
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        margin-bottom: 0.2rem;
+        white-space: nowrap;
+
+        i {
+            width: 18px;
+            text-align: center;
+            font-size: 0.95rem;
+            color: $slate-500;
+            transition: color 0.2s ease, transform 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        &:hover {
+            background-color: rgba($primary, 0.08);
+            color: $primary-hover;
+            transform: translateX(4px);
+
+            i {
+                color: $primary-hover;
+                transform: scale(1.15);
+            }
+        }
+
+        &.active {
+            background: linear-gradient(135deg, rgba($primary, 0.15), rgba(79, 70, 229, 0.1));
+            color: $primary-hover;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba($primary, 0.12);
+
+            i {
+                color: $primary-hover;
+            }
+        }
+    }
+}
+
+/* Settings Card Item Grid */
+.settings-card {
+    background-color: var(--bs-body-bg);
+    border: none;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.05);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+
+    &:hover {
+        box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.08);
+    }
+
+    .settings-card-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+
+        .settings-icon-badge {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+
+            &.icon-blue {
+                background-color: #eff6ff;
+                color: #2563eb;
+            }
+
+            &.icon-green {
+                background-color: $color-success-soft;
+                color: $color-success-dark;
+            }
+
+            &.icon-orange {
+                background-color: #fff7ed;
+                color: #ea580c;
+            }
+
+            &.icon-yellow {
+                background-color: $color-warning-soft;
+                color: #ca8a04;
+            }
+        }
+
+        .settings-title-wrap {
+            .settings-card-title {
+                font-size: 0.925rem;
+                font-weight: 600;
+                color: var(--bs-body-color);
+                margin-bottom: 0.15rem;
+                line-height: 1.25;
+            }
+
+            .settings-card-desc {
+                font-size: 0.75rem;
+                color: $slate-500;
+                margin-bottom: 0;
+                line-height: 1.35;
+            }
+        }
+    }
+
+    .settings-card-body {
+        margin-top: auto;
+    }
+
+    .form-control,
+    .form-select {
+        font-size: 0.85rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+        border: 1px solid $slate-200;
+        background-color: $slate-50;
+        color: var(--bs-body-color);
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, background-color 0.15s ease-in-out;
+
+        &:focus {
+            background-color: #ffffff;
+            border-color: $primary-light;
+            box-shadow: 0 0 0 3px rgba($primary, 0.15);
+        }
+    }
+
+    .input-group {
+        .form-control {
+            border-top-right-radius: 0 !important;
+            border-bottom-right-radius: 0 !important;
+            border-right: none;
+
+            &:focus {
+                z-index: 2;
+                border-right: 1px solid $primary-light;
+            }
+        }
+
+        .input-group-text {
+            font-size: 0.825rem;
+            border-top-left-radius: 0 !important;
+            border-bottom-left-radius: 0 !important;
+            border-top-right-radius: 0.5rem !important;
+            border-bottom-right-radius: 0.5rem !important;
+            background-color: $slate-100;
+            border: 1px solid $slate-200;
+            color: $slate-500;
+            padding: 0.5rem 0.75rem;
+            font-weight: 500;
+        }
+    }
+}
+
+/* Callout Info Banners */
+.settings-callout {
+    font-size: 0.735rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    margin-top: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    line-height: 1.35;
+
+    &.callout-blue {
+        background-color: $slate-100;
+        color: $slate-600;
+    }
+
+    &.callout-green {
+        background-color: $color-success-soft;
+        color: #166534;
+    }
+}
+
+/* Logo & Favicon Display Box */
+.logo-preview-box {
+    background-color: $slate-50;
+    border: 1px solid $slate-200;
+    border-radius: 0.6rem;
+    padding: 0.65rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.65rem;
+    min-height: 52px;
+
+    img {
+        max-height: 36px;
+        object-fit: contain;
+    }
+}
+
+/* Dark Mode Overrides for Settings Page */
+[data-bs-theme="dark"] {
+    .settings-header-banner {
+        background-color: $slate-800;
+        border: none;
+        box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.2);
+
+        .settings-header-icon {
+            background-color: rgba($primary, 0.2);
+            color: $primary-light;
+        }
+    }
+
+    .settings-vnav {
+        background-color: $slate-800;
+        border: none;
+        box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.2);
+
+        .nav-link {
+            color: $slate-300;
+
+            i {
+                color: $slate-400;
+            }
+
+            &:hover {
+                background-color: rgba($primary, 0.18);
+                color: #ffffff;
+                transform: translateX(4px);
+
+                i {
+                    color: $primary-light;
+                    transform: scale(1.15);
+                }
+            }
+
+            &.active {
+                background-color: rgba($primary, 0.22);
+                color: $primary-light;
+
+                i {
+                    color: $primary-light;
+                }
+            }
+        }
+    }
+
+    .settings-card {
+        background-color: $slate-800;
+        border: none;
+        box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.2);
+
+        .settings-icon-badge {
+            &.icon-blue {
+                background-color: rgba(37, 99, 235, 0.2);
+                color: #60a5fa;
+            }
+
+            &.icon-green {
+                background-color: rgba(22, 163, 74, 0.2);
+                color: $color-success-light;
+            }
+
+            &.icon-orange {
+                background-color: rgba(234, 88, 12, 0.2);
+                color: #fb923c;
+            }
+
+            &.icon-yellow {
+                background-color: rgba(202, 138, 4, 0.2);
+                color: #facc15;
+            }
+        }
+
+        .settings-title-wrap {
+            .settings-card-title {
+                color: $slate-50;
+            }
+
+            .settings-card-desc {
+                color: $slate-400;
+            }
+        }
+
+        .form-control,
+        .form-select {
+            background-color: $slate-900;
+            border-color: $crm-dark-border-strong;
+            color: $slate-50;
+
+            &:focus {
+                background-color: $slate-900;
+                border-color: $primary-light;
+            }
+        }
+
+        .input-group {
+            .form-control {
+                border-right: none;
+
+                &:focus {
+                    border-right: 1px solid $primary-light;
+                }
+            }
+
+            .input-group-text {
+                background-color: $slate-800;
+                border-color: $crm-dark-border-strong;
+                color: $slate-400;
+            }
+        }
+    }
+
+    .settings-callout {
+        &.callout-blue {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: $slate-300;
+        }
+
+        &.callout-green {
+            background-color: rgba(34, 197, 94, 0.15);
+            color: #86efac;
+        }
+    }
+
+    .logo-preview-box {
+        background-color: $slate-900;
+        border-color: $crm-dark-border-normal;
+    }
+}

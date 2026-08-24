@@ -2757,7 +2757,8 @@ textarea.form-control-lg {
 
 .form-switch .form-check-input {
   --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba%280, 0, 0, 0.25%29'/%3e%3c/svg%3e");
-  width: 2em;
+  width: 2.25rem !important;
+  height: 1.25rem !important;
   margin-left: -2.5em;
   background-image: var(--bs-form-switch-bg);
   background-position: left center;
@@ -17172,21 +17173,12 @@ span.flatpickr-weekday {
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
 }
 
-.form-check-input.switch-green {
-  width: 2.5rem;
-  height: 1.35rem;
+.form-switch .form-check-input {
+  width: 2.25rem !important;
+  height: 1.25rem !important;
   cursor: pointer;
   background-color: #cbd5e1;
   border-color: transparent;
-}
-
-.form-check-input.switch-green:checked {
-  background-color: #6366f1;
-  border-color: #6366f1;
-}
-
-.form-check-input.switch-green:focus {
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
 }
 
 /* Logo & Favicon Display Box */
@@ -17358,13 +17350,11 @@ span.flatpickr-weekday {
   box-shadow: 0 0 0 3px rgba(80, 48, 255, 0.3);
 }
 
-[data-bs-theme=dark] .form-check-input.switch-green,
 [data-bs-theme=dark] .form-switch .form-check-input {
   background-color: #334155 !important;
   border-color: transparent !important;
 }
 
-[data-bs-theme=dark] .form-check-input.switch-green:checked,
 [data-bs-theme=dark] .form-switch .form-check-input:checked {
   background-color: #5030FF !important;
   border-color: #5030FF !important;

@@ -1,0 +1,47 @@
+// ==========================================================================
+// CRM SCSS Reusable Mixins & Helper Functions
+// ==========================================================================
+
+// Flexbox Center Helper
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+// Glassmorphism Surface Generator
+@mixin glass-surface($bg: rgba(255, 255, 255, 0.7), $border: rgba(0, 0, 0, 0.08), $blur: 12px) {
+    background: $bg !important;
+    backdrop-filter: blur($blur) !important;
+    -webkit-backdrop-filter: blur($blur) !important;
+    border-bottom: 1px solid $border !important;
+}
+
+// Status & Pipeline Badge Variant Generator
+@mixin badge-variant($bg-color, $text-color, $border-color: transparent) {
+    background-color: $bg-color !important;
+    color: $text-color !important;
+    border: 1px solid $border-color !important;
+}
+
+// Table Action Button Variant Generator
+@mixin action-btn-variant($color, $border-color, $hover-bg, $hover-color, $hover-border-color: $border-color) {
+    color: $color;
+    border-color: $border-color;
+
+    &:hover {
+        background-color: $hover-bg;
+        color: $hover-color;
+        border-color: $hover-border-color;
+    }
+}
+
+// Hide Webkit Scrollbar Track
+@mixin hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}

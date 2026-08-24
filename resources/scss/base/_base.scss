@@ -1,0 +1,77 @@
+// ==========================================================================
+// Base Resets & Global CSS Custom Properties
+// ==========================================================================
+
+:root {
+    --bs-gutter-x: 0.75rem;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(0, 0, 0, 0.08);
+}
+
+:root,
+[data-bs-theme="light"] body {
+    background-color: #ebf0ff !important;
+}
+
+body {
+    font-family: $font-family-sans-serif;
+    background-color: var(--bs-body-bg);
+}
+
+#main-content {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: margin-left $transition-speed ease;
+}
+
+/* Custom Scrollbar Styles */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(100, 116, 139, 0.3) transparent;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 116, 139, 0.3);
+    border-radius: 10px;
+
+    &:hover {
+        background-color: rgba(100, 116, 139, 0.5);
+    }
+}
+
+// Dark Theme Global Base Overrides
+[data-bs-theme="dark"] {
+    --bs-body-bg: #0F0F1A;
+    --bs-body-color: #{$slate-200};
+    --glass-bg: rgba(30, 41, 59, 0.7);
+    --glass-border: #{$crm-dark-border-normal};
+    --bs-card-bg: #{$crm-dark-card};
+    --bs-tertiary-bg: #{$crm-dark-elevated};
+    --bs-border-color-translucent: #{$crm-dark-border-subtle};
+
+    * {
+        scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.2);
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+    }
+
+    body {
+        background-color: $crm-dark-main !important;
+    }
+}

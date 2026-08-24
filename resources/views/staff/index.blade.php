@@ -8,7 +8,7 @@
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-body">
         <div class="card-header border-0 bg-body p-3">
             <!-- Header Row Component (cardHeader=false avoids nested card-header) -->
-            <x-page-header title="Staff" icon="fa-solid fa-user-group" :cardHeader="false" class="mb-4">
+            <x-page-header title="Staff" icon="fa-solid fa-user-group" :cardHeader="false">
                 <x-slot:actions>
                     @can('staff.create')
                         <x-button.primary href="{{ route('staff.create') }}" icon="fa-solid fa-plus fs-sm" label="Add Staff" />

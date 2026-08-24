@@ -5,7 +5,7 @@
 
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-body">
         <div class="card-header border-0 bg-body p-3">
-            <x-page-header title="Deals" icon="fa-solid fa-gem" :cardHeader="false" class="mb-4">
+            <x-page-header title="Deals" icon="fa-solid fa-gem" :cardHeader="false">
                 <x-slot:actions>
                     @can('deals.create')
                         <x-button.primary href="{{ route('deals.create') }}" icon="fa-solid fa-plus fs-sm" label="Add Deal" />

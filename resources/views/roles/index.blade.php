@@ -5,7 +5,7 @@
 
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-body">
         <div class="card-header border-0 bg-body p-3">
-            <x-page-header title="Roles & Permissions" icon="fa-solid fa-user-shield" :cardHeader="false" class="mb-4">
+            <x-page-header title="Roles & Permissions" icon="fa-solid fa-user-shield" :cardHeader="false">
                 <x-slot:actions>
                     @can('roles.create')
                         <x-button.primary href="{{ route('roles.create') }}" icon="fa-solid fa-plus fs-sm" label="Add Role" />

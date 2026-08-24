@@ -1,0 +1,283 @@
+// ==========================================================================
+// Custom Buttons & Table Action Control Styles
+// ==========================================================================
+
+.btn-purple-primary {
+    background: linear-gradient(135deg, $primary, $primary-hover) !important;
+    border: none !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba($primary, 0.3);
+    transition: all 0.2s ease;
+
+    &:hover {
+        opacity: 0.95;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 18px rgba($primary, 0.4);
+    }
+}
+
+.btn-filter-action {
+    background-color: #ffffff !important;
+    border: 1px solid $slate-200 !important;
+    border-radius: 8px !important;
+    height: 36px !important;
+    font-size: 0.825rem !important;
+    font-weight: 500 !important;
+    color: $slate-600 !important;
+    padding: 0.25rem 0.75rem !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    transition: all 0.15s ease;
+
+    &:hover {
+        background-color: $slate-50 !important;
+        border-color: $slate-300 !important;
+        color: $slate-900 !important;
+    }
+}
+
+.btn-delete-bulk {
+    background-color: #ffffff !important;
+    border: 1px solid #ffe4e6 !important;
+    border-radius: 8px !important;
+    height: 36px !important;
+    font-size: 0.825rem !important;
+    font-weight: 500 !important;
+    color: $color-rose-dark !important;
+    padding: 0.25rem 0.85rem !important;
+    box-shadow: 0 1px 2px rgba(225, 29, 72, 0.06);
+    transition: all 0.15s ease;
+
+    &:hover {
+        background-color: $color-rose-soft !important;
+        border-color: $color-rose-light !important;
+        color: #be123c !important;
+    }
+}
+
+.page-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: 1px solid $slate-200;
+    background-color: #ffffff;
+    color: $slate-600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover:not(.active):not(:disabled) {
+        background-color: $slate-50;
+        color: $slate-900;
+        border-color: $slate-300;
+    }
+
+    &.active {
+        background: linear-gradient(135deg, $primary, $primary-hover);
+        color: #ffffff;
+        border-color: transparent;
+        box-shadow: 0 3px 10px rgba($primary, 0.35);
+        font-weight: 600;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.action-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid $slate-200;
+    background-color: #ffffff;
+    font-size: 0.85rem;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    text-decoration: none !important;
+}
+
+.action-btn-view {
+    color: $primary;
+    border-color: #e0e7ff;
+
+    &:hover {
+        background-color: $primary-soft-bg;
+        color: $primary-hover;
+        border-color: #c7d2fe;
+    }
+}
+
+.action-btn-edit {
+    color: $color-info;
+    border-color: $color-sky-soft;
+
+    &:hover {
+        background-color: $color-info-soft;
+        color: $color-info-dark;
+        border-color: #bae6fd;
+    }
+}
+
+.action-btn-delete {
+    color: $color-rose-dark;
+    border-color: #ffe4e6;
+
+    &:hover {
+        background-color: $color-rose-soft;
+        color: #be123c;
+        border-color: $color-rose-light;
+    }
+}
+
+.action-btn-perm {
+    color: $color-purple-dark;
+    border-color: $color-purple-soft;
+    background-color: #ffffff;
+
+    &:hover {
+        background-color: $color-purple-soft;
+        color: #6b21a8;
+        border-color: #e9d5ff;
+    }
+}
+
+.btn-soft-primary {
+    background-color: #eff6ff;
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
+    font-size: 0.775rem;
+    font-weight: 500;
+    padding: 0.35rem 0.75rem;
+    border-radius: 0.45rem;
+
+    &:hover {
+        background-color: #dbeafe;
+        color: #1d4ed8;
+    }
+}
+
+.btn-soft-danger {
+    background-color: $color-danger-soft;
+    color: $color-danger-dark;
+    border: 1px solid #fecaca;
+    font-size: 0.775rem;
+    font-weight: 500;
+    padding: 0.35rem 0.75rem;
+    border-radius: 0.45rem;
+
+    &:hover {
+        background-color: #fee2e2;
+        color: #b91c1c;
+    }
+}
+
+// Dark Mode Button Overrides
+[data-bs-theme="dark"] {
+    .btn-light {
+        background-color: #1e1e35 !important;
+        color: $slate-300 !important;
+        border-color: $crm-dark-border-subtle !important;
+
+        &:hover,
+        &:focus {
+            background-color: #272845 !important;
+            color: #ffffff !important;
+            border-color: rgba(255, 255, 255, 0.15) !important;
+        }
+    }
+
+    .btn-filter-action {
+        background-color: $crm-dark-elevated !important;
+        border-color: $crm-dark-border-normal !important;
+        color: $slate-300 !important;
+
+        &:hover {
+            background-color: #222744 !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+            color: #ffffff !important;
+        }
+    }
+
+    .action-btn {
+        background-color: #1a1a32 !important;
+        border-color: $crm-dark-border-strong !important;
+        color: $slate-300 !important;
+    }
+
+    .action-btn-view {
+        background-color: rgba($primary, 0.15) !important;
+        border-color: rgba($primary, 0.28) !important;
+        color: $primary-light !important;
+
+        &:hover {
+            background-color: rgba($primary, 0.3) !important;
+            border-color: rgba($primary, 0.45) !important;
+            color: $primary-lighter !important;
+        }
+    }
+
+    .action-btn-edit {
+        background-color: rgba(2, 132, 199, 0.15) !important;
+        border-color: rgba(2, 132, 199, 0.28) !important;
+        color: $color-info-light !important;
+
+        &:hover {
+            background-color: rgba(2, 132, 199, 0.3) !important;
+            border-color: rgba(2, 132, 199, 0.45) !important;
+            color: $color-sky-light !important;
+        }
+    }
+
+    .action-btn-delete {
+        background-color: rgba(239, 68, 68, 0.15) !important;
+        border-color: rgba(239, 68, 68, 0.28) !important;
+        color: $color-danger-light !important;
+
+        &:hover {
+            background-color: rgba(239, 68, 68, 0.3) !important;
+            border-color: rgba(239, 68, 68, 0.45) !important;
+            color: #fca5a5 !important;
+        }
+    }
+
+    .page-btn {
+        background-color: $crm-dark-elevated;
+        border-color: $crm-dark-border-normal;
+        color: $slate-300;
+
+        &:hover:not(.active):not(:disabled) {
+            background-color: $crm-dark-border-subtle;
+            color: #ffffff;
+        }
+    }
+
+    .btn-soft-primary {
+        background-color: rgba(37, 99, 235, 0.2);
+        color: #93c5fd;
+        border-color: rgba(37, 99, 235, 0.35);
+
+        &:hover {
+            background-color: rgba(37, 99, 235, 0.3);
+            color: #ffffff;
+        }
+    }
+
+    .btn-soft-danger {
+        background-color: rgba(220, 38, 38, 0.2);
+        color: #fca5a5;
+        border-color: rgba(220, 38, 38, 0.35);
+
+        &:hover {
+            background-color: rgba(220, 38, 38, 0.3);
+            color: #ffffff;
+        }
+    }
+}

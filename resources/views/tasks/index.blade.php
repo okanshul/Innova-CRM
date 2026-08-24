@@ -5,7 +5,7 @@
 
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-body">
         <div class="card-header border-0 bg-body p-3">
-            <x-page-header title="Tasks" icon="fa-regular fa-square-check" :cardHeader="false" class="mb-4">
+            <x-page-header title="Tasks" icon="fa-regular fa-square-check" :cardHeader="false">
                 <x-slot:actions>
                     @can('tasks.create')
                         <x-button.primary href="{{ route('tasks.create') }}" icon="fa-solid fa-plus fs-sm" label="Add Task" />

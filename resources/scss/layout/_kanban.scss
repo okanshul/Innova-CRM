@@ -1,0 +1,34 @@
+// ==========================================================================
+// Pipeline & Kanban Board Layout Styles
+// ==========================================================================
+
+.pipeline-board {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+
+    .pipeline-col {
+        min-width: 280px;
+        flex: 1;
+        background-color: $slate-100;
+        border-radius: $border-radius-lg;
+        padding: 1rem;
+
+        [data-bs-theme="dark"] & {
+            background-color: #151525;
+        }
+    }
+}
+
+@media (max-width: 767.98px) {
+    .pipeline-board {
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 0.5rem;
+
+        .pipeline-col {
+            min-width: 250px !important;
+            scroll-snap-align: start;
+        }
+    }
+}

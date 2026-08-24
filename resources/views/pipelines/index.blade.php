@@ -5,7 +5,7 @@
 
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-body">
         <div class="card-header border-0 bg-body p-3">
-            <x-page-header title="Sales Pipelines" icon="fa-solid fa-bars-staggered" :cardHeader="false" class="mb-4">
+            <x-page-header title="Sales Pipelines" icon="fa-solid fa-bars-staggered" :cardHeader="false">
                 <x-slot:actions>
                     @can('pipeline.create')
                         <x-button.primary href="{{ route('pipelines.create') }}" icon="fa-solid fa-plus fs-sm" label="Add Pipeline" />

@@ -33,7 +33,7 @@
     </div>
 @else
     <div
-        {{ $attributes->merge(['class' => 'd-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-3 mb-4']) }}>
+        {{ $attributes->merge(['class' => 'd-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-3 mb-3']) }}>
         <div class="d-flex align-items-center gap-3">
             @if ($icon)
                 <div class="page-header-icon rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"

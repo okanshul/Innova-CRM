@@ -1,0 +1,738 @@
+// ==========================================================================
+// Form Controls, Inputs, Custom Selects & Data Tables
+// ==========================================================================
+
+form>.p-3,
+form>div {
+    position: relative;
+    z-index: 2;
+}
+
+.form-select,
+.form-control {
+    position: relative;
+
+    &:focus,
+    &:active {
+        z-index: 1050 !important;
+    }
+}
+
+.custom-checkbox {
+    width: 1rem !important;
+    height: 1rem !important;
+    border: 1.5px solid $slate-300 !important;
+    border-radius: 5px !important;
+    cursor: pointer;
+    vertical-align: middle;
+    margin: 0 !important;
+
+    &:checked {
+        background-color: $primary !important;
+        border-color: $primary !important;
+    }
+}
+
+.form-switch .form-check-input {
+    width: 2.25rem !important;
+    height: 1.25rem !important;
+}
+
+/* Form Controls & Custom Tabs */
+.card-body .form-control,
+.card-body .form-select,
+.card-body .custom-select-trigger,
+form .form-control,
+form .form-select,
+form .custom-select-trigger,
+.flatpickr-input-target,
+.flatpickr-alt-input {
+    border-radius: 8px !important;
+    border: 1px solid $slate-200;
+    font-size: 0.875rem !important;
+    padding: 0.55rem 0.85rem !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    min-height: 42px;
+
+    &:focus,
+    &.active {
+        border-color: $primary !important;
+        box-shadow: 0 0 0 3px rgba($primary, 0.15) !important;
+    }
+
+    &.is-invalid {
+        border-color: $color-danger !important;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+    }
+}
+
+/* Global Input & Custom Select Placeholder Styling */
+input::placeholder,
+textarea::placeholder,
+.form-control::placeholder,
+.flatpickr-input-target::placeholder,
+.flatpickr-alt-input::placeholder {
+    color: $slate-400 !important;
+    opacity: 1 !important;
+}
+
+.custom-select-trigger.is-placeholder .custom-select-label,
+.custom-select-trigger .custom-select-label.is-placeholder,
+.custom-select-trigger.is-placeholder,
+select:has(option[value=""]:checked),
+select.is-placeholder {
+    color: $slate-400 !important;
+}
+
+/* Global Select & Option Theme Styling */
+select,
+.form-select,
+.custom-filter-select {
+    cursor: pointer;
+
+    option {
+        background-color: #ffffff;
+        color: $slate-800;
+        font-family: $font-family-sans-serif;
+        font-size: 0.875rem;
+        padding: 0.5rem;
+    }
+
+    optgroup {
+        font-weight: 600;
+        color: $primary;
+        background-color: $slate-50;
+        padding: 0.4rem 0.6rem;
+    }
+}
+
+/* Custom Themed Select Wrapper & Dropdown Menu */
+.custom-select-wrapper {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    width: 100%;
+
+    select.custom-select-hidden {
+        display: none !important;
+        position: absolute !important;
+        opacity: 0 !important;
+        width: 0 !important;
+        height: 0 !important;
+        pointer-events: none !important;
+        z-index: -1 !important;
+        overflow: hidden !important;
+        clip: rect(0, 0, 0, 0) !important;
+    }
+
+    .custom-select-trigger {
+        width: 100%;
+        min-height: 42px;
+        border: 1px solid $slate-200;
+        border-radius: 8px;
+        padding: 0.55rem 0.85rem;
+        font-size: 0.875rem;
+        font-weight: 400;
+        color: $slate-800;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        cursor: pointer;
+        user-select: none;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        transition: all 0.15s ease-in-out;
+
+        &:hover {
+            border-color: $slate-300;
+            color: $slate-900;
+        }
+
+        &:focus,
+        &.active {
+            border-color: $primary !important;
+            box-shadow: 0 0 0 3px rgba($primary, 0.15) !important;
+        }
+
+        &.is-invalid {
+            border-color: $color-danger !important;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+        }
+
+        .custom-select-arrow {
+            font-size: 0.75rem;
+            color: $slate-500;
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.15s ease;
+        }
+
+        &.active .custom-select-arrow {
+            transform: rotate(180deg);
+            color: $primary;
+        }
+
+        &.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            pointer-events: none;
+            background-color: $slate-50;
+        }
+    }
+
+    .custom-select-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        min-width: 100%;
+        width: max-content;
+        max-width: 320px;
+        z-index: 1060;
+        background: #ffffff;
+        border: 1px solid $slate-200;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        display: none;
+        overflow: hidden;
+
+        &.show {
+            display: block;
+            animation: customSelectFadeIn 0.15s cubic-bezier(0, 0, 0.2, 1);
+        }
+    }
+
+    &.dropup {
+        .custom-select-menu {
+            top: auto !important;
+            bottom: 100% !important;
+            margin-top: 0 !important;
+            border-radius: 10px 10px 0 0 !important;
+            box-shadow: 0 -10px 25px -5px rgba(0, 0, 0, 0.12), 0 -4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+        }
+    }
+
+    .custom-select-search-wrapper {
+        position: relative;
+        z-index: 10;
+
+        .custom-select-search-input {
+            padding-left: 28px !important;
+
+            &:focus {
+                z-index: 1 !important;
+            }
+        }
+
+        i {
+            position: absolute !important;
+            left: 10px !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            z-index: 10 !important;
+            pointer-events: none !important;
+        }
+    }
+
+    .custom-select-options-list {
+        max-height: 200px;
+        overflow-y: auto;
+
+        &::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 4px;
+        }
+    }
+
+    .custom-select-option {
+        padding: 0.5rem 0.85rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: $slate-700;
+        margin-bottom: 2px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        white-space: nowrap;
+        transition: all 0.12s ease;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        &:hover {
+            background-color: rgba($primary, 0.08);
+            color: $primary;
+        }
+
+        &.selected {
+            background-color: $primary;
+            color: #ffffff;
+            font-weight: 600;
+
+            &:hover {
+                background-color: #5558e6;
+                color: #ffffff;
+            }
+        }
+
+        &.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+    }
+}
+
+@keyframes customSelectFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Data Table Filters & Controls */
+.filter-controls-wrapper {
+    .filter-item-full {
+        flex: 1 1 100%;
+        width: 100%;
+
+        @media (min-width: 576px) {
+            flex: 0 0 auto;
+            width: auto;
+        }
+    }
+
+    .filter-item-half {
+        flex: 1 1 calc(50% - 0.25rem);
+        min-width: 120px;
+
+        @media (min-width: 576px) {
+            flex: 0 0 auto;
+            width: auto;
+        }
+    }
+
+    .filter-item-third {
+        flex: 1 1 calc(33.333% - 0.35rem);
+        min-width: 90px;
+
+        @media (min-width: 576px) {
+            flex: 0 0 auto;
+            width: auto;
+        }
+    }
+}
+
+select.custom-filter-select:not(.custom-select-hidden) {
+    background-color: #ffffff !important;
+    border: 1px solid $slate-200 !important;
+    border-radius: 8px !important;
+    height: 36px !important;
+    font-size: 0.825rem !important;
+    font-weight: 500 !important;
+    color: $slate-600 !important;
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+    padding-left: 0.85rem !important;
+    padding-right: 2.25rem !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    transition: all 0.15s ease;
+    cursor: pointer !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m2.5 5.5 5.5 5.5 5.5-5.5'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 0.75rem center !important;
+    background-size: 14px 10px !important;
+
+    &:hover {
+        background-color: $slate-50 !important;
+        border-color: $slate-300 !important;
+        color: $slate-900 !important;
+    }
+
+    &:focus,
+    &:focus-within,
+    &.active {
+        border-color: $primary !important;
+        box-shadow: 0 0 0 3px rgba($primary, 0.15) !important;
+        color: $slate-900 !important;
+        outline: 0 !important;
+    }
+}
+
+.filter-controls-wrapper .custom-select-trigger,
+.custom-select-wrapper:has(.custom-filter-select) .custom-select-trigger {
+    height: 36px !important;
+    min-height: 36px !important;
+    padding: 0.25rem 0.85rem !important;
+    font-size: 0.825rem !important;
+    font-weight: 500 !important;
+    color: $slate-600 !important;
+    background-color: #ffffff !important;
+    border: 1px solid $slate-200 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+    transition: all 0.15s ease-in-out !important;
+
+    &:hover {
+        background-color: $slate-50 !important;
+        border-color: $slate-300 !important;
+        color: $slate-900 !important;
+    }
+
+    &:focus,
+    &.active {
+        border-color: $primary !important;
+        box-shadow: 0 0 0 3px rgba($primary, 0.15) !important;
+        color: $slate-900 !important;
+        outline: 0 !important;
+    }
+}
+
+.invalid-feedback-ajax,
+.invalid-feedback {
+    display: block;
+    color: $color-danger;
+    font-size: 0.775rem;
+    margin-top: 0.25rem;
+    font-weight: 500;
+}
+
+.custom-form-tabs {
+    border-bottom: 1px solid $slate-200 !important;
+
+    .nav-link {
+        color: $slate-500;
+        border: none !important;
+        border-bottom: 2px solid transparent !important;
+        font-weight: 500;
+        font-size: 0.875rem;
+        padding: 0.75rem 1.25rem;
+        transition: all 0.15s ease;
+        background: transparent !important;
+
+        &:hover {
+            color: $primary;
+            border-bottom-color: $slate-300 !important;
+        }
+
+        &.active {
+            color: $primary !important;
+            border-bottom-color: $primary !important;
+            font-weight: 600;
+        }
+    }
+}
+
+/* Data Table Modern Row Hover Effects */
+.table {
+    th {
+        font-weight: 600;
+        color: $slate-500;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+    }
+
+    tbody {
+        tr {
+            transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s ease;
+            position: relative;
+
+            td {
+                transition: background-color 0.2s ease, color 0.15s ease;
+            }
+
+            &:hover {
+                background-color: rgba($primary, 0.05) !important;
+                box-shadow: inset 3px 0 0 $primary, 0 4px 14px -2px rgba($primary, 0.08);
+
+                td {
+                    background-color: transparent !important;
+                }
+
+                .action-btn {
+                    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+                    transform: translateY(-1px);
+                }
+
+                .form-check-input {
+                    border-color: $primary;
+                }
+            }
+        }
+    }
+}
+
+.dropdown-item {
+    transition: all 0.2s ease-in-out;
+
+    &:hover,
+    &:focus {
+        background-color: rgba($primary, 0.08);
+        color: $primary;
+
+        i.text-secondary {
+            color: $primary !important;
+        }
+    }
+}
+
+// Dark Mode Form Overrides
+[data-bs-theme="dark"] {
+    .dropdown-menu {
+        background-color: #1a1a30 !important;
+        border: 1px solid $crm-dark-border-subtle !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+
+        .dropdown-item {
+            color: $slate-300;
+
+            &:hover,
+            &:focus {
+                background-color: $crm-dark-border-subtle;
+                color: #ffffff;
+            }
+
+            &.text-danger:hover {
+                background-color: rgba(239, 68, 68, 0.15);
+                color: $color-danger-light !important;
+            }
+        }
+    }
+
+    .table {
+        --bs-table-bg: #1A1A2E;
+        --bs-table-color: #{$slate-200};
+        --bs-table-hover-bg: #27283c;
+
+        th {
+            color: $slate-400;
+        }
+
+        tbody tr:hover {
+            background-color: rgba($primary, 0.12) !important;
+            box-shadow: inset 3px 0 0 $primary-light, 0 4px 18px rgba(0, 0, 0, 0.35);
+
+            td {
+                background-color: transparent !important;
+            }
+        }
+    }
+
+    .table-light,
+    .table-light th,
+    .table thead.table-light,
+    .table thead.table-light tr,
+    .table thead.table-light th {
+        --bs-table-bg: #{$crm-dark-card-alt} !important;
+        --bs-table-color: #{$slate-400} !important;
+        background-color: $crm-dark-card-alt !important;
+        color: $slate-400 !important;
+    }
+
+    .table-responsive {
+        border-color: $crm-dark-border-subtle !important;
+    }
+
+    .custom-form-tabs {
+        background-color: $crm-dark-card !important;
+        border-bottom-color: $crm-dark-border-subtle !important;
+
+        .nav-link {
+            color: $slate-400;
+
+            &.active {
+                color: $primary-light !important;
+                background-color: transparent !important;
+                border-bottom-color: $primary !important;
+            }
+        }
+    }
+
+    select.custom-filter-select,
+    .filter-controls-wrapper .custom-select-trigger,
+    .custom-select-wrapper:has(.custom-filter-select) .custom-select-trigger {
+        background-color: $crm-dark-elevated !important;
+        border-color: $crm-dark-border-normal !important;
+        color: $slate-300 !important;
+    }
+
+    select.custom-filter-select:not(.custom-select-hidden) {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m2.5 5.5 5.5 5.5 5.5-5.5'/%3e%3c/svg%3e") !important;
+
+        &:hover {
+            background-color: #222744 !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+            color: #ffffff !important;
+        }
+
+        &:focus {
+            border-color: $primary !important;
+            box-shadow: 0 0 0 3px rgba($primary, 0.25) !important;
+            color: #ffffff !important;
+        }
+    }
+
+    select,
+    .form-select,
+    .custom-filter-select {
+        option {
+            background-color: $crm-dark-elevated;
+            color: $slate-200;
+
+            &:hover,
+            &:focus,
+            &:active,
+            &:checked {
+                background-color: $primary !important;
+                background: $primary linear-gradient(0deg, $primary 0%, $primary 100%) !important;
+                color: #ffffff !important;
+                font-weight: 600;
+            }
+
+            &:disabled {
+                color: $slate-500 !important;
+                background-color: $crm-dark-card !important;
+            }
+        }
+
+        optgroup {
+            color: $primary-light;
+            background-color: $crm-dark-card-alt;
+        }
+    }
+
+    .custom-select-wrapper {
+        .custom-select-trigger {
+            background-color: $crm-dark-elevated;
+            border-color: $crm-dark-border-normal;
+            color: $slate-300;
+
+            &:hover,
+            &:focus,
+            &.active {
+                border-color: $primary;
+                color: #ffffff;
+            }
+        }
+
+        .custom-select-menu {
+            background: $crm-dark-card-alt;
+            border-color: $crm-dark-border-normal;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        &.dropup .custom-select-menu {
+            box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5) !important;
+        }
+
+        .custom-select-option {
+            color: $slate-300;
+
+            &:hover {
+                background-color: rgba($primary, 0.2);
+                color: $primary-light;
+            }
+
+            &.selected {
+                background-color: $primary;
+                color: #ffffff;
+            }
+        }
+    }
+
+    .card-body .form-control,
+    .card-body .form-select,
+    .card-body .custom-select-trigger,
+    form .form-control,
+    form .form-select,
+    form .custom-select-trigger,
+    .form-control,
+    .form-select,
+    .custom-select-trigger,
+    textarea.form-control,
+    input.form-control,
+    .flatpickr-input-target,
+    .flatpickr-alt-input,
+    .flatpickr-input,
+    .flatpickr-mobile {
+        background-color: $crm-dark-card !important;
+        border-color: $crm-dark-border-strong !important;
+        color: $slate-100 !important;
+
+        &::placeholder {
+            color: $slate-500 !important;
+            opacity: 1 !important;
+        }
+
+        &:hover {
+            border-color: rgba(255, 255, 255, 0.25) !important;
+        }
+
+        &:focus,
+        &.active {
+            background-color: $crm-dark-header !important;
+            border-color: $primary !important;
+            box-shadow: 0 0 0 3px rgba($primary, 0.25) !important;
+            color: #ffffff !important;
+        }
+
+        &:disabled,
+        &[readonly] {
+            background-color: #0d101d !important;
+            border-color: $crm-dark-border-subtle !important;
+            color: $slate-500 !important;
+        }
+
+        &.is-invalid {
+            border-color: $color-danger-light !important;
+            box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.2) !important;
+        }
+    }
+
+    .form-label,
+    label {
+        color: $slate-400 !important;
+
+        i {
+            color: $slate-400 !important;
+        }
+    }
+
+    .form-check-input {
+        background-color: $slate-900;
+        border-color: rgba(255, 255, 255, 0.25);
+
+        &:checked {
+            background-color: $primary !important;
+            border-color: $primary !important;
+        }
+
+        &:focus {
+            box-shadow: 0 0 0 3px rgba($primary, 0.3);
+        }
+    }
+
+    .form-switch .form-check-input {
+        width: 2.25rem !important;
+        height: 1.25rem !important;
+        background-color: #334155 !important;
+        border-color: transparent !important;
+
+        &:checked {
+            background-color: $primary !important;
+            border-color: $primary !important;
+        }
+    }
+}

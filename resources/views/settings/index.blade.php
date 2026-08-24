@@ -381,19 +381,58 @@
                                             <div>
                                                 <div class="settings-card-header">
                                                     <div class="settings-icon-badge icon-blue">
-                                                        <i class="fa-solid fa-image"></i>
+                                                        <i class="fa-regular fa-image"></i>
                                                     </div>
                                                     <div class="settings-title-wrap">
                                                         <h6 class="settings-card-title">System Logo</h6>
-                                                        <p class="settings-card-desc">Manage logo in Appearance tab.</p>
+                                                        <p class="settings-card-desc">Upload your company logo.</p>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="settings-card-body">
-                                                <button type="button" class="btn btn-soft-primary w-100 btn-sm"
-                                                    onclick="document.getElementById('v-pills-appearance-tab').click()">
-                                                    <i class="fa-solid fa-palette me-1"></i> Branding Settings
-                                                </button>
+                                                <div class="border rounded-3 p-3 bg-body-tertiary d-flex align-items-center justify-content-center mb-3"
+                                                    style="min-height: 64px;" id="sysLogoPreviewBox">
+                                                    @if (isset($settings['system_logo']) && $settings['system_logo'])
+                                                        <img src="{{ asset($settings['system_logo']) }}" alt="Logo"
+                                                            class="img-fluid"
+                                                            style="max-height: 40px; object-fit: contain;">
+                                                    @else
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <div class="brand-icon rounded-3 d-flex align-items-center justify-content-center text-white shadow-sm flex-shrink-0"
+                                                                style="width: 40px; height: 40px; background: linear-gradient(135deg, #6366f1, #4f46e5);">
+                                                                <svg width="22" height="22" viewBox="0 0 24 24"
+                                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="white"
+                                                                        fill-opacity="0.9" />
+                                                                    <path d="M2 12L12 17L22 12" stroke="white"
+                                                                        stroke-width="2" stroke-linecap="round"
+                                                                        stroke-linejoin="round" />
+                                                                    <path d="M2 17L12 22L22 17" stroke="white"
+                                                                        stroke-width="2" stroke-linecap="round"
+                                                                        stroke-linejoin="round" />
+                                                                </svg>
+                                                            </div>
+                                                            <span
+                                                                class="fw-bold fs-5 text-body-emphasis tracking-tight">{{ $settings['app_name'] ?? 'InnovaCRM' }}</span>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                                <input type="file" id="sysLogoInput" name="system_logo_file"
+                                                    class="d-none" accept="image/*">
+                                                <input type="hidden" name="remove_system_logo"
+                                                    id="removeSystemLogoInput" value="0">
+                                                <div class="d-flex gap-2">
+                                                    <button type="button"
+                                                        class="btn btn-soft-primary flex-fill rounded-3 py-2 fw-semibold d-flex align-items-center justify-content-center gap-1 fs-7"
+                                                        onclick="document.getElementById('sysLogoInput').click()">
+                                                        <i class="fa-solid fa-arrows-rotate me-1 fs-8"></i> Change
+                                                    </button>
+                                                    <button type="button"
+                                                        class="btn btn-soft-danger rounded-3 py-2 px-3 fw-semibold fs-7"
+                                                        id="btnRemoveSysLogo">
+                                                        Remove
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -404,19 +443,54 @@
                                             <div>
                                                 <div class="settings-card-header">
                                                     <div class="settings-icon-badge icon-yellow">
-                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-regular fa-star"></i>
                                                     </div>
                                                     <div class="settings-title-wrap">
                                                         <h6 class="settings-card-title">Favicon</h6>
-                                                        <p class="settings-card-desc">Manage favicon in Appearance tab.</p>
+                                                        <p class="settings-card-desc">Upload favicon for browser tab.</p>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="settings-card-body">
-                                                <button type="button" class="btn btn-soft-primary w-100 btn-sm"
-                                                    onclick="document.getElementById('v-pills-appearance-tab').click()">
-                                                    <i class="fa-solid fa-palette me-1"></i> Branding Settings
-                                                </button>
+                                                <div class="border rounded-3 p-3 bg-body-tertiary d-flex align-items-center justify-content-center mb-3"
+                                                    style="min-height: 64px;" id="sysFaviconPreviewBox">
+                                                    @if (isset($settings['favicon']) && $settings['favicon'])
+                                                        <img src="{{ asset($settings['favicon']) }}" alt="Favicon"
+                                                            class="img-fluid rounded"
+                                                            style="max-height: 40px; max-width: 40px; object-fit: contain;">
+                                                    @else
+                                                        <div class="brand-icon rounded-3 d-flex align-items-center justify-content-center text-white shadow-sm flex-shrink-0"
+                                                            style="width: 40px; height: 40px; background: linear-gradient(135deg, #6366f1, #4f46e5);">
+                                                            <svg width="22" height="22" viewBox="0 0 24 24"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="white"
+                                                                    fill-opacity="0.9" />
+                                                                <path d="M2 12L12 17L22 12" stroke="white"
+                                                                    stroke-width="2" stroke-linecap="round"
+                                                                    stroke-linejoin="round" />
+                                                                <path d="M2 17L12 22L22 17" stroke="white"
+                                                                    stroke-width="2" stroke-linecap="round"
+                                                                    stroke-linejoin="round" />
+                                                            </svg>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                                <input type="file" id="sysFaviconInput" name="favicon_file"
+                                                    class="d-none" accept="image/*">
+                                                <input type="hidden" name="remove_favicon" id="removeFaviconInput"
+                                                    value="0">
+                                                <div class="d-flex gap-2">
+                                                    <button type="button"
+                                                        class="btn btn-soft-primary flex-fill rounded-3 py-2 fw-semibold d-flex align-items-center justify-content-center gap-1 fs-7"
+                                                        onclick="document.getElementById('sysFaviconInput').click()">
+                                                        <i class="fa-solid fa-arrows-rotate me-1 fs-8"></i> Change
+                                                    </button>
+                                                    <button type="button"
+                                                        class="btn btn-soft-danger rounded-3 py-2 px-3 fw-semibold fs-7"
+                                                        id="btnRemoveSysFavicon">
+                                                        Remove
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -439,7 +513,7 @@
                                             <div class="settings-card-body">
                                                 <div class="form-check form-switch mb-0">
                                                     <input type="hidden" name="maintenance_mode" value="0">
-                                                    <input class="form-check-input switch-green" type="checkbox"
+                                                    <input class="form-check-input" type="checkbox"
                                                         name="maintenance_mode" id="maintenanceModeSwitch" value="1"
                                                         {{ ($settings['maintenance_mode'] ?? '0') == '1' ? 'checked' : '' }}>
                                                 </div>
@@ -468,7 +542,7 @@
                                             <div class="settings-card-body">
                                                 <div class="form-check form-switch mb-0">
                                                     <input type="hidden" name="enable_recaptcha" value="0">
-                                                    <input class="form-check-input switch-green" type="checkbox"
+                                                    <input class="form-check-input" type="checkbox"
                                                         name="enable_recaptcha" id="enableRecaptchaSwitch" value="1"
                                                         {{ ($settings['enable_recaptcha'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 </div>
@@ -601,7 +675,7 @@
                                             <div class="settings-card-body">
                                                 <div class="form-check form-switch mb-0">
                                                     <input type="hidden" name="email_verification" value="0">
-                                                    <input class="form-check-input switch-green" type="checkbox"
+                                                    <input class="form-check-input" type="checkbox"
                                                         name="email_verification" id="emailVerificationSwitch"
                                                         value="1"
                                                         {{ ($settings['email_verification'] ?? '1') == '1' ? 'checked' : '' }}>
@@ -1079,8 +1153,8 @@
                                                 </div>
                                                 <div class="form-check form-switch mb-0">
                                                     <input type="hidden" name="pref_sys_email" value="0">
-                                                    <input class="form-check-input switch-green" type="checkbox"
-                                                        name="pref_sys_email" value="1"
+                                                    <input class="form-check-input" type="checkbox" name="pref_sys_email"
+                                                        value="1"
                                                         {{ ($settings['pref_sys_email'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 </div>
                                             </div>
@@ -1093,7 +1167,7 @@
                                                 </div>
                                                 <div class="form-check form-switch mb-0">
                                                     <input type="hidden" name="pref_notifications" value="0">
-                                                    <input class="form-check-input switch-green" type="checkbox"
+                                                    <input class="form-check-input" type="checkbox"
                                                         name="pref_notifications" value="1"
                                                         {{ ($settings['pref_notifications'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 </div>
@@ -1107,7 +1181,7 @@
                                                 </div>
                                                 <div class="form-check form-switch mb-0">
                                                     <input type="hidden" name="pref_verification" value="0">
-                                                    <input class="form-check-input switch-green" type="checkbox"
+                                                    <input class="form-check-input" type="checkbox"
                                                         name="pref_verification" value="1"
                                                         {{ ($settings['pref_verification'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 </div>
@@ -1121,7 +1195,7 @@
                                                 </div>
                                                 <div class="form-check form-switch mb-0">
                                                     <input type="hidden" name="pref_change_email" value="0">
-                                                    <input class="form-check-input switch-green" type="checkbox"
+                                                    <input class="form-check-input" type="checkbox"
                                                         name="pref_change_email" value="1"
                                                         {{ ($settings['pref_change_email'] ?? '0') == '1' ? 'checked' : '' }}>
                                                 </div>
@@ -1159,8 +1233,8 @@
                                                 </div>
                                                 <div class="form-check form-switch mb-0">
                                                     <input type="hidden" name="channel_inapp" value="0">
-                                                    <input class="form-check-input switch-green" type="checkbox"
-                                                        name="channel_inapp" value="1"
+                                                    <input class="form-check-input" type="checkbox" name="channel_inapp"
+                                                        value="1"
                                                         {{ ($settings['channel_inapp'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 </div>
                                             </div>
@@ -1173,8 +1247,8 @@
                                                 </div>
                                                 <div class="form-check form-switch mb-0">
                                                     <input type="hidden" name="channel_email" value="0">
-                                                    <input class="form-check-input switch-green" type="checkbox"
-                                                        name="channel_email" value="1"
+                                                    <input class="form-check-input" type="checkbox" name="channel_email"
+                                                        value="1"
                                                         {{ ($settings['channel_email'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 </div>
                                             </div>
@@ -1187,8 +1261,8 @@
                                                 </div>
                                                 <div class="form-check form-switch mb-0">
                                                     <input type="hidden" name="channel_sms" value="0">
-                                                    <input class="form-check-input switch-green" type="checkbox"
-                                                        name="channel_sms" value="1"
+                                                    <input class="form-check-input" type="checkbox" name="channel_sms"
+                                                        value="1"
                                                         {{ ($settings['channel_sms'] ?? '0') == '1' ? 'checked' : '' }}>
                                                 </div>
                                             </div>
@@ -1201,7 +1275,7 @@
                                                 </div>
                                                 <div class="form-check form-switch mb-0">
                                                     <input type="hidden" name="channel_browser" value="0">
-                                                    <input class="form-check-input switch-green" type="checkbox"
+                                                    <input class="form-check-input" type="checkbox"
                                                         name="channel_browser" value="1"
                                                         {{ ($settings['channel_browser'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 </div>
@@ -1324,8 +1398,8 @@
                                             </div>
                                             <div class="form-check form-switch mb-0">
                                                 <input type="hidden" name="sec_req_number" value="0">
-                                                <input class="form-check-input switch-green" type="checkbox"
-                                                    name="sec_req_number" value="1"
+                                                <input class="form-check-input" type="checkbox" name="sec_req_number"
+                                                    value="1"
                                                     {{ ($settings['sec_req_number'] ?? '1') == '1' ? 'checked' : '' }}>
                                             </div>
                                         </div>
@@ -1338,8 +1412,8 @@
                                             </div>
                                             <div class="form-check form-switch mb-0">
                                                 <input type="hidden" name="sec_req_special" value="0">
-                                                <input class="form-check-input switch-green" type="checkbox"
-                                                    name="sec_req_special" value="1"
+                                                <input class="form-check-input" type="checkbox" name="sec_req_special"
+                                                    value="1"
                                                     {{ ($settings['sec_req_special'] ?? '1') == '1' ? 'checked' : '' }}>
                                             </div>
                                         </div>
@@ -1368,12 +1442,13 @@
                                             class="p-3 border rounded-3 bg-body-tertiary mb-3 d-flex align-items-center justify-content-between">
                                             <div>
                                                 <h6 class="mb-1 fw-semibold fs-7">Require 2FA for all users</h6>
-                                                <p class="text-secondary small mb-0 fs-8">Mandatory 2FA authentication.</p>
+                                                <p class="text-secondary small mb-0 fs-8">Mandatory 2FA authentication.
+                                                </p>
                                             </div>
                                             <div class="form-check form-switch mb-0">
                                                 <input type="hidden" name="sec_req_2fa" value="0">
-                                                <input class="form-check-input switch-green" type="checkbox"
-                                                    name="sec_req_2fa" value="1"
+                                                <input class="form-check-input" type="checkbox" name="sec_req_2fa"
+                                                    value="1"
                                                     {{ ($settings['sec_req_2fa'] ?? '0') == '1' ? 'checked' : '' }}>
                                             </div>
                                         </div>
@@ -1386,8 +1461,8 @@
                                             </div>
                                             <div class="form-check form-switch mb-0">
                                                 <input type="hidden" name="sec_allow_2fa" value="0">
-                                                <input class="form-check-input switch-green" type="checkbox"
-                                                    name="sec_allow_2fa" value="1"
+                                                <input class="form-check-input" type="checkbox" name="sec_allow_2fa"
+                                                    value="1"
                                                     {{ ($settings['sec_allow_2fa'] ?? '1') == '1' ? 'checked' : '' }}>
                                             </div>
                                         </div>
@@ -1498,7 +1573,7 @@
                                                 </div>
                                                 <div class="form-check form-switch mb-0">
                                                     <input type="hidden" name="crm_enable_scoring" value="0">
-                                                    <input class="form-check-input switch-green" type="checkbox"
+                                                    <input class="form-check-input" type="checkbox"
                                                         name="crm_enable_scoring" value="1"
                                                         {{ ($settings['crm_enable_scoring'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 </div>
@@ -1512,7 +1587,7 @@
                                                 </div>
                                                 <div class="form-check form-switch mb-0">
                                                     <input type="hidden" name="crm_enable_forecast" value="0">
-                                                    <input class="form-check-input switch-green" type="checkbox"
+                                                    <input class="form-check-input" type="checkbox"
                                                         name="crm_enable_forecast" value="1"
                                                         {{ ($settings['crm_enable_forecast'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 </div>
@@ -1526,7 +1601,7 @@
                                                 </div>
                                                 <div class="form-check form-switch mb-0">
                                                     <input type="hidden" name="crm_enable_reminders" value="0">
-                                                    <input class="form-check-input switch-green" type="checkbox"
+                                                    <input class="form-check-input" type="checkbox"
                                                         name="crm_enable_reminders" value="1"
                                                         {{ ($settings['crm_enable_reminders'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 </div>
@@ -1540,7 +1615,7 @@
                                                 </div>
                                                 <div class="form-check form-switch mb-0">
                                                     <input type="hidden" name="crm_auto_assign" value="0">
-                                                    <input class="form-check-input switch-green" type="checkbox"
+                                                    <input class="form-check-input" type="checkbox"
                                                         name="crm_auto_assign" value="1"
                                                         {{ ($settings['crm_auto_assign'] ?? '0') == '1' ? 'checked' : '' }}>
                                                 </div>
@@ -1858,23 +1933,15 @@
                                 </div>
                             </div>
                             <div class="card-body p-0">
-                                <div class="table-responsive">
-                                    <table class="table table-hover align-middle mb-0">
-                                        <thead class="bg-body-tertiary border-bottom">
-                                            <tr>
-                                                <th class="ps-4 py-3 small fw-bold text-secondary">Time</th>
-                                                <th class="py-3 small fw-bold text-secondary">User</th>
-                                                <th class="py-3 small fw-bold text-secondary">Action</th>
-                                                <th class="py-3 small fw-bold text-secondary">Module</th>
-                                                <th class="pe-4 py-3 text-end small fw-bold text-secondary">IP Address
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="auditLogTableBody">
-                                            <!-- Dynamic JS Render -->
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <x-data-table id="auditLogTable" tableBodyId="auditLogTableBody" :showCheckboxColumn="false"
+                                    paginationRowId="auditPaginationRow" summaryId="auditPaginationSummary" controlsId="auditPaginationControls"
+                                    :headers="[
+                                        'TIME',
+                                        'USER',
+                                        'ACTION',
+                                        'MODULE',
+                                        ['title' => 'IP ADDRESS', 'align' => 'end'],
+                                    ]" />
                             </div>
                         </div>
                     </div>
