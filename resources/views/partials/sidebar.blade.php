@@ -1,10 +1,14 @@
 <aside id="sidebar" class="offcanvas-lg offcanvas-start d-flex flex-column p-3">
     <div class="d-flex align-items-center justify-content-between mb-4 px-2 pt-1">
         <a href="{{ route('dashboard') }}" class="d-flex align-items-center text-white text-decoration-none sidebar-brand gap-2">
+            @if(setting('favicon'))
+                <img src="{{ asset(setting('favicon')) }}" alt="{{ setting('app_name', 'InnovaCRM') }}" class="sidebar-favicon-img rounded-2" style="max-height: 34px; max-width: 34px; object-fit: contain;">
+            @endif
+
             @if(setting('system_logo'))
-                <img src="{{ asset(setting('system_logo')) }}" alt="{{ setting('app_name', 'InnovaCRM') }}" class="sidebar-logo-img rounded-2" style="max-height: 38px; max-width: 160px; object-fit: contain;">
+                <img src="{{ asset(setting('system_logo')) }}" alt="{{ setting('app_name', 'InnovaCRM') }}" class="sidebar-logo-img sidebar-logo-full rounded-2" style="max-height: 38px; max-width: 160px; object-fit: contain;">
             @else
-                <div class="d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center gap-2 sidebar-logo-full">
                     <div class="brand-icon rounded-3 d-flex align-items-center justify-content-center text-white shadow-sm flex-shrink-0"
                         style="width: 38px; height: 38px; min-width: 38px; background: linear-gradient(135deg, #6366f1, #a855f7) !important;">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -133,7 +137,7 @@
         </div>
 
         <!-- User Profile -->
-        <div class="dropdown">
+        <div class="dropdown dropup">
             @php
                 $sidebarAvatar = (auth()->user()->avatar && \Illuminate\Support\Facades\Storage::disk('public')->exists(auth()->user()->avatar))
                     ? asset('storage/' . auth()->user()->avatar)
@@ -141,7 +145,7 @@
                 $sidebarUiAvatar = 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) . '&background=6366F1&color=fff';
             @endphp
             <a href="javascript:void(0)" class="dropdown-toggle d-flex align-items-center text-white text-decoration-none px-2 py-1 rounded-3 hover-bg sidebar-user"
-                id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false" role="button">
+                id="dropdownUser1" data-bs-toggle="dropdown" data-bs-popper-config='{"strategy":"fixed"}' aria-expanded="false" role="button">
                 <div class="position-relative d-flex justify-content-center align-items-center">
                     <img src="{{ $sidebarAvatar }}" onerror="this.onerror=null;this.src='{{ $sidebarUiAvatar }}';" alt="{{ auth()->user()->name }}"
                         width="36" height="36" class="rounded-circle avatar object-fit-cover">
@@ -152,7 +156,7 @@
                 </div>
             </a>
             <div class="dropdown-menu dropdown-menu-dark text-small shadow-lg rounded-4 border-0 p-2 mt-2"
-                aria-labelledby="dropdownUser1" style="min-width: 220px; background-color: #1a1a30;">
+                aria-labelledby="dropdownUser1" style="min-width: 220px; background-color: #1a1a30; z-index: 1090;">
                 <div class="d-flex align-items-center gap-3 p-2 mb-2 bg-white bg-opacity-10 rounded-3">
                     <img src="{{ $sidebarAvatar }}" onerror="this.onerror=null;this.src='{{ $sidebarUiAvatar }}';" alt="{{ auth()->user()->name }}"
                         width="36" height="36" class="rounded-circle avatar object-fit-cover">
@@ -163,11 +167,11 @@
                 </div>
                 <div class="dropdown-divider my-1 opacity-25"></div>
                 <a class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2 text-white-50" href="{{ route('profile.index') }}">
-                    <i class="fa-regular fa-user text-primary" style="width: 18px;"></i>
+                    <i class="fa-regular fa-user text-secondary transition-colors" style="width: 18px;"></i>
                     <span class="text-white">Profile</span>
                 </a>
-                <a class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2 text-white-50" href="#">
-                    <i class="fa-solid fa-gear text-info" style="width: 18px;"></i>
+                <a class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2 text-white-50" href="{{ route('settings.index') }}">
+                    <i class="fa-solid fa-gear text-secondary transition-colors" style="width: 18px;"></i>
                     <span class="text-white">Settings</span>
                 </a>
                 <div class="dropdown-divider my-1 opacity-25"></div>

@@ -282,6 +282,10 @@ body {
     white-space: nowrap;
 }
 
+.sidebar-favicon-img {
+    display: none !important;
+}
+
 .sidebar-text {
     color: inherit;
     transition: opacity 0.2s ease;
@@ -361,6 +365,19 @@ body {
             justify-content: center !important;
             padding-left: 0 !important;
             padding-right: 0 !important;
+
+            .sidebar-favicon-img {
+                display: block !important;
+                margin: 0 auto;
+                max-width: 34px !important;
+                max-height: 34px !important;
+                object-fit: contain;
+            }
+
+            .sidebar-favicon-img ~ .sidebar-logo-full,
+            &:has(.sidebar-favicon-img) .sidebar-logo-full {
+                display: none !important;
+            }
 
             .logo-icon,
             .sidebar-logo-img {
@@ -3512,19 +3529,31 @@ span.flatpickr-weekday {
                 color: $slate-400;
             }
         }
+    }
 
-        .form-check-input {
-            background-color: $slate-900;
-            border-color: rgba(255, 255, 255, 0.2);
+    /* Checkbox & Switch Dark Mode Overrides */
+    .form-check-input {
+        background-color: $slate-900;
+        border-color: rgba(255, 255, 255, 0.25);
 
-            &:checked {
-                background-color: $primary;
-                border-color: $primary;
-            }
+        &:checked {
+            background-color: $primary !important;
+            border-color: $primary !important;
+        }
 
-            &:focus {
-                box-shadow: 0 0 0 3px rgba($primary, 0.3);
-            }
+        &:focus {
+            box-shadow: 0 0 0 3px rgba($primary, 0.3);
+        }
+    }
+
+    .form-check-input.switch-green,
+    .form-switch .form-check-input {
+        background-color: #334155 !important;
+        border-color: transparent !important;
+
+        &:checked {
+            background-color: $primary !important;
+            border-color: $primary !important;
         }
     }
 

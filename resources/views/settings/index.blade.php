@@ -19,7 +19,8 @@
                 </div>
             </div>
             <div class="d-flex align-items-center gap-2">
-                <button type="button" class="btn btn-outline-danger px-3 py-2 rounded-3 fw-semibold fs-7" id="btnResetSettings">
+                <button type="button" class="btn btn-outline-danger px-3 py-2 rounded-3 fw-semibold fs-7"
+                    id="btnResetSettings">
                     <i class="fa-solid fa-rotate-left me-1"></i> Reset Settings
                 </button>
                 <x-button.primary type="submit" icon="fa-solid fa-check" label="Save All Settings" />
@@ -633,12 +634,14 @@
                                 <div class="row g-4 align-items-start">
                                     <!-- Column 1: Logo -->
                                     <div class="col-lg-4 col-md-12 pe-lg-4 border-lg-end">
-                                        <label class="form-label fw-medium small text-secondary ps-2 mb-2"><i class="fa-solid fa-image text-secondary me-1"></i> Logo</label>
+                                        <label class="form-label fw-medium small text-secondary ps-2 mb-2"><i
+                                                class="fa-solid fa-image text-secondary me-1"></i> Logo</label>
                                         <div class="logo-preview-box border border-light-subtles p-3 text-center bg-body-tertiary d-flex align-items-center justify-content-center mb-3"
                                             style="min-height: 140px;" id="appearanceLogoPreviewBox">
                                             @if (isset($settings['system_logo']) && $settings['system_logo'])
                                                 <img src="{{ asset($settings['system_logo']) }}" alt="Logo"
-                                                    class="img-fluid" style="max-height: 60px; max-width: 220px; object-fit: contain;">
+                                                    class="img-fluid"
+                                                    style="max-height: 60px; max-width: 220px; object-fit: contain;">
                                             @else
                                                 <div class="d-flex align-items-center gap-2">
                                                     <div class="brand-icon rounded-3 d-flex align-items-center justify-content-center text-white shadow-sm"
@@ -660,7 +663,8 @@
                                         </div>
                                         <input type="file" id="appearanceLogoInput" name="system_logo_file"
                                             class="d-none" accept="image/*">
-                                        <input type="hidden" name="remove_system_logo" id="removeSystemLogoInput" value="0">
+                                        <input type="hidden" name="remove_system_logo" id="removeSystemLogoInput"
+                                            value="0">
                                         <div class="d-flex gap-2 mb-2">
                                             <button type="button" class="btn flex-fill py-2 rounded-3 fw-semibold"
                                                 style="background-color: #EEF2FF; color: #5030FF; border: none;"
@@ -668,7 +672,8 @@
                                                 <i class="fa-solid fa-upload me-1"></i> Change Logo
                                             </button>
                                             @if (isset($settings['system_logo']) && $settings['system_logo'])
-                                                <button type="button" class="btn btn-soft-danger py-2 rounded-3 fw-semibold"
+                                                <button type="button"
+                                                    class="btn btn-soft-danger py-2 rounded-3 fw-semibold"
                                                     id="btnRemoveLogo">
                                                     <i class="fa-solid fa-trash"></i>
                                                 </button>
@@ -684,10 +689,21 @@
                                         <!-- Primary Color -->
                                         <div class="mb-3">
                                             <div class="d-flex align-items-end gap-2">
-                                                <x-form.input id="primaryColorText" name="primary_color" label="Primary Color" icon="fa-solid fa-palette" class="form-control-lg rounded-3 fs-6 flex-grow-1 mb-0" :value="$settings['primary_color'] ?? '#5030FF'" style="text-transform: uppercase;" containerClass="flex-grow-1" />
-                                                <div class="position-relative flex-shrink-0 rounded-3 overflow-hidden shadow-xs" style="width: 42px; height: 42px;">
-                                                    <div id="primaryColorSwatch" class="w-100 h-100 rounded-3" style="background-color: {{ $settings['primary_color'] ?? '#5030FF' }};"></div>
-                                                    <input type="color" class="position-absolute top-0 start-0 w-100 h-100 opacity-0 cursor-pointer" id="primaryColorPicker" value="{{ $settings['primary_color'] ?? '#5030FF' }}" style="cursor: pointer; border: none; padding: 0;">
+                                                <x-form.input id="primaryColorText" name="primary_color"
+                                                    label="Primary Color" icon="fa-solid fa-palette"
+                                                    class="form-control-lg rounded-3 fs-6 flex-grow-1 mb-0"
+                                                    :value="$settings['primary_color'] ?? '#5030FF'" style="text-transform: uppercase;"
+                                                    containerClass="flex-grow-1" />
+                                                <div class="position-relative flex-shrink-0 rounded-3 overflow-hidden shadow-xs"
+                                                    style="width: 42px; height: 42px;">
+                                                    <div id="primaryColorSwatch" class="w-100 h-100 rounded-3"
+                                                        style="background-color: {{ $settings['primary_color'] ?? '#5030FF' }};">
+                                                    </div>
+                                                    <input type="color"
+                                                        class="position-absolute top-0 start-0 w-100 h-100 opacity-0 cursor-pointer"
+                                                        id="primaryColorPicker"
+                                                        value="{{ $settings['primary_color'] ?? '#5030FF' }}"
+                                                        style="cursor: pointer; border: none; padding: 0;">
                                                 </div>
                                             </div>
                                         </div>
@@ -695,10 +711,21 @@
                                         <!-- Secondary Color -->
                                         <div class="mb-3">
                                             <div class="d-flex align-items-end gap-2">
-                                                <x-form.input id="secondaryColorText" name="secondary_color" label="Secondary Color" icon="fa-solid fa-fill-drip" class="form-control-lg rounded-3 fs-6 flex-grow-1 mb-0" :value="$settings['secondary_color'] ?? '#F2F4F8'" style="text-transform: uppercase;" containerClass="flex-grow-1" />
-                                                <div class="position-relative flex-shrink-0 rounded-3 overflow-hidden shadow-xs" style="width: 42px; height: 42px;">
-                                                    <div id="secondaryColorSwatch" class="w-100 h-100 rounded-3" style="background-color: {{ $settings['secondary_color'] ?? '#F2F4F8' }};"></div>
-                                                    <input type="color" class="position-absolute top-0 start-0 w-100 h-100 opacity-0 cursor-pointer" id="secondaryColorPicker" value="{{ $settings['secondary_color'] ?? '#F2F4F8' }}" style="cursor: pointer; border: none; padding: 0;">
+                                                <x-form.input id="secondaryColorText" name="secondary_color"
+                                                    label="Secondary Color" icon="fa-solid fa-fill-drip"
+                                                    class="form-control-lg rounded-3 fs-6 flex-grow-1 mb-0"
+                                                    :value="$settings['secondary_color'] ?? '#F2F4F8'" style="text-transform: uppercase;"
+                                                    containerClass="flex-grow-1" />
+                                                <div class="position-relative flex-shrink-0 rounded-3 overflow-hidden shadow-xs"
+                                                    style="width: 42px; height: 42px;">
+                                                    <div id="secondaryColorSwatch" class="w-100 h-100 rounded-3"
+                                                        style="background-color: {{ $settings['secondary_color'] ?? '#F2F4F8' }};">
+                                                    </div>
+                                                    <input type="color"
+                                                        class="position-absolute top-0 start-0 w-100 h-100 opacity-0 cursor-pointer"
+                                                        id="secondaryColorPicker"
+                                                        value="{{ $settings['secondary_color'] ?? '#F2F4F8' }}"
+                                                        style="cursor: pointer; border: none; padding: 0;">
                                                 </div>
                                             </div>
                                         </div>
@@ -706,10 +733,21 @@
                                         <!-- Sidebar Background Color -->
                                         <div class="mb-3">
                                             <div class="d-flex align-items-end gap-2">
-                                                <x-form.input id="sidebarBgColorText" name="sidebar_bg_color" label="Sidebar Background Color" icon="fa-solid fa-table-columns" class="form-control-lg rounded-3 fs-6 flex-grow-1 mb-0" :value="$settings['sidebar_bg_color'] ?? '#0B0F19'" style="text-transform: uppercase;" containerClass="flex-grow-1" />
-                                                <div class="position-relative flex-shrink-0 rounded-3 overflow-hidden shadow-xs" style="width: 42px; height: 42px;">
-                                                    <div id="sidebarBgColorSwatch" class="w-100 h-100 rounded-3" style="background-color: {{ $settings['sidebar_bg_color'] ?? '#0B0F19' }};"></div>
-                                                    <input type="color" class="position-absolute top-0 start-0 w-100 h-100 opacity-0 cursor-pointer" id="sidebarBgColorPicker" value="{{ $settings['sidebar_bg_color'] ?? '#0B0F19' }}" style="cursor: pointer; border: none; padding: 0;">
+                                                <x-form.input id="sidebarBgColorText" name="sidebar_bg_color"
+                                                    label="Sidebar Background Color" icon="fa-solid fa-table-columns"
+                                                    class="form-control-lg rounded-3 fs-6 flex-grow-1 mb-0"
+                                                    :value="$settings['sidebar_bg_color'] ?? '#0B0F19'" style="text-transform: uppercase;"
+                                                    containerClass="flex-grow-1" />
+                                                <div class="position-relative flex-shrink-0 rounded-3 overflow-hidden shadow-xs"
+                                                    style="width: 42px; height: 42px;">
+                                                    <div id="sidebarBgColorSwatch" class="w-100 h-100 rounded-3"
+                                                        style="background-color: {{ $settings['sidebar_bg_color'] ?? '#0B0F19' }};">
+                                                    </div>
+                                                    <input type="color"
+                                                        class="position-absolute top-0 start-0 w-100 h-100 opacity-0 cursor-pointer"
+                                                        id="sidebarBgColorPicker"
+                                                        value="{{ $settings['sidebar_bg_color'] ?? '#0B0F19' }}"
+                                                        style="cursor: pointer; border: none; padding: 0;">
                                                 </div>
                                             </div>
                                         </div>
@@ -719,12 +757,12 @@
                                     <div class="col-lg-4 col-md-6 ps-lg-4">
                                         <!-- Favicon -->
                                         <div class="mb-3">
-                                            <label class="form-label fw-medium small text-secondary ps-2 mb-2"><i class="fa-solid fa-icons text-secondary me-1"></i> Favicon</label>
+                                            <label class="form-label fw-medium small text-secondary ps-2 mb-2"><i
+                                                    class="fa-solid fa-icons text-secondary me-1"></i> Favicon</label>
                                             <div
                                                 class="border border-light-subtle rounded-3 p-3 bg-body-tertiary d-flex align-items-center gap-3">
                                                 <div class="rounded-3 d-flex align-items-center justify-content-center border text-white flex-shrink-0"
-                                                    style="width: 46px; height: 46px;"
-                                                    id="appearanceFaviconPreviewBox">
+                                                    style="width: 46px; height: 46px;" id="appearanceFaviconPreviewBox">
                                                     @if (isset($settings['favicon']) && $settings['favicon'])
                                                         <img src="{{ asset($settings['favicon']) }}" alt="Favicon"
                                                             class="img-fluid rounded" style="max-height: 30px;">
@@ -743,7 +781,8 @@
                                                 <div>
                                                     <input type="file" id="appearanceFaviconInput" name="favicon_file"
                                                         class="d-none" accept="image/*">
-                                                    <input type="hidden" name="remove_favicon" id="removeFaviconInput" value="0">
+                                                    <input type="hidden" name="remove_favicon" id="removeFaviconInput"
+                                                        value="0">
                                                     <div class="d-flex align-items-center gap-2">
                                                         <button type="button"
                                                             class="btn p-0 border-0 fw-semibold text-primary fs-7 mb-0 text-start"
@@ -751,7 +790,9 @@
                                                             Change Favicon
                                                         </button>
                                                         @if (isset($settings['favicon']) && $settings['favicon'])
-                                                            <button type="button" class="btn p-0 border-0 fw-semibold text-danger fs-8 mb-0 ms-2" id="btnRemoveFavicon">
+                                                            <button type="button"
+                                                                class="btn p-0 border-0 fw-semibold text-danger fs-8 mb-0 ms-2"
+                                                                id="btnRemoveFavicon">
                                                                 Remove
                                                             </button>
                                                         @endif
@@ -762,10 +803,13 @@
                                         </div>
 
                                         <!-- Application Name -->
-                                        <x-form.input class="form-control-lg rounded-3 fs-6 mb-3" name="app_name" label="Application Name" icon="fa-solid fa-cube" :value="$settings['app_name'] ?? 'InnovaCRM'" />
+                                        <x-form.input class="form-control-lg rounded-3 fs-6 mb-3" name="app_name"
+                                            label="Application Name" icon="fa-solid fa-cube" :value="$settings['app_name'] ?? 'InnovaCRM'" />
 
                                         <!-- Application URL -->
-                                        <x-form.input class="form-control-lg rounded-3 fs-6" type="url" name="app_url" label="Application URL" icon="fa-solid fa-globe" :value="$settings['app_url'] ?? 'https://crm.innovacrm.com'" />
+                                        <x-form.input class="form-control-lg rounded-3 fs-6" type="url"
+                                            name="app_url" label="Application URL" icon="fa-solid fa-globe"
+                                            :value="$settings['app_url'] ?? 'https://crm.innovacrm.com'" />
                                     </div>
                                 </div>
                             </div>

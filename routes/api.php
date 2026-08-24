@@ -10,6 +10,12 @@ use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\MeetingController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\SettingController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\BackupController;
+use App\Http\Controllers\Api\AuditLogController;
+use App\Http\Controllers\Api\SystemInfoController;
+use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\GlobalSearchController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -51,24 +57,24 @@ Route::middleware(['web', 'auth'])->name('crm.')->group(function () {
     Route::post('settings/test-email', [SettingController::class, 'testEmail'])->name('api.settings.test_email');
 
     // Users API
-    Route::apiResource('users', \App\Http\Controllers\Api\UserController::class)->names('api.users');
+    Route::apiResource('users', UserController::class)->names('api.users');
 
     // Backups API
-    Route::get('backups/{id}/download', [\App\Http\Controllers\Api\BackupController::class, 'download'])->name('api.backups.download');
-    Route::post('backups/restore', [\App\Http\Controllers\Api\BackupController::class, 'restore'])->name('api.backups.restore');
-    Route::apiResource('backups', \App\Http\Controllers\Api\BackupController::class)->names('api.backups');
+    Route::get('backups/{id}/download', [BackupController::class, 'download'])->name('api.backups.download');
+    Route::post('backups/restore', [BackupController::class, 'restore'])->name('api.backups.restore');
+    Route::apiResource('backups', BackupController::class)->names('api.backups');
 
     // Audit Logs API
-    Route::get('audit-logs', [\App\Http\Controllers\Api\AuditLogController::class, 'index'])->name('api.audit_logs.index');
+    Route::get('audit-logs', [AuditLogController::class, 'index'])->name('api.audit_logs.index');
 
     // System Info API
-    Route::get('system-info', [\App\Http\Controllers\Api\SystemInfoController::class, 'index'])->name('api.system_info.index');
+    Route::get('system-info', [SystemInfoController::class, 'index'])->name('api.system_info.index');
 
     // Profile API
-    Route::get('profile', [\App\Http\Controllers\Api\ProfileController::class, 'show'])->name('api.profile.show');
-    Route::post('profile', [\App\Http\Controllers\Api\ProfileController::class, 'update'])->name('api.profile.update');
-    Route::put('profile/password', [\App\Http\Controllers\Api\ProfileController::class, 'updatePassword'])->name('api.profile.password');
+    Route::get('profile', [ProfileController::class, 'show'])->name('api.profile.show');
+    Route::post('profile', [ProfileController::class, 'update'])->name('api.profile.update');
+    Route::put('profile/password', [ProfileController::class, 'updatePassword'])->name('api.profile.password');
 
     // Global Search API
-    Route::get('search', [\App\Http\Controllers\Api\GlobalSearchController::class, 'search'])->name('api.search');
+    Route::get('search', [GlobalSearchController::class, 'search'])->name('api.search');
 });
