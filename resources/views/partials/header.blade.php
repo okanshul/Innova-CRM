@@ -46,21 +46,13 @@
             <i class="fa-solid fa-magnifying-glass fs-6"></i>
         </button>
 
-        <!-- Theme Switch (Desktop/Tablet) -->
-        <div class="d-none d-sm-flex align-items-center gap-2">
-            <div class="bg-primary rounded-pill d-flex align-items-center position-relative cursor-pointer transition-all"
-                id="theme-toggle" style="width: 44px; height: 24px; padding: 2px;">
-                <div class="d-flex justify-content-between w-100 px-1 text-white opacity-75"
-                    style="font-size: 0.7rem; pointer-events: none;">
-                    <i class="fa-solid fa-sun"></i>
-                    <i class="fa-solid fa-moon"></i>
-                </div>
-                <!-- Knob -->
-                <div class="bg-white rounded-circle position-absolute transition-all shadow-sm d-flex align-items-center justify-content-center"
-                    id="theme-knob" style="width: 18px; height: 18px; left: 3px; top: 3px;">
-                </div>
-            </div>
-        </div>
+        <!-- Theme Toggle Single Button (Cycle Light -> Dark -> Auto) -->
+        <button class="btn btn-body-tertiary bg-body-tertiary rounded-circle d-flex align-items-center justify-content-center shadow-none border text-secondary p-0 transition-all hover-primary ms-1"
+            id="theme-toggle-btn" type="button" aria-label="Toggle Theme"
+            style="width: 36px; height: 36px; background-color: var(--bs-tertiary-bg);"
+            title="Theme preference">
+            <i class="theme-toggle-icon fa-solid fa-sun fs-6 text-secondary"></i>
+        </button>
 
         <!-- Notification Bell -->
         <div class="position-relative cursor-pointer text-secondary hover-primary bg-body-tertiary rounded-circle d-flex align-items-center justify-content-center shadow-none border" style="width: 36px; height: 36px;">

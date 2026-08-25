@@ -5,6 +5,21 @@ window.bootstrap = bootstrap;
 
 document.addEventListener('DOMContentLoaded', () => {
 
+    let revenueChart, leadsChart;
+
+    // Handle Chart Dark mode
+    function updateChartsTheme(theme) {
+        const gridColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
+        const textColor = theme === 'dark' ? '#94a3b8' : '#64748b';
+
+        if (revenueChart && revenueChart.options && revenueChart.options.scales) {
+            revenueChart.options.scales.y.grid.color = gridColor;
+            revenueChart.options.scales.y.ticks.color = textColor;
+            revenueChart.options.scales.x.ticks.color = textColor;
+            revenueChart.update();
+        }
+    }
+
     // Sidebar Toggle Logic
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.getElementById('main-content');
@@ -114,50 +129,93 @@ document.addEventListener('DOMContentLoaded', () => {
         updateTooltipsState(isCollapsed);
     });
 
-    // Theme Toggle Logic
-    const themeToggle = document.getElementById('theme-toggle');
+    // Theme Management Logic (Single Button Cycle: Light -> Dark -> Auto)
     const htmlElement = document.documentElement;
-    const themeKnob = document.getElementById('theme-knob');
-    const themeKnobIcon = document.getElementById('theme-knob-icon');
+    const themeBtn = document.getElementById('theme-toggle-btn');
 
-    // Check localStorage for saved theme
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    htmlElement.setAttribute('data-bs-theme', savedTheme);
-    updateThemeIcon(savedTheme);
+    const getStoredTheme = () => localStorage.getItem('theme') || 'auto';
+    const setStoredTheme = theme => localStorage.setItem('theme', theme);
 
-    if (themeToggle) {
-        themeToggle.addEventListener('click', (e) => {
+    const getAppliedTheme = (theme) => {
+        if (theme === 'auto') {
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        return theme;
+    };
+
+    const setTheme = theme => {
+        const appliedTheme = getAppliedTheme(theme);
+        htmlElement.setAttribute('data-bs-theme', appliedTheme);
+        updateChartsTheme(appliedTheme);
+    };
+
+    const updateThemeUI = (theme) => {
+        const themeIcon = document.querySelector('.theme-toggle-icon') || (themeBtn ? themeBtn.querySelector('i') : null);
+
+        let iconClass = 'fa-circle-half-stroke';
+        let iconColor = 'text-secondary';
+        let nextThemeName = 'Light';
+
+        if (theme === 'light') {
+            iconClass = 'fa-sun';
+            iconColor = 'text-secondary';
+            nextThemeName = 'Dark';
+        } else if (theme === 'dark') {
+            iconClass = 'fa-moon';
+            iconColor = 'text-secondary';
+            nextThemeName = 'Auto';
+        } else if (theme === 'auto') {
+            iconClass = 'fa-circle-half-stroke';
+            iconColor = 'text-secondary';
+            nextThemeName = 'Light';
+        }
+
+        if (themeIcon) {
+            themeIcon.className = `theme-toggle-icon fa-solid ${iconClass} ${iconColor} fs-6`;
+        }
+
+        if (themeBtn) {
+            const systemState = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            const currentLabel = theme === 'auto' ? `Auto (${systemState})` : theme.charAt(0).toUpperCase() + theme.slice(1);
+            const tooltipText = `Theme: ${currentLabel} (Click for ${nextThemeName})`;
+            themeBtn.setAttribute('title', tooltipText);
+            themeBtn.setAttribute('aria-label', tooltipText);
+        }
+    };
+
+    // Initialize Theme State
+    const initialTheme = getStoredTheme();
+    setTheme(initialTheme);
+    updateThemeUI(initialTheme);
+
+    // Listen for system color scheme changes (when on 'auto')
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        const storedTheme = getStoredTheme();
+        if (storedTheme === 'auto') {
+            setTheme('auto');
+            updateThemeUI('auto');
+        }
+    });
+
+    // Single Button Click to Cycle: light -> dark -> auto -> light
+    if (themeBtn) {
+        themeBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            const currentTheme = htmlElement.getAttribute('data-bs-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            const currentTheme = getStoredTheme();
+            let nextTheme = 'light';
+            if (currentTheme === 'light') {
+                nextTheme = 'dark';
+            } else if (currentTheme === 'dark') {
+                nextTheme = 'auto';
+            } else if (currentTheme === 'auto') {
+                nextTheme = 'light';
+            }
 
-            htmlElement.setAttribute('data-bs-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeIcon(newTheme);
-
-            // Optional: Re-render charts for dark mode colors
-            updateChartsTheme(newTheme);
+            setStoredTheme(nextTheme);
+            setTheme(nextTheme);
+            updateThemeUI(nextTheme);
         });
     }
-
-    function updateThemeIcon(theme) {
-        if (!themeKnob) return;
-        if (theme === 'dark') {
-            themeKnob.style.transform = 'translateX(20px)';
-            if (themeKnobIcon) {
-                themeKnobIcon.classList.remove('fa-sun');
-                themeKnobIcon.classList.add('fa-moon');
-            }
-        } else {
-            themeKnob.style.transform = 'translateX(0)';
-            if (themeKnobIcon) {
-                themeKnobIcon.classList.remove('fa-moon');
-                themeKnobIcon.classList.add('fa-sun');
-            }
-        }
-    }
-
-    let revenueChart, leadsChart;
 
     // Chart.js Default Font
     Chart.defaults.font.family = "'Inter', sans-serif";
@@ -264,23 +322,5 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
-    }
-
-    // Handle Chart Dark mode
-    function updateChartsTheme(theme) {
-        const gridColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
-        const textColor = theme === 'dark' ? '#94a3b8' : '#64748b';
-
-        if (revenueChart) {
-            revenueChart.options.scales.y.grid.color = gridColor;
-            revenueChart.options.scales.y.ticks.color = textColor;
-            revenueChart.options.scales.x.ticks.color = textColor;
-            revenueChart.update();
-        }
-    }
-
-    // Initial call just in case it starts in dark mode
-    if (htmlElement.getAttribute('data-bs-theme') === 'dark') {
-        updateChartsTheme('dark');
     }
 });

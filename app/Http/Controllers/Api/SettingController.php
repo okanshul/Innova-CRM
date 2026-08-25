@@ -145,6 +145,19 @@ class SettingController extends Controller
         }
 
         try {
+            $smtpUsername = $request->input('smtp_username');
+            $userEmail = $request->user()->email ?? null;
+
+            // Determine valid From address (RFC 2822 compliant)
+            $fromAddress = filter_var($smtpUsername, FILTER_VALIDATE_EMAIL)
+                ? $smtpUsername
+                : (filter_var($userEmail, FILTER_VALIDATE_EMAIL) ? $userEmail : 'no-reply@innovacrm.com');
+
+            // Determine valid recipient address (RFC 2822 compliant)
+            $recipient = filter_var($userEmail, FILTER_VALIDATE_EMAIL)
+                ? $userEmail
+                : (filter_var($smtpUsername, FILTER_VALIDATE_EMAIL) ? $smtpUsername : 'admin@innovacrm.com');
+
             // Dynamic SMTP configuration
             config([
                 'mail.mailers.dynamic_smtp' => [
@@ -152,17 +165,15 @@ class SettingController extends Controller
                     'host' => $request->input('smtp_host'),
                     'port' => $request->input('smtp_port'),
                     'encryption' => strtolower($request->input('smtp_encryption', 'tls')) === 'none' ? null : strtolower($request->input('smtp_encryption', 'tls')),
-                    'username' => $request->input('smtp_username'),
+                    'username' => $smtpUsername,
                     'password' => $request->input('smtp_password'),
                     'timeout' => 5,
                 ],
                 'mail.from' => [
-                    'address' => $request->input('smtp_username'),
+                    'address' => $fromAddress,
                     'name' => CrmSetting::get('company_name', 'InnovaCRM'),
                 ]
             ]);
-
-            $recipient = $request->user()->email ?? $request->input('smtp_username');
 
             // Send dynamic test email
             Mail::mailer('dynamic_smtp')->raw('This is a test email from InnovaCRM to verify your SMTP configuration.', function ($message) use ($recipient) {

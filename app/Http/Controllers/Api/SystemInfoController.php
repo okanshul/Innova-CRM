@@ -15,13 +15,15 @@ class SystemInfoController extends Controller
         $tz = CrmSetting::get('timezone', 'Asia/Kolkata');
         $serverTime = now()->timezone($tz)->format('M j, Y, g:i A (T)');
 
-        $freeDisk = @disk_free_space(base_path());
-        $totalDisk = @disk_total_space(base_path());
-        $diskUsage = ($freeDisk !== false && $totalDisk !== false)
+        $freeDisk = function_exists('disk_free_space') ? @disk_free_space(base_path()) : false;
+        $totalDisk = function_exists('disk_total_space') ? @disk_total_space(base_path()) : false;
+        $diskUsage = ($freeDisk !== false && $totalDisk !== false && $totalDisk > 0)
             ? round(($totalDisk - $freeDisk) / 1024 / 1024 / 1024, 1) . ' GB / ' . round($totalDisk / 1024 / 1024 / 1024, 1) . ' GB'
-            : '12.4 GB / 100 GB';
+            : 'N/A';
 
-        $memUsage = round(memory_get_usage(true) / 1024 / 1024, 1) . ' MB';
+        $memUsage = function_exists('memory_get_usage') ? round(memory_get_usage(true) / 1024 / 1024, 1) . ' MB' : 'N/A';
+        $osRelease = function_exists('php_uname') ? @php_uname('r') : '';
+        $operatingSystem = PHP_OS_FAMILY . ($osRelease !== '' ? ' (' . $osRelease . ')' : '');
 
         return response()->json([
             'success' => true,
@@ -32,8 +34,8 @@ class SystemInfoController extends Controller
                 'environment' => app()->environment(),
                 'debug_mode' => config('app.debug') ? 'Enabled' : 'Disabled',
                 'db_driver' => config('database.default'),
-                'server_software' => $_SERVER['SERVER_SOFTWARE'] ?? 'Apache / Nginx (XAMPP)',
-                'operating_system' => PHP_OS_FAMILY . ' (' . php_uname('r') . ')',
+                'server_software' => $_SERVER['SERVER_SOFTWARE'] ?? 'Apache / Nginx',
+                'operating_system' => $operatingSystem,
                 'server_time' => $serverTime,
                 'timezone' => $tz,
                 'memory_usage' => $memUsage,

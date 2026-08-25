@@ -43,7 +43,7 @@
     <!-- Flatpickr CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
-    <!-- Inline script to apply collapsed state & crmSettings before initial paint -->
+    <!-- Inline script to apply theme preference & collapsed state before initial paint -->
     <script>
         window.crmSettings = {
             itemsPerPage: parseInt("{{ setting('items_per_page', 10) }}", 10) || 10,
@@ -53,6 +53,12 @@
             timezone: "{{ setting('timezone', 'Asia/Kolkata') }}"
         };
         (function() {
+            var storedTheme = localStorage.getItem('theme') || 'auto';
+            var appliedTheme = storedTheme;
+            if (storedTheme === 'auto') {
+                appliedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            document.documentElement.setAttribute('data-bs-theme', appliedTheme);
             if (localStorage.getItem('sidebarCollapsed') === 'true') {
                 document.documentElement.classList.add('sidebar-collapsed');
             }
