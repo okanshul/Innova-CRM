@@ -1,0 +1,318 @@
+// ==========================================================================
+// Delete Confirmation Modal Component Styles
+// ==========================================================================
+
+/* Dynamic Backdrop Overlay (JS modal) */
+.delete-confirm-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10050;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease-out, visibility 0.25s ease-out;
+    padding: 20px;
+    box-sizing: border-box;
+
+    &.show {
+        opacity: 1;
+        visibility: visible;
+
+        .delete-confirm-card {
+            transform: scale(1) translateY(0);
+        }
+    }
+}
+
+/* Modal Dialog Card Container with Custom Gradient Background & Top Highlight Accent */
+.delete-confirm-card {
+    background: radial-gradient(100% 70% at 50% 0%, #FFF5F5 0%, #FFFFFF 65%) !important;
+    border-radius: 24px !important;
+    padding: 40px 38px !important;
+    width: 100%;
+    max-width: 520px;
+    box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.18), 0 0 0 1px rgba(226, 232, 240, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.9) !important;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    transform: scale(0.95) translateY(10px);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
+
+    /* Sleek top accent line */
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, rgba(239, 68, 68, 0.15) 0%, #EF4444 50%, rgba(239, 68, 68, 0.15) 100%);
+        border-radius: 24px 24px 0 0;
+    }
+
+    /* Ambient background glow halo behind top icon */
+    &::after {
+        content: '';
+        position: absolute;
+        top: -40px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 240px;
+        height: 240px;
+        background: radial-gradient(circle, rgba(254, 226, 226, 0.55) 0%, rgba(255, 255, 255, 0) 70%);
+        pointer-events: none;
+        z-index: 0;
+    }
+}
+
+/* Icon Section & Scattered Sparkle Accent Shapes */
+.delete-modal-icon-wrapper {
+    position: relative;
+    width: 130px;
+    height: 110px;
+    margin: 0 auto 24px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+.delete-modal-badge {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background-color: #FEE2E2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(254, 226, 226, 0.6);
+    z-index: 2;
+}
+
+.delete-sparkle {
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+    animation: deleteSparkleFloat 3.2s ease-in-out infinite alternate;
+
+    &.sparkle-1 { top: -2px; right: 8px; animation-delay: 0s; }
+    &.sparkle-2 { top: 6px; left: 6px; animation-delay: 0.4s; }
+    &.sparkle-3 { bottom: 10px; right: 10px; animation-delay: 0.8s; }
+}
+
+@keyframes deleteSparkleFloat {
+    0% { transform: translateY(0) scale(1) rotate(0deg); }
+    50% { transform: translateY(-3px) scale(1.12) rotate(8deg); }
+    100% { transform: translateY(-5px) scale(0.95) rotate(-5deg); }
+}
+
+/* Heading */
+.delete-modal-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #0F172A;
+    margin-top: 0;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    position: relative;
+    z-index: 1;
+
+    .delete-count-highlight,
+    .text-danger {
+        color: #DC2626 !important;
+        font-weight: 700;
+    }
+}
+
+/* Subtext */
+.delete-modal-subtext {
+    color: #64748B;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.5;
+    position: relative;
+    z-index: 1;
+
+    p {
+        margin-bottom: 4px;
+        color: #64748B;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+/* Warning Banner */
+.delete-warning-banner {
+    background-color: #FEF2F2;
+    border: 1px solid #FEE2E2;
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-top: 20px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-align: left;
+    position: relative;
+    z-index: 1;
+}
+
+.delete-warning-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background-color: #FEE2E2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.delete-warning-text {
+    color: #334155;
+    font-size: 13.5px;
+    font-weight: 600;
+    line-height: 1.45;
+}
+
+/* Action Buttons */
+.delete-modal-actions {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+
+    @media (max-width: 480px) {
+        flex-direction: column-reverse;
+        gap: 10px;
+    }
+}
+
+.delete-btn-cancel,
+.delete-btn-confirm {
+    flex: 1;
+    padding: 10px 20px !important;
+    min-height: 42px;
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
+    line-height: 1.5 !important;
+    border-radius: 0.5rem !important;
+    white-space: nowrap !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    box-sizing: border-box !important;
+}
+
+.delete-btn-cancel {
+    background-color: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #475569 !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+
+    &:hover {
+        background-color: #f8fafc !important;
+        border-color: #94a3b8 !important;
+        color: #0f172a !important;
+    }
+
+    &:focus-visible {
+        outline: 2px solid #94a3b8;
+        outline-offset: 2px;
+    }
+}
+
+.delete-btn-confirm {
+    background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
+    border: none !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(220, 38, 38, 0.35) !important;
+
+    &:hover {
+        opacity: 0.95 !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 6px 18px rgba(220, 38, 38, 0.45) !important;
+    }
+
+    &:focus-visible {
+        outline: 2px solid #ef4444;
+        outline-offset: 2px;
+    }
+}
+
+/* Dark Mode Theme Support */
+[data-bs-theme="dark"] {
+    .delete-confirm-card {
+        background: radial-gradient(100% 70% at 50% 0%, rgba(239, 68, 68, 0.15) 0%, #1E293B 65%) !important;
+        color: #F8FAFC !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+
+        &::before {
+            background: linear-gradient(90deg, rgba(239, 68, 68, 0.2) 0%, #F87171 50%, rgba(239, 68, 68, 0.2) 100%);
+        }
+
+        &::after {
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.2) 0%, rgba(239, 68, 68, 0) 70%);
+        }
+    }
+
+    .delete-modal-title {
+        color: #F8FAFC;
+    }
+
+    .delete-modal-subtext,
+    .delete-modal-subtext p {
+        color: #94A3B8;
+    }
+
+    .delete-modal-badge {
+        background-color: rgba(239, 68, 68, 0.2);
+        box-shadow: 0 4px 14px rgba(239, 68, 68, 0.15);
+    }
+
+    .delete-warning-banner {
+        background-color: rgba(220, 38, 38, 0.12);
+        border-color: rgba(220, 38, 38, 0.25);
+    }
+
+    .delete-warning-icon {
+        background-color: rgba(220, 38, 38, 0.2);
+    }
+
+    .delete-warning-text {
+        color: #E2E8F0;
+    }
+
+    .delete-btn-cancel {
+        background-color: #334155 !important;
+        border-color: #475569 !important;
+        color: #E2E8F0 !important;
+
+        &:hover {
+            background-color: #475569 !important;
+            color: #FFFFFF !important;
+            border-color: #64748B !important;
+        }
+    }
+}

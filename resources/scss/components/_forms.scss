@@ -400,6 +400,57 @@ select.custom-filter-select:not(.custom-select-hidden) {
     }
 }
 
+.search-input-box {
+    background-color: #ffffff !important;
+    border: 1px solid $slate-200 !important;
+    border-radius: 8px !important;
+    height: 36px !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    width: 100%;
+    transition: all 0.15s ease;
+
+    @media (min-width: 576px) {
+        width: 220px;
+    }
+
+    input,
+    input.form-control,
+    .form-control {
+        background: transparent !important;
+        background-color: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        outline: none !important;
+        font-size: 0.825rem;
+        color: $slate-800;
+
+        &::placeholder {
+            color: $slate-400;
+            opacity: 1;
+        }
+
+        &:focus,
+        &:active {
+            background: transparent !important;
+            background-color: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+    }
+
+    i {
+        background: transparent !important;
+        background-color: transparent !important;
+        color: $slate-400;
+    }
+
+    &:focus-within {
+        border-color: $primary !important;
+        box-shadow: 0 0 0 3px rgba($primary, 0.15) !important;
+    }
+}
+
+
 .invalid-feedback-ajax,
 .invalid-feedback {
     display: block;
@@ -581,6 +632,46 @@ select.custom-filter-select:not(.custom-select-hidden) {
             border-color: $primary !important;
             box-shadow: 0 0 0 3px rgba($primary, 0.25) !important;
             color: #ffffff !important;
+        }
+    }
+
+    .search-input-box {
+        background-color: $crm-dark-elevated !important;
+        border-color: $crm-dark-border-normal !important;
+        color: $slate-300 !important;
+
+        input,
+        input.form-control,
+        .form-control {
+            background: transparent !important;
+            background-color: transparent !important;
+            color: $slate-100 !important;
+            border: none !important;
+            box-shadow: none !important;
+
+            &::placeholder {
+                color: $slate-500 !important;
+                opacity: 1 !important;
+            }
+
+            &:focus,
+            &:active {
+                background: transparent !important;
+                background-color: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+            }
+        }
+
+        i {
+            color: $slate-400 !important;
+            background: transparent !important;
+            background-color: transparent !important;
+        }
+
+        &:focus-within {
+            border-color: rgba($primary, 0.7) !important;
+            box-shadow: 0 0 0 3px rgba($primary, 0.25) !important;
         }
     }
 

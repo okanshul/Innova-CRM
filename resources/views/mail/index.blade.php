@@ -12,7 +12,7 @@
             </x-slot:actions>
         </x-page-header>
 
-        <div class="p-4">
+        <div class="p-3">
             <div class="card border p-4 rounded-4 bg-body-tertiary text-center py-5">
                 <i class="fa-regular fa-paper-plane fs-1 text-primary mb-3"></i>
                 <h5 class="fw-bold">CRM Mail Inbox</h5>

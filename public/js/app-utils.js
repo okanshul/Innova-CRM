@@ -73,25 +73,201 @@ function showErrorToast(message) {
     }
 }
 
-async function confirmDelete(itemName = 'this item') {
-    if (typeof Swal !== 'undefined') {
-        const result = await Swal.fire({
-            title: 'Are you sure?',
-            text: `This will permanently delete ${itemName}. This action cannot be undone.`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#6366F1',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Yes, delete it',
-            cancelButtonText: 'Cancel',
-            reverseButtons: true,
-            customClass: {
-                popup: 'rounded-4 border-0 shadow'
+/**
+ * Show a custom "Delete Confirmation" modal dialog matching modern CRM SaaS design.
+ * @param {Object|string} options - Configuration object or item name string
+ * @returns {Promise<boolean>} Resolves to true if confirmed, false if cancelled.
+ */
+function showDeleteConfirmationModal(options = {}) {
+    return new Promise((resolve) => {
+        let opts = typeof options === 'string' ? { itemName: options } : (options || {});
+
+        let count = opts.count;
+        let itemType = opts.itemType || 'Deals';
+        let itemName = opts.itemName || '';
+
+        // If count wasn't explicitly passed, try parsing it from itemName string (e.g. "10 selected deals")
+        if (count === undefined || count === null) {
+            const numMatch = String(itemName).match(/^(\d+)\s*(selected\s*)?(.*)$/i);
+            if (numMatch) {
+                count = parseInt(numMatch[1], 10);
+                const rawType = numMatch[3] ? numMatch[3].trim() : '';
+                if (rawType) {
+                    itemType = rawType.charAt(0).toUpperCase() + rawType.slice(1);
+                }
+            }
+        }
+
+        const isPlural = count === undefined || count === null ? false : (count > 1 || count === 0);
+        const displayCount = count !== undefined && count !== null ? count : null;
+
+        let entityName = itemType;
+        if (entityName.toLowerCase().endsWith('deals')) entityName = isPlural ? 'Deals' : 'Deal';
+        else if (entityName.toLowerCase().endsWith('contacts')) entityName = isPlural ? 'Contacts' : 'Contact';
+        else if (entityName.toLowerCase().endsWith('tasks')) entityName = isPlural ? 'Tasks' : 'Task';
+        else if (entityName.toLowerCase().endsWith('meetings')) entityName = isPlural ? 'Meetings' : 'Meeting';
+        else if (entityName.toLowerCase().endsWith('staff')) entityName = isPlural ? 'Staff Members' : 'Staff Member';
+
+        let titleHtml = opts.title;
+        if (!titleHtml) {
+            if (displayCount !== null) {
+                titleHtml = `Delete <span class="delete-count-highlight">${displayCount}</span> ${entityName}?`;
+            } else {
+                titleHtml = `Delete ${entityName}?`;
+            }
+        }
+
+        let subtext1 = opts.subtextLine1;
+        if (!subtext1) {
+            if (displayCount !== null && displayCount > 1) {
+                subtext1 = `You are about to permanently delete the ${displayCount} selected ${entityName.toLowerCase()}.`;
+            } else if (itemName && !String(itemName).match(/^\d+/)) {
+                subtext1 = `You are about to permanently delete "${itemName}".`;
+            } else {
+                subtext1 = `You are about to permanently delete the selected ${entityName.toLowerCase()}.`;
+            }
+        }
+        let subtext2 = opts.subtextLine2 || 'This action cannot be undone.';
+
+        let warningText = opts.warningText;
+        if (!warningText) {
+            const nounText = (displayCount !== null && displayCount > 1) ? `these ${entityName.toLowerCase()}` : `this ${entityName.toLowerCase()}`;
+            warningText = `Once deleted, ${nounText} and related data will be permanently removed from the system.`;
+        }
+
+        const cancelText = opts.cancelText || 'Cancel';
+        const confirmText = opts.confirmText || 'Yes, delete permanently';
+
+        const existingOverlay = document.getElementById('globalDeleteConfirmOverlay');
+        if (existingOverlay) existingOverlay.remove();
+
+        const overlay = document.createElement('div');
+        overlay.id = 'globalDeleteConfirmOverlay';
+        overlay.className = 'delete-confirm-overlay';
+        overlay.setAttribute('role', 'dialog');
+        overlay.setAttribute('aria-modal', 'true');
+        overlay.setAttribute('aria-labelledby', 'globalDeleteConfirmTitle');
+
+        overlay.innerHTML = `
+            <div class="delete-confirm-card">
+                <div class="delete-modal-icon-wrapper">
+                    <svg class="delete-sparkle sparkle-1" width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 0L9.8 6.2L16 8L9.8 9.8L8 16L6.2 9.8L0 8L6.2 6.2L8 0Z" fill="#F59E0B"/>
+                    </svg>
+                    <svg class="delete-sparkle sparkle-2" width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 0L9.8 6.2L16 8L9.8 9.8L8 16L6.2 9.8L0 8L6.2 6.2L8 0Z" fill="#A855F7"/>
+                    </svg>
+                    <svg class="delete-sparkle sparkle-3" width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 0L9.8 6.2L16 8L9.8 9.8L8 16L6.2 9.8L0 8L6.2 6.2L8 0Z" fill="#EC4899"/>
+                    </svg>
+
+                    <div class="delete-modal-badge">
+                        <svg width="38" height="42" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 6h18"></path>
+                            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                            <line x1="10" y1="11" x2="10" y2="17"></line>
+                            <line x1="14" y1="11" x2="14" y2="17"></line>
+                        </svg>
+                    </div>
+                </div>
+
+                <h3 class="delete-modal-title" id="globalDeleteConfirmTitle">
+                    ${titleHtml}
+                </h3>
+
+                <div class="delete-modal-subtext">
+                    <p>${subtext1}</p>
+                    <p>${subtext2}</p>
+                </div>
+
+                <div class="delete-warning-banner">
+                    <div class="delete-warning-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                    </div>
+                    <div class="delete-warning-text">
+                        ${warningText}
+                    </div>
+                </div>
+
+                <div class="delete-modal-actions">
+                    <button type="button" class="delete-btn-cancel" id="globalDeleteCancelBtn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                        <span>${cancelText}</span>
+                    </button>
+                    <button type="button" class="delete-btn-confirm" id="globalDeleteConfirmBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 6h18"></path>
+                            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                        </svg>
+                        <span>${confirmText}</span>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+
+        requestAnimationFrame(() => {
+            overlay.classList.add('show');
+            const confirmBtn = document.getElementById('globalDeleteConfirmBtn');
+            if (confirmBtn) confirmBtn.focus();
+        });
+
+        function cleanup(confirmed) {
+            overlay.classList.remove('show');
+            document.removeEventListener('keydown', handleKeyDown);
+            setTimeout(() => {
+                if (overlay && overlay.parentNode) {
+                    overlay.parentNode.removeChild(overlay);
+                }
+                resolve(confirmed);
+            }, 250);
+        }
+
+        function handleKeyDown(e) {
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                cleanup(false);
+            }
+        }
+
+        document.addEventListener('keydown', handleKeyDown);
+
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                cleanup(false);
             }
         });
-        return result.isConfirmed;
+
+        const cancelBtn = document.getElementById('globalDeleteCancelBtn');
+        const confirmBtn = document.getElementById('globalDeleteConfirmBtn');
+
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', () => cleanup(false));
+        }
+
+        if (confirmBtn) {
+            confirmBtn.addEventListener('click', () => cleanup(true));
+        }
+    });
+}
+
+async function confirmDelete(itemName = 'this item', options = {}) {
+    let opts = {};
+    if (typeof options === 'object' && options !== null) {
+        opts = { ...options };
     }
-    return confirm(`Are you sure you want to delete ${itemName}?`);
+    opts.itemName = opts.itemName || itemName;
+    return showDeleteConfirmationModal(opts);
 }
 
 /**
