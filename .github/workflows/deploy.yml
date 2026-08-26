@@ -1,0 +1,165 @@
+name: Deploy Laravel 13 to InfinityFree
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Build & Deploy to InfinityFree
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup PHP 8.3
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, xml, ctype, fileinfo, pdo, pdo_mysql, bcmath, json, tokenizer, openssl
+          tools: composer
+
+      - name: Install Composer dependencies
+        run: |
+          composer install \
+            --no-dev \
+            --prefer-dist \
+            --optimize-autoloader \
+            --no-interaction
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Build Vite assets
+        run: npm run build
+
+      - name: Prepare deployment directory
+        run: |
+          rm -rf deploy
+          mkdir -p deploy/htdocs/laravel
+
+      - name: Copy Laravel application files
+        run: |
+          rsync -av \
+            --exclude='.env' \
+            --exclude='.env.*' \
+            --exclude='.git' \
+            --exclude='node_modules' \
+            --exclude='deploy' \
+            --exclude='tests' \
+            --exclude='phpunit.xml' \
+            --exclude='.github' \
+            ./ deploy/htdocs/laravel/
+
+      - name: Copy public web assets to htdocs
+        run: |
+          cp -a public/. deploy/htdocs/
+
+      - name: Remove duplicate index.php and .htaccess from inner public folder
+        run: |
+          rm -f deploy/htdocs/laravel/public/index.php
+          rm -f deploy/htdocs/laravel/public/.htaccess
+
+      - name: Create root index.php
+        run: |
+          cat << 'EOF' > deploy/htdocs/index.php
+          <?php
+
+          use Illuminate\Foundation\Application;
+          use Illuminate\Http\Request;
+
+          define('LARAVEL_START', microtime(true));
+
+          // Determine if the application is in maintenance mode...
+          if (file_exists($maintenance = __DIR__.'/laravel/storage/framework/maintenance.php')) {
+              require $maintenance;
+          }
+
+          // Register the Composer autoloader...
+          require __DIR__.'/laravel/vendor/autoload.php';
+
+          // Bootstrap Laravel and handle the request...
+          /** @var Application $app */
+          $app = require_once __DIR__.'/laravel/bootstrap/app.php';
+
+          // Set public path to root htdocs directory
+          $app->usePublicPath(__DIR__);
+
+          $app->handleRequest(Request::capture());
+          EOF
+
+      - name: Create root .htaccess
+        run: |
+          cat << 'EOF' > deploy/htdocs/.htaccess
+          <IfModule mod_rewrite.c>
+              <IfModule mod_negotiation.c>
+                  Options -MultiViews -Indexes
+              </IfModule>
+
+              RewriteEngine On
+
+              # Handle Authorization Header
+              RewriteCond %{HTTP:Authorization} .
+              RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+              # Handle X-XSRF-Token Header
+              RewriteCond %{HTTP:x-xsrf-token} .
+              RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
+
+              # Redirect Trailing Slashes If Not A Folder...
+              RewriteCond %{REQUEST_FILENAME} !-d
+              RewriteCond %{REQUEST_URI} (.+)/$
+              RewriteRule ^ %1 [L,R=301]
+
+              # Send Requests To Front Controller...
+              RewriteCond %{REQUEST_FILENAME} !-d
+              RewriteCond %{REQUEST_FILENAME} !-f
+              RewriteRule ^ index.php [L]
+          </IfModule>
+          EOF
+
+      - name: Create laravel folder .htaccess (Security Protection)
+        run: |
+          cat << 'EOF' > deploy/htdocs/laravel/.htaccess
+          # Deny direct access to Laravel framework files and directories
+          <IfModule mod_authz_core.c>
+              Require all denied
+          </IfModule>
+          <IfModule !mod_authz_core.c>
+              Order deny,allow
+              Deny from all
+          </IfModule>
+          EOF
+
+      - name: Create required storage directories
+        run: |
+          mkdir -p deploy/htdocs/laravel/storage/app/public
+          mkdir -p deploy/htdocs/laravel/storage/app/private
+          mkdir -p deploy/htdocs/laravel/storage/framework/cache/data
+          mkdir -p deploy/htdocs/laravel/storage/framework/sessions
+          mkdir -p deploy/htdocs/laravel/storage/framework/views
+          mkdir -p deploy/htdocs/laravel/storage/logs
+
+      - name: Deploy to InfinityFree via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ftpupload.net
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: /htdocs/
+          local-dir: ./deploy/htdocs/
+          protocol: ftp
+          timeout: 60000
+          log-level: standard
+          exclude: |
+            **/.env
+            **/.env.*
