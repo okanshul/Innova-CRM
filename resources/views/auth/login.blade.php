@@ -7,6 +7,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>InnovaCRM - Login</title>
 
+    @include('partials.pwa')
+
     @if (setting('favicon'))
         <link rel="icon" href="{{ asset(setting('favicon')) }}">
     @endif
@@ -20,7 +22,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- Theme SCSS -->
-    @vite(['resources/scss/theme.scss'])
+    @vite(['resources/scss/theme.scss', 'resources/js/app.js'])
 
     <style>
         :root {

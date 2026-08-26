@@ -7,6 +7,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title ?? setting('app_name', setting('company_name', 'InnovaCRM')) }}</title>
 
+    @include('partials.pwa')
+
     @if(setting('favicon'))
         <link rel="icon" href="{{ asset(setting('favicon')) }}">
     @endif
@@ -65,7 +67,7 @@
         })();
     </script>
 
-    @vite(['resources/scss/theme.scss', 'resources/js/dashboard.js'])
+    @vite(['resources/scss/theme.scss', 'resources/js/dashboard.js', 'resources/js/app.js'])
 
     {{ $styles ?? '' }}
     @stack('styles')

@@ -38,7 +38,7 @@
         </div>
     </div>
 
-    <div class="d-flex align-items-center gap-2 gap-sm-3">
+    <div class="d-flex align-items-center gap-2">
         <!-- Mobile Search Button -->
         <button class="btn btn-light rounded-circle p-0 d-flex align-items-center justify-content-center d-md-none text-secondary shadow-none border" 
                 style="width: 36px; height: 36px; background-color: var(--bs-tertiary-bg);" 
@@ -54,12 +54,114 @@
             <i class="theme-toggle-icon fa-solid fa-sun fs-6 text-secondary"></i>
         </button>
 
-        <!-- Notification Bell -->
-        <div class="position-relative cursor-pointer text-secondary hover-primary bg-body-tertiary rounded-circle d-flex align-items-center justify-content-center shadow-none border" style="width: 36px; height: 36px;">
-            <i class="fa-solid fa-bell fs-6"></i>
-            <span
-                class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger border border-white p-0 d-flex align-items-center justify-content-center"
-                style="font-size:0.55rem; width:16px;height:16px;">3</span>
+        <!-- Notification Bell Dropdown -->
+        <div class="dropdown ms-1">
+            <button class="btn btn-body-tertiary bg-body-tertiary rounded-circle d-flex align-items-center justify-content-center shadow-none border text-secondary p-0 transition-all hover-primary position-relative"
+                id="notificationDropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notifications"
+                style="width: 36px; height: 36px; background-color: var(--bs-tertiary-bg);"
+                title="Notifications">
+                <i class="fa-regular fa-bell fs-6 text-secondary"></i>
+                <span class="position-absolute badge rounded-pill bg-danger border border-2 border-body d-flex align-items-center justify-content-center"
+                    style="top: -6px; right: -7px; min-width: 18px; height: 18px; padding: 0 5px; font-size: 0.575rem; font-weight: 700; line-height: 1; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">5</span>
+            </button>
+
+            <div class="dropdown-menu dropdown-menu-end shadow-lg border-0 p-0 mt-2 rounded-4 overflow-hidden notification-dropdown-menu" aria-labelledby="notificationDropdown" style="width: 380px; max-width: calc(100vw - 2rem);">
+                <!-- Header -->
+                <div class="d-flex align-items-center justify-content-between px-3 py-3 border-bottom">
+                    <h6 class="fw-bold m-0 text-body-emphasis fs-6">Notifications</h6>
+                    <a href="#" class="text-decoration-none fw-semibold d-flex align-items-center gap-1.5 text-primary" style="font-size: 0.8125rem;">
+                        Mark all as read
+                    </a>
+                </div>
+
+                <!-- Notifications List -->
+                <div class="d-flex flex-column notification-list-body" style="max-height: 380px; overflow-y: auto;">
+                    <!-- Item 1: New contact added -->
+                    <a href="#" class="text-decoration-none px-3 py-3 border-bottom d-flex align-items-center gap-3 notification-item bg-body-tertiary">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" 
+                            style="width: 42px; height: 42px; background: rgba(99, 102, 241, 0.12); color: #6366f1;">
+                            <i class="fa-solid fa-user-plus fs-6"></i>
+                        </div>
+                        <div class="flex-grow-1 min-w-0 me-1">
+                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                <span class="fw-bold text-body-emphasis text-truncate" style="font-size: 0.875rem;">New contact added</span>
+                                <small class="text-secondary flex-shrink-0 ms-2" style="font-size: 0.75rem;">2m ago</small>
+                            </div>
+                            <p class="text-secondary mb-0 text-truncate" style="font-size: 0.8125rem; line-height: 1.3;">John Smith has been added as a new contact.</p>
+                        </div>
+                        <span class="rounded-circle bg-primary flex-shrink-0 ms-1" style="width: 8px; height: 8px;"></span>
+                    </a>
+
+                    <!-- Item 2: Deal won -->
+                    <a href="#" class="text-decoration-none px-3 py-3 border-bottom d-flex align-items-center gap-3 notification-item">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" 
+                            style="width: 42px; height: 42px; background: rgba(34, 197, 94, 0.12); color: #16a34a;">
+                            <i class="fa-solid fa-trophy fs-6"></i>
+                        </div>
+                        <div class="flex-grow-1 min-w-0 me-1">
+                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                <span class="fw-bold text-body-emphasis text-truncate" style="font-size: 0.875rem;">Deal won</span>
+                                <small class="text-secondary flex-shrink-0 ms-2" style="font-size: 0.75rem;">15m ago</small>
+                            </div>
+                            <p class="text-secondary mb-0 text-truncate" style="font-size: 0.8125rem; line-height: 1.3;">"Website Redesign" deal has been won.</p>
+                        </div>
+                        <span class="rounded-circle bg-primary flex-shrink-0 ms-1" style="width: 8px; height: 8px;"></span>
+                    </a>
+
+                    <!-- Item 3: Task overdue -->
+                    <a href="#" class="text-decoration-none px-3 py-3 border-bottom d-flex align-items-center gap-3 notification-item">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" 
+                            style="width: 42px; height: 42px; background: rgba(239, 68, 68, 0.12); color: #dc2626;">
+                            <i class="fa-regular fa-calendar-xmark fs-6"></i>
+                        </div>
+                        <div class="flex-grow-1 min-w-0 me-1">
+                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                <span class="fw-bold text-body-emphasis text-truncate" style="font-size: 0.875rem;">Task overdue</span>
+                                <small class="text-secondary flex-shrink-0 ms-2" style="font-size: 0.75rem;">1h ago</small>
+                            </div>
+                            <p class="text-secondary mb-0 text-truncate" style="font-size: 0.8125rem; line-height: 1.3;">"Follow up with Laura" is overdue.</p>
+                        </div>
+                        <span class="rounded-circle bg-primary flex-shrink-0 ms-1" style="width: 8px; height: 8px;"></span>
+                    </a>
+
+                    <!-- Item 4: New message -->
+                    <a href="#" class="text-decoration-none px-3 py-3 border-bottom d-flex align-items-center gap-3 notification-item">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" 
+                            style="width: 42px; height: 42px; background: rgba(14, 165, 233, 0.12); color: #0284c7;">
+                            <i class="fa-regular fa-envelope fs-6"></i>
+                        </div>
+                        <div class="flex-grow-1 min-w-0 me-1">
+                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                <span class="fw-bold text-body-emphasis text-truncate" style="font-size: 0.875rem;">New message</span>
+                                <small class="text-secondary flex-shrink-0 ms-2" style="font-size: 0.75rem;">3h ago</small>
+                            </div>
+                            <p class="text-secondary mb-0 text-truncate" style="font-size: 0.8125rem; line-height: 1.3;">You have a new message from Michael.</p>
+                        </div>
+                    </a>
+
+                    <!-- Item 5: Report generated -->
+                    <a href="#" class="text-decoration-none px-3 py-3 d-flex align-items-center gap-3 notification-item">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" 
+                            style="width: 42px; height: 42px; background: rgba(245, 158, 11, 0.12); color: #d97706;">
+                            <i class="fa-solid fa-chart-column fs-6"></i>
+                        </div>
+                        <div class="flex-grow-1 min-w-0 me-1">
+                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                <span class="fw-bold text-body-emphasis text-truncate" style="font-size: 0.875rem;">Report generated</span>
+                                <small class="text-secondary flex-shrink-0 ms-2" style="font-size: 0.75rem;">5h ago</small>
+                            </div>
+                            <p class="text-secondary mb-0 text-truncate" style="font-size: 0.8125rem; line-height: 1.3;">"Monthly Sales Report" is ready to view.</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Footer -->
+                <div class="p-3 text-center border-top">
+                    <a href="#" class="text-decoration-none fw-semibold text-primary" style="font-size: 0.875rem;">
+                        View all notifications
+                    </a>
+                </div>
+            </div>
         </div>
 
         <!-- User Dropdown Profile -->

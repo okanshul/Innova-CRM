@@ -1,1 +1,1 @@
-//
+import './pwa/index.js';
