@@ -1,8 +1,8 @@
 <aside id="sidebar" class="offcanvas-lg offcanvas-start d-flex flex-column p-3">
-    <div class="d-flex align-items-center justify-content-between mb-4 px-2 pt-1">
+    <div class="d-flex align-items-center justify-content-between mb-3 px-2 pt-1">
         <a href="{{ route('dashboard') }}" class="d-flex align-items-center text-white text-decoration-none sidebar-brand gap-2">
             @if(setting('favicon'))
-                <img src="{{ asset(setting('favicon')) }}" alt="{{ setting('app_name', 'InnovaCRM') }}" class="sidebar-favicon-img rounded-2" style="max-height: 34px; max-width: 34px; object-fit: contain;">
+                <img src="{{ asset(setting('favicon')) }}" alt="{{ setting('app_name', 'InnovaCRM') }}" class="sidebar-favicon-img rounded-2">
             @endif
 
             @if(setting('system_logo'))
@@ -123,7 +123,7 @@
 
     <!-- Upgrade Card -->
     <div class="mt-auto sidebar-footer pt-3">
-        <div class="card border-0 rounded-4 mb-3 p-3 text-white upgrade-card" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08) !important;">
+        <div class="card border-0 rounded-3 mb-3 p-3 text-white upgrade-card" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08) !important;">
             <div class="card-body p-0 text-start">
                 <div class="d-flex align-items-center gap-2 mb-1">
                     <i class="fa-solid fa-wand-magic-sparkles text-primary fs-5"></i>
@@ -155,7 +155,7 @@
                     <span class="text-secondary text-capitalize" style="font-size: 0.75rem; color: #9ca3af !important;">{{ auth()->user()->getRoleNames()->first() ?? 'Administrator' }}</span>
                 </div>
             </a>
-            <div class="dropdown-menu dropdown-menu-dark text-small shadow-lg rounded-4 border-0 p-2 mt-2"
+            <div class="dropdown-menu dropdown-menu-dark text-small shadow-lg rounded-3 border-0 p-2 mt-2"
                 aria-labelledby="dropdownUser1" style="min-width: 220px; background-color: #1a1a30; z-index: 1090;">
                 <div class="d-flex align-items-center gap-3 p-2 mb-2 bg-white bg-opacity-10 rounded-3">
                     <img src="{{ $sidebarAvatar }}" onerror="this.onerror=null;this.src='{{ $sidebarUiAvatar }}';" alt="{{ auth()->user()->name }}"

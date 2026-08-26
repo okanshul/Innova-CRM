@@ -26,7 +26,7 @@
             id="headerSearchTrigger"
             data-bs-toggle="modal" data-bs-target="#globalSearchModal">
             <i class="fa-solid fa-magnifying-glass text-secondary mx-2"></i>
-            <input type="text" class="form-control border-0 bg-transparent shadow-none p-0 flex-grow-1 header-search-input"
+            <input type="text" class="form-control border-0 bg-transparent shadow-none p-0 flex-grow-1 header-search-input" style="background: transparent !important;"
                 placeholder="Search contacts, deals, tasks..." readonly>
             <span
                 class="badge text-secondary rounded-2 bg-transparent px-1 py-1 d-flex align-items-center justify-content-center search-kbd-badge">⌘ <span class="ps-1 search-kbd-key">K</span></span>
@@ -56,25 +56,27 @@
                 <span class="position-absolute badge rounded-pill bg-danger border border-2 border-body d-flex align-items-center justify-content-center notif-count-badge">5</span>
             </button>
 
-            <div class="dropdown-menu dropdown-menu-end shadow-lg border-0 p-0 mt-2 rounded-4 overflow-hidden notification-dropdown-menu" aria-labelledby="notificationDropdown">
+            <div class="dropdown-menu dropdown-menu-end shadow-lg rounded-3 border-0 p-2 mt-2 notification-dropdown-menu" aria-labelledby="notificationDropdown">
                 <!-- Header -->
-                <div class="d-flex align-items-center justify-content-between px-3 py-3 border-bottom">
-                    <h6 class="fw-bold m-0 text-body-emphasis fs-6">Notifications</h6>
-                    <a href="#" class="text-decoration-none fw-semibold d-flex align-items-center gap-1.5 text-primary notif-mark-read">
+                <div class="d-flex align-items-center justify-content-between p-2 mb-2 bg-body-tertiary rounded-3">
+                    <strong class="fw-bold text-body-emphasis fs-6 px-1">Notifications</strong>
+                    <a href="#" class="text-decoration-none fw-semibold d-flex align-items-center gap-1.5 text-primary notif-mark-read px-1">
                         Mark all as read
                     </a>
                 </div>
 
+                <div class="dropdown-divider my-1 opacity-25"></div>
+
                 <!-- Notifications List -->
-                <div class="d-flex flex-column notification-list-body">
+                <div class="d-flex flex-column notification-list-body gap-1 my-1">
                     <!-- Item 1: New contact added -->
-                    <a href="#" class="text-decoration-none px-3 py-3 border-bottom d-flex align-items-center gap-3 notification-item bg-body-tertiary">
+                    <a href="#" class="dropdown-item rounded-3 p-2 d-flex align-items-center gap-3 notification-item">
                         <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 notif-icon-avatar notif-icon-indigo">
                             <i class="fa-solid fa-user-plus fs-6"></i>
                         </div>
                         <div class="flex-grow-1 min-w-0 me-1">
                             <div class="d-flex align-items-center justify-content-between mb-1">
-                                <span class="fw-bold text-body-emphasis text-truncate notif-title">New contact added</span>
+                                <strong class="fw-bold text-body-emphasis text-truncate notif-title">New contact added</strong>
                                 <small class="text-secondary flex-shrink-0 ms-2 notif-time">2m ago</small>
                             </div>
                             <p class="text-secondary mb-0 text-truncate notif-desc">John Smith has been added as a new contact.</p>
@@ -83,13 +85,13 @@
                     </a>
 
                     <!-- Item 2: Deal won -->
-                    <a href="#" class="text-decoration-none px-3 py-3 border-bottom d-flex align-items-center gap-3 notification-item">
+                    <a href="#" class="dropdown-item rounded-3 p-2 d-flex align-items-center gap-3 notification-item">
                         <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 notif-icon-avatar notif-icon-success">
                             <i class="fa-solid fa-trophy fs-6"></i>
                         </div>
                         <div class="flex-grow-1 min-w-0 me-1">
                             <div class="d-flex align-items-center justify-content-between mb-1">
-                                <span class="fw-bold text-body-emphasis text-truncate notif-title">Deal won</span>
+                                <strong class="fw-bold text-body-emphasis text-truncate notif-title">Deal won</strong>
                                 <small class="text-secondary flex-shrink-0 ms-2 notif-time">15m ago</small>
                             </div>
                             <p class="text-secondary mb-0 text-truncate notif-desc">"Website Redesign" deal has been won.</p>
@@ -98,13 +100,13 @@
                     </a>
 
                     <!-- Item 3: Task overdue -->
-                    <a href="#" class="text-decoration-none px-3 py-3 border-bottom d-flex align-items-center gap-3 notification-item">
+                    <a href="#" class="dropdown-item rounded-3 p-2 d-flex align-items-center gap-3 notification-item">
                         <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 notif-icon-avatar notif-icon-danger">
                             <i class="fa-regular fa-calendar-xmark fs-6"></i>
                         </div>
                         <div class="flex-grow-1 min-w-0 me-1">
                             <div class="d-flex align-items-center justify-content-between mb-1">
-                                <span class="fw-bold text-body-emphasis text-truncate notif-title">Task overdue</span>
+                                <strong class="fw-bold text-body-emphasis text-truncate notif-title">Task overdue</strong>
                                 <small class="text-secondary flex-shrink-0 ms-2 notif-time">1h ago</small>
                             </div>
                             <p class="text-secondary mb-0 text-truncate notif-desc">"Follow up with Laura" is overdue.</p>
@@ -113,13 +115,13 @@
                     </a>
 
                     <!-- Item 4: New message -->
-                    <a href="#" class="text-decoration-none px-3 py-3 border-bottom d-flex align-items-center gap-3 notification-item">
+                    <a href="#" class="dropdown-item rounded-3 p-2 d-flex align-items-center gap-3 notification-item">
                         <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 notif-icon-avatar notif-icon-info">
                             <i class="fa-regular fa-envelope fs-6"></i>
                         </div>
                         <div class="flex-grow-1 min-w-0 me-1">
                             <div class="d-flex align-items-center justify-content-between mb-1">
-                                <span class="fw-bold text-body-emphasis text-truncate notif-title">New message</span>
+                                <strong class="fw-bold text-body-emphasis text-truncate notif-title">New message</strong>
                                 <small class="text-secondary flex-shrink-0 ms-2 notif-time">3h ago</small>
                             </div>
                             <p class="text-secondary mb-0 text-truncate notif-desc">You have a new message from Michael.</p>
@@ -127,13 +129,13 @@
                     </a>
 
                     <!-- Item 5: Report generated -->
-                    <a href="#" class="text-decoration-none px-3 py-3 d-flex align-items-center gap-3 notification-item">
+                    <a href="#" class="dropdown-item rounded-3 p-2 d-flex align-items-center gap-3 notification-item">
                         <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 notif-icon-avatar notif-icon-warning">
                             <i class="fa-solid fa-chart-column fs-6"></i>
                         </div>
                         <div class="flex-grow-1 min-w-0 me-1">
                             <div class="d-flex align-items-center justify-content-between mb-1">
-                                <span class="fw-bold text-body-emphasis text-truncate notif-title">Report generated</span>
+                                <strong class="fw-bold text-body-emphasis text-truncate notif-title">Report generated</strong>
                                 <small class="text-secondary flex-shrink-0 ms-2 notif-time">5h ago</small>
                             </div>
                             <p class="text-secondary mb-0 text-truncate notif-desc">"Monthly Sales Report" is ready to view.</p>
@@ -141,12 +143,12 @@
                     </a>
                 </div>
 
+                <div class="dropdown-divider my-1 opacity-25"></div>
+
                 <!-- Footer -->
-                <div class="p-3 text-center border-top">
-                    <a href="#" class="text-decoration-none fw-semibold text-primary notif-footer-link">
-                        View all notifications
-                    </a>
-                </div>
+                <a href="#" class="dropdown-item rounded-3 py-2 text-center text-primary fw-semibold notif-footer-link">
+                    View all notifications
+                </a>
             </div>
         </div>
 
@@ -172,7 +174,7 @@
                     </div>
                 </div>
             </a>
-            <div class="dropdown-menu dropdown-menu-end shadow-lg rounded-4 border-0 p-2 mt-2 user-dropdown-menu"
+            <div class="dropdown-menu dropdown-menu-end shadow-lg rounded-3 border-0 p-2 mt-2 user-dropdown-menu"
                 aria-labelledby="dropdownUserHeader">
                 <div class="d-flex align-items-center gap-3 p-2 mb-2 bg-body-tertiary rounded-3">
                     <img src="{{ $userAvatar }}" onerror="this.onerror=null;this.src='{{ $uiAvatar }}';" alt="{{ auth()->user()->name }}" width="38" height="38"

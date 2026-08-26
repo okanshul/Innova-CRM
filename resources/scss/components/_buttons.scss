@@ -248,14 +248,33 @@
         }
     }
 
+    .btn-delete-bulk {
+        background-color: rgba(239, 68, 68, 0.15) !important;
+        border-color: rgba(239, 68, 68, 0.3) !important;
+        color: #fca5a5 !important;
+
+        &:hover {
+            background-color: rgba(239, 68, 68, 0.28) !important;
+            border-color: rgba(239, 68, 68, 0.45) !important;
+            color: #ffffff !important;
+        }
+    }
+
     .page-btn {
-        background-color: $crm-dark-elevated;
-        border-color: $crm-dark-border-normal;
-        color: $slate-300;
+        background-color: $crm-dark-elevated !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        color: $slate-300 !important;
 
         &:hover:not(.active):not(:disabled) {
-            background-color: $crm-dark-border-subtle;
-            color: #ffffff;
+            background-color: #222744 !important;
+            border-color: rgba(255, 255, 255, 0.22) !important;
+            color: #ffffff !important;
+        }
+
+        &:focus,
+        &:focus-visible {
+            outline: none !important;
+            box-shadow: 0 0 0 2px rgba($primary, 0.3) !important;
         }
     }
 
