@@ -57,19 +57,3 @@ Route::middleware('auth')->group(function () {
     Route::resource('roles', RoleController::class)->only(['index', 'create', 'show', 'edit']);
     Route::resource('settings', SettingController::class)->only(['index']);
 });
-
-// Storage assets fallback route (InfinityFree / shared hosting symlink alternative)
-Route::get('/storage/{path}', function (string $path) {
-    $basePath = storage_path('app/public');
-    $filePath = storage_path('app/public/' . $path);
-
-    $realBase = realpath($basePath);
-    $realFile = realpath($filePath);
-
-    if (!$realFile || !$realBase || !str_starts_with($realFile, $realBase) || !file_exists($realFile)) {
-        abort(404);
-    }
-
-    return response()->file($realFile);
-})->where('path', '.*');
-
