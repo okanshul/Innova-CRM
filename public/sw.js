@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v1.0.0';
+const CACHE_VERSION = 'v1.0.1';
 const CACHE_NAME = `innovacrm-${CACHE_VERSION}`;
 const OFFLINE_URL = '/offline';
 
@@ -63,10 +63,11 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // Skip dynamic non-cacheable routes (e.g. auth actions, livewire, debugbar, API endpoints with sensitive data)
+    // Skip dynamic non-cacheable routes (e.g. auth actions, livewire, debugbar, API endpoints with sensitive data, user uploaded storage)
     if (
         url.pathname.startsWith('/api/') ||
         url.pathname.startsWith('/logout') ||
+        url.pathname.startsWith('/storage/') ||
         url.pathname.includes('sanctum') ||
         url.pathname.includes('_debugbar')
     ) {

@@ -186,13 +186,14 @@ class SettingTest extends TestCase
 
     public function test_audit_logs_endpoint_filtering(): void
     {
+        AuditLog::query()->delete();
         AuditLog::record('Created', 'TestModule');
         AuditLog::record('Deleted', 'TestModule');
 
         $response = $this->getJson(route('crm.api.audit_logs.index', ['action' => 'Created']));
         $response->assertStatus(200);
-        $response->assertJsonCount(1, 'data');
-        $this->assertEquals('Created', $response->json('data.0.action'));
+        $response->assertJsonCount(1, 'data.data');
+        $this->assertEquals('Created', $response->json('data.data.0.action'));
     }
 
     public function test_system_info_endpoint(): void

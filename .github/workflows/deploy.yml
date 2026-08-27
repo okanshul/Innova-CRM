@@ -126,12 +126,13 @@ jobs:
 
 
       # ==========================================
-      # 12. Remove duplicate Laravel public files
+      # 12. Remove duplicate Laravel public files and storage symlinks
       # ==========================================
-      - name: Remove duplicate public index and htaccess
+      - name: Remove duplicate public index, htaccess, and storage symlink
         run: |
           rm -f deploy/htdocs/laravel/public/index.php
           rm -f deploy/htdocs/laravel/public/.htaccess
+          rm -rf deploy/htdocs/storage
 
 
       # ==========================================

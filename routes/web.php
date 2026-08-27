@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Support\Facades\Route;
@@ -36,6 +37,19 @@ Route::middleware('guest')->group(function () {
     Route::get('/reset-password', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
     Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
 });
+
+// Serve public storage files fallback (for shared hosting where symlinks are restricted)
+Route::get('/storage/{path}', function (string $path) {
+    $diskPath = storage_path('app/public/' . $path);
+    $realStoragePath = realpath(storage_path('app/public'));
+    $realFilePath = realpath($diskPath);
+
+    if (!$realFilePath || !$realStoragePath || !str_starts_with($realFilePath, $realStoragePath) || !file_exists($realFilePath)) {
+        abort(404);
+    }
+
+    return response()->file($realFilePath);
+})->where('path', '.*')->name('storage.file');
 
 Route::middleware('auth')->group(function () {
     Route::get('/', function () {
