@@ -71,18 +71,19 @@ Route::get('/manifest.json', function () {
 Route::get('/storage/{path}', function (string $path) {
     $diskPath = storage_path('app/public/' . $path);
     $realStoragePath = realpath(storage_path('app/public'));
-    $realFilePath = realpath($diskPath);
+    $realFilePath = ($diskPath && file_exists($diskPath)) ? realpath($diskPath) : false;
 
-    if (!$realFilePath || !$realStoragePath || !str_starts_with($realFilePath, $realStoragePath) || !file_exists($realFilePath)) {
+    if (!$realFilePath || !$realStoragePath || !str_starts_with($realFilePath, $realStoragePath)) {
         if (str_starts_with($path, 'avatars/')) {
-            $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/></svg>';
-            return response($svg, 200, ['Content-Type' => 'image/svg+xml', 'Cache-Control' => 'public, max-age=3600']);
+            $name = auth()->user()?->name ?? 'User';
+            return redirect('https://ui-avatars.com/api/?name=' . urlencode($name) . '&background=6366F1&color=fff');
         }
         abort(404);
     }
 
     return response()->file($realFilePath);
 })->where('path', '.*')->name('storage.file');
+
 
 
 Route::middleware('auth')->group(function () {
