@@ -23,15 +23,13 @@
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Force storage requests to Laravel if the target file does not exist
+    # Force missing storage requests to root front controller
+    RewriteCond %{REQUEST_URI} ^/storage/
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^storage/(.*)$ index.php [L]
-
+    RewriteRule ^ /index.php [L]
 
     # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [L]
+    RewriteRule ^ /index.php [L]
 </IfModule>
-
-
