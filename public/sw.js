@@ -1,15 +1,14 @@
-const CACHE_VERSION = 'v1.0.2';
+const CACHE_VERSION = 'v1.0.3';
 const CACHE_NAME = `innovacrm-${CACHE_VERSION}`;
 const OFFLINE_URL = '/offline';
 
 const PRECACHE_ASSETS = [
     OFFLINE_URL,
-    '/manifest.webmanifest',
-    '/manifest.json',
     '/favicon.ico',
     '/icons/icon-192x192.png',
     '/icons/icon-512x512.png',
 ];
+
 
 // Install Event
 self.addEventListener('install', (event) => {
