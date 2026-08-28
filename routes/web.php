@@ -69,13 +69,18 @@ Route::get('/manifest.json', function () {
 
 // Serve public storage files fallback (for shared hosting where symlinks are restricted)
 Route::get('/storage/{path}', function (string $path) {
+    $storagePublicDir = storage_path('app/public');
+    if (!file_exists($storagePublicDir)) {
+        @mkdir($storagePublicDir, 0755, true);
+    }
+
     $diskPath = storage_path('app/public/' . $path);
-    $realStoragePath = realpath(storage_path('app/public'));
+    $realStoragePath = realpath($storagePublicDir);
     $realFilePath = ($diskPath && file_exists($diskPath)) ? realpath($diskPath) : false;
 
     if (!$realFilePath || !$realStoragePath || !str_starts_with($realFilePath, $realStoragePath)) {
         if (str_starts_with($path, 'avatars/')) {
-            $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/></svg>';
+            $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="background:#e0e7ff;border-radius:50%;"><circle cx="12" cy="7" r="4"/><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/></svg>';
             return response($svg, 200, [
                 'Content-Type' => 'image/svg+xml',
                 'Cache-Control' => 'public, max-age=86400',

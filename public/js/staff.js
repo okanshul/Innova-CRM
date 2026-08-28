@@ -53,9 +53,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Table Row HTML Renderer
     const renderStaffRow = (staff) => {
+        const fallbackAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(staff.name)}&background=6366F1&color=fff`;
         const avatarSrc = staff.avatar
             ? `/storage/${staff.avatar}`
-            : `https://ui-avatars.com/api/?name=${encodeURIComponent(staff.name)}&background=6366F1&color=fff`;
+            : fallbackAvatar;
 
         const roleDisplay = staff.role_name ? (staff.role_name.charAt(0).toUpperCase() + staff.role_name.slice(1)) : (staff.position || 'Staff');
         const badgeClass = getRoleBadgeClass(staff.role_name, staff.position);
@@ -94,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 </td>
                 <td class="py-3">
                     <div class="d-flex align-items-center gap-3">
-                        <img src="${avatarSrc}" class="rounded-circle object-fit-cover shadow-sm" width="38" height="38" alt="${staff.name}">
+                        <img src="${avatarSrc}" onerror="this.onerror=null;this.src='${fallbackAvatar}';" class="rounded-circle object-fit-cover shadow-sm" width="38" height="38" alt="${staff.name}">
                         <div>
                             <div class="fw-semibold text-body-emphasis" style="font-size: 0.875rem;">${staff.name}</div>
                             <div class="text-secondary" style="font-size: 0.775rem;">${staff.email}</div>
@@ -150,9 +151,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const renderStaffMobileCard = (staff) => {
         const initials = getInitials(staff.name);
         const avatarBg = getAvatarBg(staff.name);
+        const fallbackAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(staff.name)}&background=6366F1&color=fff`;
 
         const avatarHtml = staff.avatar
-            ? `<img src="/storage/${staff.avatar}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0" width="42" height="42" alt="${staff.name}">`
+            ? `<img src="/storage/${staff.avatar}" onerror="this.onerror=null;this.src='${fallbackAvatar}';" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0" width="42" height="42" alt="${staff.name}">`
             : `<div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 fw-bold text-white shadow-sm" style="width: 42px; height: 42px; background-color: ${avatarBg}; font-size: 0.9rem; letter-spacing: 0.5px;">${initials}</div>`;
 
         const statusBadge = (staff.status === 'active' || staff.status === '1')
