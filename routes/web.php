@@ -38,6 +38,35 @@ Route::middleware('guest')->group(function () {
     Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
 });
 
+// PWA Web Manifest routes (ensures application/manifest+json Content-Type on shared hosts)
+Route::get('/manifest.webmanifest', function () {
+    $path = public_path('manifest.webmanifest');
+    if (!file_exists($path)) {
+        $path = public_path('manifest.json');
+    }
+    if (!file_exists($path)) {
+        abort(404);
+    }
+    return response()->file($path, [
+        'Content-Type' => 'application/manifest+json',
+        'Cache-Control' => 'public, max-age=86400',
+    ]);
+})->name('pwa.manifest');
+
+Route::get('/manifest.json', function () {
+    $path = public_path('manifest.json');
+    if (!file_exists($path)) {
+        $path = public_path('manifest.webmanifest');
+    }
+    if (!file_exists($path)) {
+        abort(404);
+    }
+    return response()->file($path, [
+        'Content-Type' => 'application/manifest+json',
+        'Cache-Control' => 'public, max-age=86400',
+    ]);
+});
+
 // Serve public storage files fallback (for shared hosting where symlinks are restricted)
 Route::get('/storage/{path}', function (string $path) {
     $diskPath = storage_path('app/public/' . $path);
@@ -45,11 +74,16 @@ Route::get('/storage/{path}', function (string $path) {
     $realFilePath = realpath($diskPath);
 
     if (!$realFilePath || !$realStoragePath || !str_starts_with($realFilePath, $realStoragePath) || !file_exists($realFilePath)) {
+        if (str_starts_with($path, 'avatars/')) {
+            $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/></svg>';
+            return response($svg, 200, ['Content-Type' => 'image/svg+xml', 'Cache-Control' => 'public, max-age=3600']);
+        }
         abort(404);
     }
 
     return response()->file($realFilePath);
 })->where('path', '.*')->name('storage.file');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/', function () {
