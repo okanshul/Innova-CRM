@@ -118,13 +118,9 @@
                                         <x-form.input name="position" label="Position / Job Title" icon="fa-solid fa-briefcase" :value="$user->position" placeholder="e.g. Senior Account Manager" />
                                     </div>
                                     <div class="col-12 col-md-6">
-                                        <div class="form-group mb-3">
-                                            <label class="form-label fs-sm fw-semibold text-secondary mb-1">
-                                                <i class="fa-solid fa-user-shield text-secondary me-1"></i>Role / Permissions
-                                            </label>
-                                            <input type="text" class="form-control bg-body-tertiary border-0 shadow-none text-capitalize" value="{{ $user->getRoleNames()->first() ?? 'Staff' }}" readonly>
-                                        </div>
+                                        <x-form.input name="role" label="Role / Permissions" icon="fa-solid fa-user-shield" :value="ucfirst($user->getRoleNames()->first() ?? 'Staff')" readonly class="bg-body-tertiary" />
                                     </div>
+
                                 </div>
 
                                 <div class="border-top pt-3 mt-4 d-flex align-items-center justify-content-end gap-2">
@@ -198,7 +194,7 @@
 
         <!-- Sidebar Summary Box -->
         <div class="col-12 col-lg-4 mb-4">
-            <div class="card border-0 shadow-sm rounded-4 bg-body p-4 mb-4">
+            <div class="card border-0 shadow-sm rounded-4 bg-body p-3 mb-4">
                 <h5 class="fw-bold text-body-emphasis mb-3"><i class="fa-solid fa-shield-cat me-2 text-primary"></i>Security Checklist</h5>
                 <ul class="list-unstyled mb-0 d-flex flex-column gap-3 small">
                     <li class="d-flex align-items-center gap-2">
