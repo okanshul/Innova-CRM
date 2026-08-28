@@ -1,5 +1,12 @@
 <!-- PWA Meta Tags -->
-<link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
+@php
+    $pwaManifestFile = public_path('manifest.webmanifest');
+    $pwaManifestHref = file_exists($pwaManifestFile)
+        ? 'data:application/manifest+json;base64,' . base64_encode(file_get_contents($pwaManifestFile))
+        : asset('manifest.webmanifest');
+@endphp
+<link rel="manifest" href="{{ $pwaManifestHref }}" crossorigin="use-credentials">
+
 <meta name="theme-color" content="{{ config('pwa.theme_color', '#4f46e5') }}">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
