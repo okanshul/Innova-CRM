@@ -1,7 +1,23 @@
-<div class="pipeline-col d-flex flex-column border-top border-3 border-{{ $column['color'] }} pt-2 bg-body-tertiary shadow-sm">
+@php
+    $colorName = $column['color'] ?? 'primary';
+    $knownColors = [
+        'purple' => '#8b5cf6',
+        'primary' => '#6366f1',
+        'info' => '#0ea5e9',
+        'warning' => '#f59e0b',
+        'success' => '#10b981',
+        'secondary' => '#64748b',
+        'danger' => '#ef4444'
+    ];
+    $customColorHex = str_starts_with($colorName, '#') ? $colorName : ($knownColors[$colorName] ?? null);
+    $borderStyle = $customColorHex ? "border-top-color: {$customColorHex} !important;" : '';
+    $dotStyle = $customColorHex ? "background-color: {$customColorHex} !important;" : '';
+@endphp
+
+<div class="pipeline-col d-flex flex-column border-top border-3 border-{{ $colorName }} pt-2 bg-body-tertiary shadow-sm" style="{{ $borderStyle }}">
     <div class="d-flex justify-content-between align-items-center mb-2">
         <div class="d-flex align-items-center gap-2">
-            <span class="d-inline-block rounded-circle bg-{{ $column['color'] }}" style="width:8px; height:8px;"></span>
+            <span class="d-inline-block rounded-circle bg-{{ $colorName }}" style="width:8px; height:8px; {{ $dotStyle }}"></span>
             <h6 class="mb-0 fw-bold fs-sm">{{ $stage }}</h6>
         </div>
         <div class="dropdown">
@@ -22,7 +38,7 @@
     </div>
 
     <div class="d-flex flex-column gap-2 mb-2 flex-grow-1">
-        @foreach ($column['deals'] as $deal)
+        @foreach (collect($column['deals'])->take(2) as $deal)
             <div class="card rounded-3 border-0 shadow-sm">
                 <div class="card-body p-3">
                     <div class="d-flex justify-content-between align-items-center mb-1">

@@ -84,7 +84,7 @@ class DashboardController extends Controller
                 $stageValue = $dealsInStage->sum('value');
                 $color = $stageColors[$index % count($stageColors)];
 
-                $formattedDeals = $dealsInStage->take(5)->map(function ($deal) {
+                $formattedDeals = $dealsInStage->take(2)->map(function ($deal) {
                     $companyName = $deal->company ? $deal->company->name : ($deal->contact ? $deal->contact->full_name : $deal->title);
                     $contactName = $deal->contact ? $deal->contact->full_name : ($deal->company ? $deal->company->name : 'N/A');
                     $words = explode(' ', $contactName);

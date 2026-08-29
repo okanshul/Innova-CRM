@@ -65,6 +65,10 @@
     color: rgba(139, 92, 246, var(--bs-text-opacity, 1)) !important;
 }
 
+.border-purple {
+    border-color: rgba(139, 92, 246, var(--bs-border-opacity, 1)) !important;
+}
+
 // Stat Icon Circle
 .stat-icon-circle {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
