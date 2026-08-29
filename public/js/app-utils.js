@@ -215,6 +215,7 @@ function showDeleteConfirmationModal(options = {}) {
         `;
 
         document.body.appendChild(overlay);
+        document.body.classList.add('delete-modal-open', 'modal-open');
 
         requestAnimationFrame(() => {
             overlay.classList.add('show');
@@ -224,6 +225,7 @@ function showDeleteConfirmationModal(options = {}) {
 
         function cleanup(confirmed) {
             overlay.classList.remove('show');
+            document.body.classList.remove('delete-modal-open', 'modal-open');
             document.removeEventListener('keydown', handleKeyDown);
             setTimeout(() => {
                 if (overlay && overlay.parentNode) {
@@ -874,12 +876,14 @@ function initCustomSelects(targetSelector = 'select:not(.no-custom-select), .for
                         m.classList.remove('show');
                         m.previousElementSibling?.classList.remove('active');
                         wrap?.classList.remove('dropup');
+                        wrap?.classList.remove('is-open');
                     }
                 }
             });
             renderMenuOptions();
             menu.classList.add('show');
             trigger.classList.add('active');
+            wrapper.classList.add('is-open');
 
             // Auto-detect available space below/above on open
             updatePosition();
@@ -897,6 +901,7 @@ function initCustomSelects(targetSelector = 'select:not(.no-custom-select), .for
             menu.classList.remove('show');
             trigger.classList.remove('active');
             wrapper.classList.remove('dropup');
+            wrapper.classList.remove('is-open');
 
             // Remove scroll and resize listeners on menu close
             window.removeEventListener('scroll', updatePosition, true);
@@ -971,6 +976,7 @@ document.addEventListener('click', (e) => {
                 m.classList.remove('show');
                 m.previousElementSibling?.classList.remove('active');
                 wrap?.classList.remove('dropup');
+                wrap?.classList.remove('is-open');
             }
         });
     }

@@ -1,12 +1,12 @@
 <header
-    class="header border-bottom py-2 px-3 px-xl-4 d-flex align-items-center justify-content-between sticky-top">
-    <div class="d-flex align-items-center gap-2">
-        <button class="btn btn-link link-body-emphasis p-0 fs-4 text-decoration-none shadow-none me-1" id="sidebarToggle">
+    class="header border-bottom py-2 px-2 px-sm-3 px-xl-4 d-flex align-items-center justify-content-between sticky-top">
+    <div class="d-flex align-items-center gap-1 gap-sm-2 me-2 min-w-0">
+        <button class="btn btn-link link-body-emphasis p-0 fs-4 text-decoration-none shadow-none me-1 flex-shrink-0" id="sidebarToggle" aria-label="Toggle Sidebar">
             <i class="fa-solid fa-bars fs-5"></i>
         </button>
         
         <!-- Mobile Logo (Visible on mobile screens) -->
-        <a href="{{ route('dashboard') }}" class="d-flex align-items-center gap-2 text-decoration-none d-md-none">
+        <a href="{{ route('dashboard') }}" class="d-flex align-items-center gap-2 text-decoration-none d-md-none min-w-0">
             @if(setting('system_logo'))
                 <img src="{{ asset(setting('system_logo')) }}" alt="{{ setting('app_name', 'InnovaCRM') }}" class="header-logo-img">
             @else
@@ -17,7 +17,7 @@
                         <path d="M12 12V22" stroke="white" stroke-width="2" stroke-linejoin="round" />
                     </svg>
                 </div>
-                <span class="fw-bold fs-5 text-body-emphasis tracking-tight ms-1 header-logo-text">{{ setting('app_name', 'InnovaCRM') }}</span>
+                <span class="fw-bold fs-5 text-body-emphasis tracking-tight ms-1 header-logo-text d-none d-sm-inline-block">{{ setting('app_name', 'InnovaCRM') }}</span>
             @endif
         </a>
 
@@ -33,7 +33,7 @@
         </div>
     </div>
 
-    <div class="d-flex align-items-center gap-2">
+    <div class="d-flex align-items-center gap-1 gap-sm-2 flex-shrink-0">
         <!-- Mobile Search Button -->
         <button class="btn btn-light rounded-circle p-0 d-flex align-items-center justify-content-center d-md-none text-secondary shadow-none border icon-btn" 
                 type="button" data-bs-toggle="modal" data-bs-target="#globalSearchModal" aria-label="Search">
@@ -60,7 +60,7 @@
                 <!-- Header -->
                 <div class="d-flex align-items-center justify-content-between p-2 mb-2 bg-body-tertiary rounded-3">
                     <strong class="fw-bold text-body-emphasis fs-6 px-1">Notifications</strong>
-                    <a href="#" class="text-decoration-none fw-semibold d-flex align-items-center gap-1.5 text-primary notif-mark-read px-1">
+                    <a href="#" class="text-decoration-none fw-semibold d-flex align-items-center gap-2 text-primary notif-mark-read px-1">
                         Mark all as read
                     </a>
                 </div>

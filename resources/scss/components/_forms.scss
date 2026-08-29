@@ -5,7 +5,6 @@
 form>.p-3,
 form>div {
     position: relative;
-    z-index: 2;
 }
 
 .form-select,
@@ -117,6 +116,13 @@ select,
     display: inline-block;
     vertical-align: middle;
     width: 100%;
+
+    &:focus-within,
+    &.active,
+    &.is-open,
+    &:has(.custom-select-menu.show) {
+        z-index: 1050;
+    }
 
     select.custom-select-hidden {
         display: none !important;

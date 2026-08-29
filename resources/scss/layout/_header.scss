@@ -525,4 +525,59 @@
     }
 }
 
+// Mobile Responsive Tweaks (< 576px)
+@media (max-width: 575.98px) {
+    .header {
+        min-height: 56px;
+    }
+
+    .header-logo-img {
+        max-height: 26px;
+        max-width: 85px;
+    }
+
+    .logo-icon-sm {
+        width: 30px;
+        height: 30px;
+
+        svg {
+            width: 15px;
+            height: 15px;
+        }
+    }
+
+    .icon-btn {
+        width: 34px;
+        height: 34px;
+
+        i {
+            font-size: 0.875rem !important;
+        }
+    }
+
+    .avatar-sm {
+        width: 34px;
+        height: 34px;
+    }
+
+    .notif-count-badge {
+        top: -4px;
+        right: -5px;
+        min-width: 16px;
+        height: 16px;
+        font-size: 0.525rem;
+        padding: 0 4px;
+    }
+
+    .notification-dropdown-menu {
+        width: calc(100vw - 1rem);
+        max-width: 340px;
+    }
+
+    .user-dropdown-menu {
+        max-width: calc(100vw - 1rem);
+    }
+}
+
+
 
