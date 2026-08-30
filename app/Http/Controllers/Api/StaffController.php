@@ -46,9 +46,22 @@ class StaffController extends Controller
         $perPage = $request->get('per_page', setting('items_per_page', 10));
         $staff = $query->orderBy('id', 'asc')->paginate($perPage);
 
-        // Map roles for the frontend
+        // Map roles and avatar URL for the frontend
         $staff->getCollection()->transform(function ($user) {
             $user->role_name = $user->roles->first()->name ?? 'staff';
+            if ($user->avatar) {
+                if (file_exists(public_path($user->avatar))) {
+                    $user->avatar_url = asset($user->avatar);
+                } elseif (file_exists(public_path('storage/' . $user->avatar)) || Storage::disk('public')->exists($user->avatar)) {
+                    $user->avatar_url = asset('storage/' . $user->avatar);
+                } elseif (str_starts_with($user->avatar, 'http')) {
+                    $user->avatar_url = $user->avatar;
+                } else {
+                    $user->avatar_url = asset($user->avatar);
+                }
+            } else {
+                $user->avatar_url = null;
+            }
             return $user;
         });
 

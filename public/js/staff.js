@@ -51,12 +51,22 @@ document.addEventListener('DOMContentLoaded', function () {
         return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     };
 
+    // Helper: Avatar URL Formatter
+    const getAvatarSrc = (staff) => {
+        const fallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(staff.name || 'User')}&background=6366F1&color=fff`;
+        if (staff.avatar_url) return staff.avatar_url;
+        if (!staff.avatar) return fallback;
+        if (staff.avatar.startsWith('http://') || staff.avatar.startsWith('https://')) return staff.avatar;
+        if (staff.avatar.startsWith('/')) return staff.avatar;
+        if (staff.avatar.startsWith('uploads/')) return `/${staff.avatar}`;
+        if (staff.avatar.startsWith('storage/')) return `/${staff.avatar}`;
+        return `/storage/${staff.avatar}`;
+    };
+
     // Table Row HTML Renderer
     const renderStaffRow = (staff) => {
         const fallbackAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(staff.name)}&background=6366F1&color=fff`;
-        const avatarSrc = staff.avatar
-            ? `/storage/${staff.avatar}`
-            : fallbackAvatar;
+        const avatarSrc = getAvatarSrc(staff);
 
         const roleDisplay = staff.role_name ? (staff.role_name.charAt(0).toUpperCase() + staff.role_name.slice(1)) : (staff.position || 'Staff');
         const badgeClass = getRoleBadgeClass(staff.role_name, staff.position);
@@ -152,9 +162,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const initials = getInitials(staff.name);
         const avatarBg = getAvatarBg(staff.name);
         const fallbackAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(staff.name)}&background=6366F1&color=fff`;
+        const avatarSrc = getAvatarSrc(staff);
+        const hasCustomAvatar = !!(staff.avatar || staff.avatar_url);
 
-        const avatarHtml = staff.avatar
-            ? `<img src="/storage/${staff.avatar}" onerror="this.onerror=null;this.src='${fallbackAvatar}';" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0" width="42" height="42" alt="${staff.name}">`
+        const avatarHtml = hasCustomAvatar
+            ? `<img src="${avatarSrc}" onerror="this.onerror=null;this.src='${fallbackAvatar}';" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0" width="42" height="42" alt="${staff.name}">`
             : `<div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 fw-bold text-white shadow-sm" style="width: 42px; height: 42px; background-color: ${avatarBg}; font-size: 0.9rem; letter-spacing: 0.5px;">${initials}</div>`;
 
         const statusBadge = (staff.status === 'active' || staff.status === '1')
