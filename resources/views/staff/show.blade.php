@@ -32,9 +32,9 @@
                     <div class="p-3 text-center bg-body position-relative rounded-bottom-4">
                         <div class="profile-avatar-wrapper mb-3">
                             @php
-                                $hasAvatar = $staff->avatar && \Illuminate\Support\Facades\Storage::disk('public')->exists($staff->avatar);
+                                $hasAvatar = $staff->avatar && (file_exists(public_path($staff->avatar)) || \Illuminate\Support\Facades\Storage::disk('public')->exists($staff->avatar));
                                 $avatarSrc = $hasAvatar
-                                    ? asset('storage/' . $staff->avatar)
+                                    ? (file_exists(public_path($staff->avatar)) ? asset($staff->avatar) : asset('storage/' . $staff->avatar))
                                     : 'https://ui-avatars.com/api/?name=' . urlencode($staff->name) . '&background=6366F1&color=fff';
                                 $uiAvatar = 'https://ui-avatars.com/api/?name=' . urlencode($staff->name) . '&background=6366F1&color=fff';
                             @endphp

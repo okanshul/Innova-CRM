@@ -70,7 +70,16 @@ class StaffController extends Controller
         unset($data['permissions']);
 
         if ($request->hasFile('avatar')) {
-            $data['avatar'] = $request->file('avatar')->store('avatars', 'public');
+            $file = $request->file('avatar');
+            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $uploadPath = public_path('uploads/avatars');
+
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+            }
+
+            $file->move($uploadPath, $filename);
+            $data['avatar'] = 'uploads/avatars/' . $filename;
         }
 
         $user = User::create($data);
@@ -124,9 +133,23 @@ class StaffController extends Controller
 
         if ($request->hasFile('avatar')) {
             if ($user->avatar) {
-                Storage::disk('public')->delete($user->avatar);
+                if (file_exists(public_path($user->avatar))) {
+                    @unlink(public_path($user->avatar));
+                } elseif (Storage::disk('public')->exists($user->avatar)) {
+                    Storage::disk('public')->delete($user->avatar);
+                }
             }
-            $data['avatar'] = $request->file('avatar')->store('avatars', 'public');
+
+            $file = $request->file('avatar');
+            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $uploadPath = public_path('uploads/avatars');
+
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+            }
+
+            $file->move($uploadPath, $filename);
+            $data['avatar'] = 'uploads/avatars/' . $filename;
         }
 
         $user->update($data);

@@ -155,8 +155,9 @@
         <!-- User Dropdown Profile -->
         <div class="dropdown ms-1">
             @php
-                $userAvatar = (auth()->user()->avatar && \Illuminate\Support\Facades\Storage::disk('public')->exists(auth()->user()->avatar))
-                    ? asset('storage/' . auth()->user()->avatar)
+                $hasAvatar = auth()->user()->avatar && (file_exists(public_path(auth()->user()->avatar)) || \Illuminate\Support\Facades\Storage::disk('public')->exists(auth()->user()->avatar));
+                $userAvatar = $hasAvatar
+                    ? (file_exists(public_path(auth()->user()->avatar)) ? asset(auth()->user()->avatar) : asset('storage/' . auth()->user()->avatar))
                     : 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) . '&background=6366F1&color=fff';
                 $uiAvatar = 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) . '&background=6366F1&color=fff';
             @endphp

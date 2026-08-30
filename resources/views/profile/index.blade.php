@@ -23,9 +23,9 @@
                     <div class="p-3 text-center bg-body position-relative rounded-bottom-4">
                         <div class="profile-avatar-wrapper mb-3 mx-auto" style="margin-top: -65px; width: 110px; height: 110px; position: relative;">
                             @php
-                                $hasAvatar = $user->avatar && \Illuminate\Support\Facades\Storage::disk('public')->exists($user->avatar);
+                                $hasAvatar = $user->avatar && (file_exists(public_path($user->avatar)) || \Illuminate\Support\Facades\Storage::disk('public')->exists($user->avatar));
                                 $avatarSrc = $hasAvatar
-                                    ? asset('storage/' . $user->avatar)
+                                    ? (file_exists(public_path($user->avatar)) ? asset($user->avatar) : asset('storage/' . $user->avatar))
                                     : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=6366F1&color=fff';
                                 $uiAvatar = 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=6366F1&color=fff';
                             @endphp
