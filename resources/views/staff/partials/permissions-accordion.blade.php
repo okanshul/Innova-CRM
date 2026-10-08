@@ -74,14 +74,14 @@
                         $allRowChecked = true;
                     @endphp
                     <tr class="perm-module-row" data-module="{{ $group }}" data-group="{{ $group }}">
-                        <td class="ps-3 py-3 fw-semibold text-body-emphasis">
+                        <td class="ps-3 fw-semibold text-body-emphasis">
                             <div class="d-flex align-items-center gap-2">
                                 <i class="fa-solid {{ $meta['icon'] }}" style="color: #6366F1; width: 18px; font-size: 1rem;"></i>
                                 <span class="text-nowrap" style="font-size: 0.875rem;">{{ $meta['title'] }}</span>
                             </div>
                         </td>
                         @foreach($actions as $action)
-                            <td class="text-center py-3">
+                            <td class="text-center">
                                 @if(isset($groupPermMap[$action]))
                                     @php
                                         $perm = $groupPermMap[$action];
@@ -107,7 +107,7 @@
                                 @endif
                             </td>
                         @endforeach
-                        <td class="text-center py-3">
+                        <td class="text-center">
                             <div class="d-flex align-items-center justify-content-center m-0">
                                 <input class="form-check-input custom-checkbox perm-row-all perm-row-select-all"
                                        type="checkbox"

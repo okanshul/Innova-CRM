@@ -12,6 +12,7 @@
             <div class="card border-0 shadow-sm rounded-4 bg-body">
                 <x-page-header title="Edit Meeting" subtitle="Update meeting details." icon="fa-solid fa-video">
                     <x-slot:actions>
+                        <x-button.primary href="{{ route('meetings.show', $meeting->id) }}" icon="fa-solid fa-eye pe-1" label="View" />
                         <x-button.secondary href="{{ route('meetings.index') }}" icon="fa-solid fa-angle-left pe-1" label="Back" />
                     </x-slot:actions>
                 </x-page-header>

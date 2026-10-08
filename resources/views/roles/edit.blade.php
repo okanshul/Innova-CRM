@@ -12,6 +12,7 @@
             <div class="card border-0 shadow-sm rounded-4 bg-body">
                 <x-page-header title="Edit Role" subtitle="Update role permissions." icon="fa-solid fa-user-shield">
                     <x-slot:actions>
+                        <x-button.primary href="{{ route('roles.show', $role->id) }}" icon="fa-solid fa-eye pe-1" label="View" />
                         <x-button.secondary href="{{ route('roles.index') }}" icon="fa-solid fa-angle-left pe-1" label="Back" />
                     </x-slot:actions>
                 </x-page-header>

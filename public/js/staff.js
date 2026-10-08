@@ -817,7 +817,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (!isChecked) allRowChecked = false;
 
                     rowCells += `
-                        <td class="text-center py-2">
+                        <td class="text-center">
                             <div class="d-flex flex-column align-items-center justify-content-center">
                                 <input class="form-check-input custom-checkbox perm-checkbox"
                                        type="checkbox"
@@ -833,21 +833,21 @@ document.addEventListener('DOMContentLoaded', function () {
                         </td>
                     `;
                 } else {
-                    rowCells += `<td class="text-center py-2"><span class="text-body-tertiary fw-light">—</span></td>`;
+                    rowCells += `<td class="text-center"><span class="text-body-tertiary fw-light">—</span></td>`;
                 }
             });
 
             tableRowsHtml += `
                 <tr class="perm-module-row" data-module="${group}" data-group="${group}">
-                    <td class="ps-3 py-3 fw-semibold text-body-emphasis">
+                    <td class="ps-3 fw-semibold text-body-emphasis">
                         <div class="d-flex align-items-center gap-2">
                             <i class="fa-solid ${meta.icon}" style="color: #6366F1; width: 18px; font-size: 0.95rem;"></i>
                             <span class="text-nowrap" style="font-size: 0.875rem;">${meta.title}</span>
                         </div>
                     </td>
                     ${rowCells}
-                    <td class="pe-3 text-center py-3">
-                        <div class="form-check d-inline-block m-0">
+                    <td class="pe-3 text-center">
+                        <div class="d-flex flex-column align-items-center justify-content-center">
                             <input class="form-check-input custom-checkbox perm-row-all perm-row-select-all"
                                    type="checkbox"
                                    id="modal_row_all_${group}"

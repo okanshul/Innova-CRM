@@ -17,16 +17,14 @@
             </x-page-header>
 
             @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show rounded-3 mb-3" role="alert"
-                    style="font-size: 0.875rem;">
+                <div class="alert alert-success alert-dismissible fade show rounded-3 mb-3" role="alert" style="font-size: 0.875rem;">
                     <i class="fa-solid fa-circle-check me-2"></i> {{ session('success') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
 
             <!-- Controls / Filters Row -->
-            <div
-                class="filter-controls-wrapper d-flex flex-column flex-md-row align-items-stretch align-items-md-center justify-content-between gap-2">
+            <div class="filter-controls-wrapper d-flex flex-column flex-md-row align-items-stretch align-items-md-center justify-content-between gap-2">
                 <!-- Filters Group (Departments, Status & PerPage) - Left Side -->
                 <div class="d-flex flex-wrap align-items-center gap-2 order-2 order-md-1">
                     <div class="filter-item-full">
@@ -62,9 +60,7 @@
                     </div>
 
                     @can('staff.delete')
-                        <button
-                            class="btn btn-delete-bulk shadow-none d-none align-items-center gap-2 filter-item-half"
-                            id="btnBulkDelete">
+                        <button class="btn btn-delete-bulk shadow-none d-none align-items-center gap-2 filter-item-half" id="btnBulkDelete">
                             <i class="fa-regular fa-trash-can"></i> Delete Selected (<span id="selectedCount">0</span>)
                         </button>
                     @endcan
@@ -74,23 +70,17 @@
                 <div class="d-flex flex-wrap flex-sm-nowrap align-items-center gap-2 order-1 order-md-2 ms-md-auto">
                     <div class="search-input-box px-3 py-1 d-flex align-items-center flex-grow-1 flex-sm-grow-0">
                         <i class="fa-solid fa-magnifying-glass text-secondary me-2 fs-sm"></i>
-                        <input type="text" id="searchInput"
-                            class="form-control border-0 bg-transparent shadow-none p-1 fs-sm w-100"
-                            placeholder="Search staff...">
+                        <input type="text" id="searchInput" class="form-control border-0 bg-transparent shadow-none p-1 fs-sm w-100" placeholder="Search staff...">
                     </div>
 
                     <div class="filter-item-half">
-                        <button
-                            class="btn btn-filter-action shadow-none w-100 d-flex align-items-center gap-2 justify-content-center text-nowrap"
-                            id="btnFilterTrigger" title="Reset Filters">
+                        <button class="btn btn-filter-action shadow-none w-100 d-flex align-items-center gap-2 justify-content-center text-nowrap" id="btnFilterTrigger" title="Reset Filters">
                             <i class="fa-solid fa-rotate-left"></i> <span>Reset</span>
                         </button>
                     </div>
 
                     <div class="filter-item-half">
-                        <button
-                            class="btn btn-filter-action shadow-none w-100 d-flex align-items-center gap-2 justify-content-center text-nowrap"
-                            id="btnExport" title="Export Staff">
+                        <button class="btn btn-filter-action shadow-none w-100 d-flex align-items-center gap-2 justify-content-center text-nowrap" id="btnExport" title="Export Staff">
                             <i class="fa-solid fa-download"></i> <span>Export</span>
                         </button>
                     </div>
@@ -131,8 +121,7 @@
     </div>
 
     <!-- Manage Permissions Modal Component -->
-    <x-modal id="permissionsModal" title="Manage Permissions" size="lg" icon="fa-solid fa-shield-halved"
-        formId="permissionsModalForm" bodyId="permissionsModalBody">
+    <x-modal id="permissionsModal" title="Manage Permissions" size="lg" icon="fa-solid fa-shield-halved" formId="permissionsModalForm" bodyId="permissionsModalBody">
         <x-slot:headerSubtitle>
             <span class="d-inline-flex flex-wrap align-items-center gap-1">Set individual permissions for <strong id="permStaffName" class="text-body-emphasis">...</strong></span>
             <x-badge.status value="Staff" type="role" id="permStaffRoleBadge" />

@@ -13,8 +13,7 @@
         <div class="col-12">
             <div class="card border-0 shadow-sm rounded-4 bg-body">
                 <!-- Page Header Component inside Card Header -->
-                <x-page-header title="Edit Staff" subtitle="Update information for {{ $staff->name }}."
-                    icon="fa-solid fa-user-pen" iconBg="#e0f2fe" iconColor="#0284c7">
+                <x-page-header title="Edit Staff" subtitle="Update information for {{ $staff->name }}." icon="fa-solid fa-user-pen">
                     <x-slot:actions>
                         <x-button.primary href="{{ route('staff.show', $staff->id) }}" icon="fa-solid fa-eye pe-1" label="View" />
                         <x-button.secondary href="{{ route('staff.index') }}" icon="fa-solid fa-angle-left pe-1" label="Back" />
@@ -92,12 +91,10 @@
                         </div>
 
                         <!-- Tab 2: Permissions -->
-                        <div class="tab-pane fade p-3" id="permissions-pane" role="tabpanel"
-                            aria-labelledby="permissions-tab" tabindex="0">
+                        <div class="tab-pane fade p-3" id="permissions-pane" role="tabpanel" aria-labelledby="permissions-tab" tabindex="0">
                             <div class="mb-3">
                                 <h6 class="fw-bold text-body-emphasis mb-1">Direct Permissions</h6>
-                                <p class="text-secondary small mb-0">Grant or revoke specific individual permissions
-                                    overriding or supplementing role defaults for {{ $staff->name }}.</p>
+                                <p class="text-secondary small mb-0">Grant or revoke specific individual permissions overriding or supplementing role defaults for {{ $staff->name }}.</p>
                             </div>
                             @include('staff.partials.permissions-accordion', [
                                 'groupedPermissions' => $groupedPermissions ?? [],

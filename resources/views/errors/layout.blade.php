@@ -204,7 +204,7 @@
 
         /* ---------- responsive ---------- */
         @media (max-width: 900px) {
-            .page { padding: 80px 20px 32px; }
+            .page { padding: 80px 20px 0px; }
 
             .error-logo {
                 position: absolute;
