@@ -87,3 +87,12 @@ Route::middleware('auth')->group(function () {
     Route::resource('roles', RoleController::class)->only(['index', 'create', 'show', 'edit']);
     Route::resource('settings', SettingController::class)->only(['index']);
 });
+
+
+// 500 Error Route
+Route::view('/400', 'errors.400');
+Route::view('/401', 'errors.401');
+Route::view('/403', 'errors.403');
+Route::view('/404', 'errors.404');
+Route::view('/500', 'errors.500');
+Route::view('/503', 'errors.503');
